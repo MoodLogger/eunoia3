@@ -10,7 +10,7 @@ This is a Next.js application for tracking daily mood and related factors. It al
 - AI-powered analysis of mood patterns over time (requires at least 3 days of data).
 - Export daily assessment data (Date and overall theme scores) to:
     - Google Sheets (Recommended)
-    - CSV file (Fallback)
+    - CSV file (Fallback - *Not yet implemented*)
 
 ## Getting Started
 
@@ -36,6 +36,8 @@ This is a Next.js application for tracking daily mood and related factors. It al
     ```env
     # Genkit/Gemini API Key (Required for Mood Analysis feature)
     # Get yours from Google AI Studio: https://aistudio.google.com/app/apikey
+    # IMPORTANT: Ensure you enable the Gemini API in your Google Cloud project
+    # if you haven't already. Search for "Vertex AI API" and enable it.
     # GOOGLE_GENAI_API_KEY=YOUR_GEMINI_API_KEY
 
     # --- Google Sheets API Credentials (Required for Google Sheets Export) ---
@@ -71,8 +73,14 @@ This is a Next.js application for tracking daily mood and related factors. It al
 
     # 5. Private Key (Required):
     #    Open the downloaded JSON key file with a text editor. Copy the ENTIRE private key string, including the header and footer lines (`-----BEGIN PRIVATE KEY-----` to `-----END PRIVATE KEY-----`).
-    #    IMPORTANT: In your .env.local file, paste the key within quotes and replace the literal newline characters (`\n`) within the key string with the sequence `\\n`.
-    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYOUR_PRIVATE_KEY_CONTENT_WITH_NEWLINES_AS_DOUBLE_BACKSLASH_N\\n-----END PRIVATE KEY-----\\n"
+    #    VERY IMPORTANT: In your .env.local file, paste the key within DOUBLE QUOTES ("").
+    #    Replace the literal newline characters (`\n`) *within* the key string with the sequence `\\n` (double backslash n).
+    #    Example structure:
+    #    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYOUR_PRIVATE_KEY_CONTENT_WITH_NEWLINES_AS_DOUBLE_BACKSLASH_N\\nMORE_CONTENT\\nEVEN_MORE_CONTENT\\n-----END PRIVATE KEY-----\\n"
+    #    Ensure the final "-----END PRIVATE KEY-----\n" also has the `\\n` at the end.
+    #    Incorrect formatting WILL cause authentication errors (like DECODER routines errors).
+    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYOUR_MULTI_LINE_KEY_HERE_WITH_ALL_NEWLINES_REPLACED_BY_DOUBLE_BACKSLASH_N\\n-----END PRIVATE KEY-----\\n"
+
 
     # 6. Share the Google Sheet (Required):
     #    Open your specific Google Sheet file (the one identified by GOOGLE_SHEET_ID).
@@ -119,7 +127,7 @@ This is a Next.js application for tracking daily mood and related factors. It al
 - Your selections are automatically saved to the browser's local storage.
 - The overall score for each theme (-2 to +2) and the calculated overall mood icon (Bad/Normal/Good) will update automatically.
 - **Analyze Moods:** After logging data for at least 3 days, click "Analyze Moods" (requires Genkit server running and API key) to get AI-powered insights.
-- **Export to Sheets:** Click "Export to Sheets" to append the current day's date and overall theme scores as a new row to the configured Google Sheet (requires Google Sheets API setup as described above).
+- **Export to Sheets:** Click "Export to Sheets" to append the daily assessment data (date and all overall theme scores) as new rows to the configured Google Sheet (requires Google Sheets API setup as described above). Data is appended, preserving existing rows.
 
 ## Data Storage
 
