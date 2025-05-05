@@ -23,7 +23,7 @@ const AnalyzeMoodPatternsInputSchema = z.object({
   themeScores: z
     .string()
     .describe(
-      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2, where -2 is very negative, 0 is neutral, +2 is very positive) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, self education.'
+      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2, where -2 is very negative, 0 is neutral, +2 is very positive) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, family relations, self education.' // Added familyRelations
     ),
 });
 export type AnalyzeMoodPatternsInput = z.infer<typeof AnalyzeMoodPatternsInputSchema>;
@@ -49,7 +49,7 @@ const prompt = ai.definePrompt({
       themeScores: z
         .string()
         .describe(
-          'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, self education.'
+          'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, family relations, self education.' // Added familyRelations
         ),
     }),
   },
@@ -65,7 +65,7 @@ Mood Data (JSON): {{{moodData}}}
 Theme Scores (JSON): {{{themeScores}}}
 
 Based on the data:
-1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score) and reported moods (e.g., 'happy').
+1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'family relations' score) and reported moods (e.g., 'happy', 'sad').
 2. Note any significant shifts in mood and see if they correspond to changes in theme scores around the same time.
 3. Provide concise, actionable insights on what factors might be positively or negatively influencing the user's mood.
 4. Suggest potential, gentle interventions or areas of focus to improve their well-being based *only* on the observed patterns in the data. Avoid making medical claims or diagnoses.

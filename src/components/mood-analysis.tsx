@@ -23,9 +23,10 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
     const themeScores = entriesArray.map(entry => ({
         date: entry.date,
         dreaming: entry.scores.dreaming,
-        training: entry.scores.training, // Corrected key from 'trainings'
+        training: entry.scores.training,
         diet: entry.scores.diet,
         socialRelations: entry.scores.socialRelations,
+        familyRelations: entry.scores.familyRelations, // Added new theme
         selfEducation: entry.scores.selfEducation
     }));
 
@@ -87,15 +88,16 @@ export function MoodAnalysis() {
           }
 
           // Define CSV headers
-          const headers = ['Date', 'Mood', 'Dreaming', 'Training', 'Diet', 'Social Relations', 'Self Education'];
+          const headers = ['Date', 'Mood', 'Dreaming', 'Training', 'Diet', 'Social Relations', 'Family Relations', 'Self Education']; // Added new header
           // Prepare CSV rows
           const rows = entriesArray.map(entry => [
               entry.date,
               entry.mood || '', // Handle null mood
               entry.scores.dreaming,
-              entry.scores.training, // Corrected key
+              entry.scores.training,
               entry.scores.diet,
               entry.scores.socialRelations,
+              entry.scores.familyRelations, // Added data for new theme
               entry.scores.selfEducation
           ]);
 

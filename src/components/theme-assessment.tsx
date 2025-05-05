@@ -17,6 +17,7 @@ const themeLabels: Record<keyof ThemeScores, string> = {
   training: 'Training / Exercise',
   diet: 'Diet / Nutrition',
   socialRelations: 'Social Relations',
+  familyRelations: 'Family Relations', // Added label for new theme
   selfEducation: 'Self Education / Learning',
 };
 
@@ -36,7 +37,7 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
             </CardHeader>
             <CardContent className="space-y-6 p-6">
                 <div className="animate-pulse space-y-6">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(6)].map((_, i) => ( // Updated skeleton count to 6
                       <div key={i} className="space-y-2">
                           <div className="h-4 bg-muted rounded w-1/3"></div>
                           <div className="h-6 bg-muted rounded w-full"></div>

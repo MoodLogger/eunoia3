@@ -6,6 +6,7 @@ export interface ThemeScores {
   training: number;
   diet: number;
   socialRelations: number;
+  familyRelations: number; // Added new theme
   selfEducation: number;
 }
 

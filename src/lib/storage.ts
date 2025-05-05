@@ -35,6 +35,7 @@ export function getDailyEntry(date: string): DailyEntry {
     training: 0,
     diet: 0,
     socialRelations: 0,
+    familyRelations: 0, // Added default score for new theme
     selfEducation: 0,
   };
   // Return existing entry or a new one with default scores and null mood
@@ -88,7 +89,7 @@ export function saveDailyEntry(entry: DailyEntry): void {
     const completeEntry: DailyEntry = {
         date: entry.date,
         mood: entry.mood !== undefined ? entry.mood : null, // Default mood to null if missing
-        scores: entry.scores || { dreaming: 0, training: 0, diet: 0, socialRelations: 0, selfEducation: 0 }, // Default scores if missing
+        scores: entry.scores || { dreaming: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 }, // Default scores if missing, including new theme
     };
     allData[entry.date] = completeEntry;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
