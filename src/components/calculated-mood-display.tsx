@@ -28,15 +28,17 @@ export function CalculatedMoodDisplay({ icon: Icon, label }: CalculatedMoodDispl
     );
   }
 
-  // Determine icon color based on label
+  // Determine icon color based on label using theme colors
   const getIconColor = (moodLabel: string): string => {
       switch (moodLabel) {
           case 'Good':
-              return 'text-green-500'; // Use Tailwind green for good
+              return 'text-green-600 dark:text-green-400'; // Use green shades for good
           case 'Normal':
-              return 'text-yellow-500'; // Use Tailwind yellow for normal
+              return 'text-yellow-600 dark:text-yellow-400'; // Use yellow shades for normal
           case 'Bad':
-              return 'text-red-500'; // Use Tailwind red for bad
+              return 'text-red-600 dark:text-red-400'; // Use red shades for bad
+          case 'Calculating...':
+              return 'text-muted-foreground animate-spin'; // Style for loader
           default:
               return 'text-muted-foreground'; // Default color
       }
@@ -47,11 +49,16 @@ export function CalculatedMoodDisplay({ icon: Icon, label }: CalculatedMoodDispl
   return (
     <div className="flex flex-col items-center justify-center py-4 space-y-2">
       {Icon ? (
+        // Apply color and animation for Loader2
         <Icon className={cn("h-16 w-16", iconColorClass)} />
       ) : (
-        <Loader2 className="h-16 w-16 animate-spin text-muted-foreground" /> // Show loader if no icon (calculating)
+         // Fallback if icon is somehow null but not calculating - could show a placeholder
+         <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center">
+            <span className="text-xs text-muted-foreground">?</span>
+         </div>
       )}
-      <span className={cn("text-lg font-medium", iconColorClass)}>
+      {/* Apply color to the label as well */}
+      <span className={cn("text-lg font-medium", getIconColor(label).replace('animate-spin', ''))}> {/* Remove spin from label */}
         {label}
       </span>
     </div>

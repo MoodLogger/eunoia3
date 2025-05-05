@@ -1,8 +1,38 @@
 
-
-import type { DailyEntry, StoredData, ThemeScores, Mood } from './types';
+import type { DailyEntry, StoredData, ThemeScores, Mood, DetailedThemeScores, ThemeQuestionScores, QuestionScore } from './types';
+import { themeOrder } from '@/components/theme-assessment'; // Import themeOrder
 
 const STORAGE_KEY = 'moodLoggerData';
+
+// Helper to create default detailed scores for all themes
+function createDefaultDetailedScores(): DetailedThemeScores {
+  const defaultQuestionScores: ThemeQuestionScores = {};
+  for (let i = 0; i < 8; i++) {
+    defaultQuestionScores[i] = 0; // Default each question to neutral (0)
+  }
+
+  const defaultDetailedScores = {} as DetailedThemeScores;
+  themeOrder.forEach(theme => {
+      // Use structuredClone for deep copy if available, otherwise manual copy
+      if (typeof structuredClone === 'function') {
+          defaultDetailedScores[theme] = structuredClone(defaultQuestionScores);
+      } else {
+          // Manual deep copy as fallback
+          defaultDetailedScores[theme] = JSON.parse(JSON.stringify(defaultQuestionScores));
+      }
+  });
+  return defaultDetailedScores;
+}
+
+// Helper to create default theme scores (calculated from defaults)
+function createDefaultThemeScores(): ThemeScores {
+     const defaultScores = {} as ThemeScores;
+     themeOrder.forEach(theme => {
+         defaultScores[theme] = 0; // Default overall score to 0
+     });
+     return defaultScores;
+}
+
 
 /**
  * Retrieves all stored mood data from local storage.
@@ -15,104 +45,172 @@ export function getAllEntries(): StoredData {
   }
   try {
     const rawData = localStorage.getItem(STORAGE_KEY);
-    return rawData ? JSON.parse(rawData) : {};
+    const parsedData = rawData ? JSON.parse(rawData) : {};
+
+    // --- Data Migration/Validation ---
+    // Ensure each entry has the new detailedScores structure
+    Object.keys(parsedData).forEach(date => {
+        if (!parsedData[date].detailedScores) {
+            console.warn(`Migrating data for ${date}: Adding default detailedScores.`);
+            parsedData[date].detailedScores = createDefaultDetailedScores();
+            // Recalculate overall scores if they seem outdated (optional but good practice)
+            // parsedData[date].scores = calculateOverallScores(parsedData[date].detailedScores);
+        } else {
+             // Ensure all themes and questions exist within detailedScores
+             themeOrder.forEach(theme => {
+                 if (!parsedData[date].detailedScores[theme]) {
+                     parsedData[date].detailedScores[theme] = {}; // Initialize theme if missing
+                 }
+                 for (let i = 0; i < 8; i++) {
+                     if (parsedData[date].detailedScores[theme][i] === undefined) {
+                         parsedData[date].detailedScores[theme][i] = 0; // Default missing question
+                     }
+                 }
+             });
+        }
+         // Ensure overall scores structure exists
+         if (!parsedData[date].scores) {
+            parsedData[date].scores = createDefaultThemeScores();
+         } else {
+              themeOrder.forEach(theme => {
+                  if (parsedData[date].scores[theme] === undefined) {
+                     parsedData[date].scores[theme] = 0; // Default missing overall score
+                  }
+              });
+         }
+         // Ensure mood exists
+         if (parsedData[date].mood === undefined) {
+             parsedData[date].mood = null;
+         }
+    });
+
+
+    return parsedData;
   } catch (error) {
-    console.error("Error reading from local storage:", error);
+    console.error("Error reading or parsing data from local storage:", error);
+     // Attempt to clear corrupted data? Or return empty? Returning empty for now.
+     // localStorage.removeItem(STORAGE_KEY);
     return {};
   }
 }
 
 /**
  * Retrieves the entry for a specific date from local storage.
+ * Initializes with defaults if not found or incomplete.
  * @param date - The date string in YYYY-MM-DD format.
- * @returns The DailyEntry for the date or a default entry if not found.
+ * @returns The DailyEntry for the date.
  */
 export function getDailyEntry(date: string): DailyEntry {
   const allData = getAllEntries();
-  // Default score is 0, which is the neutral point in the -2 to +2 scale.
-  const defaultScores: ThemeScores = {
-    dreaming: 0,
-    moodScore: 0, // Added default score for new theme
-    training: 0,
-    diet: 0,
-    socialRelations: 0,
-    familyRelations: 0,
-    selfEducation: 0,
-  };
-  // Return existing entry or a new one with default scores and null mood
-  return allData[date] || { date, mood: null, scores: defaultScores };
-}
+  const defaultDetailedScores = createDefaultDetailedScores();
+  const defaultScores = createDefaultThemeScores();
 
-/**
- * Saves or updates the mood for a specific date in local storage.
- * @param date - The date string in YYYY-MM-DD format.
- * @param mood - The selected mood.
- */
-export function saveMood(date: string, mood: Mood): void {
-   if (typeof window === 'undefined') return;
-  try {
-    const allData = getAllEntries();
-    const currentEntry = getDailyEntry(date); // Get existing or default entry
-    allData[date] = { ...currentEntry, mood }; // Update only the mood
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-  } catch (error) {
-    console.error("Error saving mood to local storage:", error);
+  const entry = allData[date];
+
+  if (entry) {
+     // Ensure the retrieved entry has all necessary parts, merging defaults if needed
+      const detailedScores = { ...defaultDetailedScores, ...(entry.detailedScores || {}) };
+      // Deep merge for each theme's questions
+      themeOrder.forEach(theme => {
+          detailedScores[theme] = { ...(defaultDetailedScores[theme] || {}), ...(entry.detailedScores?.[theme] || {}) };
+           for (let i = 0; i < 8; i++) {
+                if (detailedScores[theme][i] === undefined) {
+                    detailedScores[theme][i] = 0;
+                }
+            }
+      });
+
+      const scores = { ...defaultScores, ...(entry.scores || {}) };
+       themeOrder.forEach(theme => {
+           if (scores[theme] === undefined) {
+               scores[theme] = 0;
+           }
+       });
+
+
+      return {
+          date: entry.date || date,
+          mood: entry.mood !== undefined ? entry.mood : null,
+          scores: scores,
+          detailedScores: detailedScores,
+      };
+  } else {
+      // Return a completely new default entry
+      return {
+          date,
+          mood: null,
+          scores: defaultScores,
+          detailedScores: defaultDetailedScores,
+      };
   }
 }
 
-/**
- * Saves or updates the theme scores for a specific date in local storage.
- * @param date - The date string in YYYY-MM-DD format.
- * @param scores - The theme scores object.
- */
-export function saveScores(date: string, scores: ThemeScores): void {
-   if (typeof window === 'undefined') return;
-  try {
-    const allData = getAllEntries();
-    const currentEntry = getDailyEntry(date); // Get existing or default entry
-    // Ensure all themes exist in the scores being saved, adding defaults if needed
-    const completeScores: ThemeScores = {
-        dreaming: scores.dreaming ?? 0,
-        moodScore: scores.moodScore ?? 0, // Ensure moodScore exists
-        training: scores.training ?? 0,
-        diet: scores.diet ?? 0,
-        socialRelations: scores.socialRelations ?? 0,
-        familyRelations: scores.familyRelations ?? 0,
-        selfEducation: scores.selfEducation ?? 0,
-    };
-    allData[date] = { ...currentEntry, scores: completeScores }; // Update only the scores
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
-  } catch (error) {
-    console.error("Error saving scores to local storage:", error);
-  }
-}
 
 /**
- * Saves the entire daily entry (mood and scores) for a specific date.
+ * Saves the entire daily entry (mood, calculated scores, and detailed scores) for a specific date.
  * Ensures the entry structure is complete before saving.
  * @param entry - The DailyEntry object.
  */
 export function saveDailyEntry(entry: DailyEntry): void {
-   if (typeof window === 'undefined') return;
+   if (typeof window === 'undefined' || !entry || !entry.date) return;
   try {
-    const allData = getAllEntries();
-    // Ensure the entry has all necessary fields before saving
+    const allData = getAllEntries(); // Get current data (already validated/migrated)
+    const defaultDetailedScores = createDefaultDetailedScores();
+    const defaultScores = createDefaultThemeScores();
+
+
+    // Ensure the entry being saved has all necessary fields, merging defaults
+     const completeDetailedScores = { ...defaultDetailedScores, ...(entry.detailedScores || {}) };
+      themeOrder.forEach(theme => {
+          completeDetailedScores[theme] = { ...(defaultDetailedScores[theme] || {}), ...(entry.detailedScores?.[theme] || {}) };
+           for (let i = 0; i < 8; i++) {
+                if (completeDetailedScores[theme][i] === undefined) {
+                    completeDetailedScores[theme][i] = 0; // Default missing question score
+                }
+            }
+      });
+
+     const completeScores = { ...defaultScores, ...(entry.scores || {}) };
+      themeOrder.forEach(theme => {
+          if (completeScores[theme] === undefined) {
+              completeScores[theme] = 0; // Default missing overall score
+          }
+      });
+
+
     const completeEntry: DailyEntry = {
         date: entry.date,
-        mood: entry.mood !== undefined ? entry.mood : null, // Default mood to null if missing
-        scores: { // Default scores if missing, including new themes
-            dreaming: entry.scores?.dreaming ?? 0,
-            moodScore: entry.scores?.moodScore ?? 0, // Add default for moodScore
-            training: entry.scores?.training ?? 0,
-            diet: entry.scores?.diet ?? 0,
-            socialRelations: entry.scores?.socialRelations ?? 0,
-            familyRelations: entry.scores?.familyRelations ?? 0,
-            selfEducation: entry.scores?.selfEducation ?? 0,
-        }
+        mood: entry.mood !== undefined ? entry.mood : null,
+        scores: completeScores,
+        detailedScores: completeDetailedScores
     };
+
     allData[entry.date] = completeEntry;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
   } catch (error) {
     console.error("Error saving daily entry to local storage:", error);
+     // Consider notifying the user about the save failure
   }
+}
+
+// --- Removed saveMood and saveScores as saveDailyEntry handles the whole object ---
+// If granular saving is needed later, these can be re-added, ensuring they
+// correctly fetch the full entry, update the specific part, and save the full entry back.
+
+// Helper function to calculate overall theme scores from detailed scores
+// This can be used in page.tsx or here if needed for migration/consistency checks
+export function calculateOverallScores(detailedScores: DetailedThemeScores): ThemeScores {
+    const overallScores = {} as ThemeScores;
+    themeOrder.forEach(theme => {
+        const themeQuestions = detailedScores[theme];
+        let sum = 0;
+        if (themeQuestions) {
+            for (let i = 0; i < 8; i++) {
+                sum += themeQuestions[i] ?? 0;
+            }
+        }
+        // Clamp the score between -2 and +2 (although sum should naturally fall in this range)
+        overallScores[theme] = Math.max(-2, Math.min(2, sum));
+    });
+    return overallScores;
 }

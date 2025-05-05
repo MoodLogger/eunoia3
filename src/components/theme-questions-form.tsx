@@ -1,0 +1,88 @@
+
+"use client";
+
+import * as React from 'react';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import type { ThemeQuestionScores, QuestionScore, ThemeScores } from '@/lib/types';
+import { cn } from '@/lib/utils';
+
+interface ThemeQuestionsFormProps {
+  themeKey: keyof ThemeScores;
+  themeLabel: string;
+  detailedScores: ThemeQuestionScores;
+  onQuestionScoreChange: (themeKey: keyof ThemeScores, questionIndex: number, value: QuestionScore) => void;
+}
+
+// Placeholder questions - replace with actual questions later
+const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
+  const questions: string[] = [];
+  for (let i = 1; i <= 8; i++) {
+    questions.push(`Placeholder Question ${i} for ${themeLabelMap[themeKey] || themeKey}?`);
+  }
+  return questions;
+};
+
+// Map theme keys to labels if needed, or use themeLabel prop
+const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
+    dreaming: 'Dreaming / Sleep Quality',
+    moodScore: 'Mood Quality / Stability',
+    training: 'Training / Exercise',
+    diet: 'Diet / Nutrition',
+    socialRelations: 'Social Relations',
+    familyRelations: 'Family Relations',
+    selfEducation: 'Self Education / Learning',
+};
+
+
+export function ThemeQuestionsForm({
+  themeKey,
+  themeLabel, // Use the passed label
+  detailedScores,
+  onQuestionScoreChange
+}: ThemeQuestionsFormProps) {
+
+  const questions = getQuestionsForTheme(themeKey);
+
+  const handleValueChange = (questionIndex: number, value: string) => {
+    const score = parseFloat(value) as QuestionScore;
+    if ([-0.25, 0, 0.25].includes(score)) {
+      onQuestionScoreChange(themeKey, questionIndex, score);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-center text-primary">{themeLabel} Questions</h3>
+      {questions.map((question, index) => (
+        <div key={`${themeKey}-${index}`} className="space-y-3 p-4 border rounded-md bg-card shadow-sm">
+          <Label htmlFor={`${themeKey}-q${index}`} className="text-sm font-medium text-foreground/90 block mb-2">
+            {index + 1}. {question}
+          </Label>
+          <RadioGroup
+            id={`${themeKey}-q${index}`}
+            // Ensure value is a string for RadioGroup, default to '0' if undefined
+            value={(detailedScores[index]?.toString()) ?? '0'}
+            onValueChange={(value) => handleValueChange(index, value)}
+            className="flex space-x-4 justify-center"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} />
+              <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">Negative (-0.25)</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} />
+              <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">Neutral (0)</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} />
+              <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">Positive (+0.25)</Label>
+            </div>
+          </RadioGroup>
+           {/* Optional: Display current score for the question */}
+           {/* <p className="text-xs text-center text-muted-foreground mt-1">Score: {detailedScores[index] ?? 0}</p> */}
+        </div>
+      ))}
+    </div>
+  );
+}
