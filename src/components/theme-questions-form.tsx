@@ -61,35 +61,42 @@ export function ThemeQuestionsForm({
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-center text-primary">{themeLabel} Questions</h3>
-      {questions.map((question, index) => (
-        <div key={`${themeKey}-${index}`} className="space-y-3 p-4 border rounded-md bg-card shadow-sm">
-          <Label htmlFor={`${themeKey}-q${index}`} className="text-sm font-medium text-foreground/90 block mb-2">
-            {index + 1}. {question}
-          </Label>
-          <RadioGroup
-            id={`${themeKey}-q${index}`}
-            // Ensure value is a string for RadioGroup, default to '0' if undefined
-            value={(detailedScores[index]?.toString()) ?? '0'}
-            onValueChange={(value) => handleValueChange(index, value)}
-            className="flex space-x-4 justify-center"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} />
-              <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">Negative (-0.25)</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} />
-              <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">Neutral (0)</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} />
-              <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">Positive (+0.25)</Label>
-            </div>
-          </RadioGroup>
-           {/* Optional: Display current score for the question */}
-           {/* <p className="text-xs text-center text-muted-foreground mt-1">Score: {detailedScores[index] ?? 0}</p> */}
-        </div>
-      ))}
+      {questions.map((question, index) => {
+        const isNawodnienieQuestion = themeKey === 'diet' && index === 0;
+        const negativeLabel = isNawodnienieQuestion ? "<1 litr (-0.25)" : "Negative (-0.25)";
+        const neutralLabel = isNawodnienieQuestion ? "1-2 litry (0)" : "Neutral (0)";
+        const positiveLabel = isNawodnienieQuestion ? ">2 litry (+0.25)" : "Positive (+0.25)";
+
+        return (
+          <div key={`${themeKey}-${index}`} className="space-y-3 p-4 border rounded-md bg-card shadow-sm">
+            <Label htmlFor={`${themeKey}-q${index}`} className="text-sm font-medium text-foreground/90 block mb-2">
+              {index + 1}. {question}
+            </Label>
+            <RadioGroup
+              id={`${themeKey}-q${index}`}
+              // Ensure value is a string for RadioGroup, default to '0' if undefined
+              value={(detailedScores[index]?.toString()) ?? '0'}
+              onValueChange={(value) => handleValueChange(index, value)}
+              className="flex space-x-4 justify-center"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} />
+                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{negativeLabel}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} />
+                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{neutralLabel}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} />
+                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{positiveLabel}</Label>
+              </div>
+            </RadioGroup>
+             {/* Optional: Display current score for the question */}
+             {/* <p className="text-xs text-center text-muted-foreground mt-1">Score: {detailedScores[index] ?? 0}</p> */}
+          </div>
+        );
+      })}
     </div>
   );
 }
