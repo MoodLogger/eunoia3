@@ -39,8 +39,12 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
                 <div className="animate-pulse space-y-6">
                     {[...Array(6)].map((_, i) => ( // Updated skeleton count to 6
                       <div key={i} className="space-y-2">
-                          <div className="h-4 bg-muted rounded w-1/3"></div>
-                          <div className="h-6 bg-muted rounded w-full"></div>
+                          <div className="flex justify-between items-center">
+                               <div className="h-4 bg-muted rounded w-1/3"></div>
+                               <div className="h-4 bg-muted rounded w-1/6"></div>
+                           </div>
+                           <div className="h-2 bg-muted rounded w-full"></div> {/* Slider track */}
+                           <div className="h-5 w-5 bg-muted rounded-full -mt-3.5 mx-auto"></div> {/* Slider thumb */}
                       </div>
                     ))}
                 </div>
