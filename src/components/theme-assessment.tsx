@@ -16,7 +16,8 @@ interface ThemeAssessmentProps {
   onQuestionScoreChange: (themeKey: keyof ThemeScores, questionIndex: number, value: QuestionScore) => void; // Add handler prop
 }
 
-const themeLabels: Record<keyof ThemeScores, string> = {
+// Moved themeLabels outside the component and exported
+export const themeLabels: Record<keyof ThemeScores, string> = {
   dreaming: 'Dreaming / Sleep Quality',
   moodScore: 'Mood Quality / Stability',
   training: 'Training / Exercise',
