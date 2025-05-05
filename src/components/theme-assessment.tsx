@@ -59,16 +59,18 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
           <div key={theme} className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor={theme} className="text-foreground/80">{themeLabels[theme]}</Label>
+              {/* Display score with + sign if positive */}
               <span className="text-sm font-medium text-primary">{scores[theme] > 0 ? `+${scores[theme]}` : scores[theme]}</span>
             </div>
             <Slider
               id={theme}
-              min={-2} // Updated min value
-              max={2}  // Updated max value
+              min={-2} // Ensure min value is -2
+              max={2}  // Ensure max value is 2
               step={1}
               value={[scores[theme]]}
               onValueChange={([value]) => onScoreChange(theme, value)}
               aria-label={`${themeLabels[theme]} score: ${scores[theme]}`}
+              className="[&>span:first-of-type]:h-2 [&>span:first-of-type>span]:h-2 [&>span:last-of-type]:h-5 [&>span:last-of-type]:w-5" // Standard ShadCN slider sizing
             />
           </div>
         ))}

@@ -18,18 +18,18 @@ const AnalyzeMoodPatternsInputSchema = z.object({
   moodData: z
     .string()
     .describe(
-      'A stringified JSON array of objects, where each object represents a day and its mood. Each object has date (ISO-8601 format) and mood properties.'
+      'A stringified JSON array of objects, where each object represents a day and its mood. Each object has date (ISO-8601 format) and mood properties (e.g., "happy", "sad", "neutral", "angry", or null).'
     ),
   themeScores: z
     .string()
     .describe(
-      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, self education.'
+      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2, where -2 is very negative, 0 is neutral, +2 is very positive) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, self education.'
     ),
 });
 export type AnalyzeMoodPatternsInput = z.infer<typeof AnalyzeMoodPatternsInputSchema>;
 
 const AnalyzeMoodPatternsOutputSchema = z.object({
-  insights: z.string().describe('Insights on factors influencing mood based on the logged data.'),
+  insights: z.string().describe('Insights on factors influencing mood based on the logged data, including observed correlations and actionable suggestions.'),
 });
 export type AnalyzeMoodPatternsOutput = z.infer<typeof AnalyzeMoodPatternsOutputSchema>;
 
@@ -58,13 +58,19 @@ const prompt = ai.definePrompt({
       insights: z.string().describe('Insights on factors influencing mood based on the logged data.'),
     }),
   },
-  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores (ranging from -2 to +2) over time to identify potential factors influencing the user's mood.
+  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores provided over time to identify potential factors influencing the user's mood. The theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral.
 
-Mood Data: {{{moodData}}}
+Mood Data (JSON): {{{moodData}}}
 
-Theme Scores: {{{themeScores}}}
+Theme Scores (JSON): {{{themeScores}}}
 
-Provide insights on what factors might be positively or negatively influencing the user's mood, and suggest potential interventions to improve their well-being. Be specific about the connections you observe between themes and mood shifts.`,
+Based on the data:
+1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score) and reported moods (e.g., 'happy').
+2. Note any significant shifts in mood and see if they correspond to changes in theme scores around the same time.
+3. Provide concise, actionable insights on what factors might be positively or negatively influencing the user's mood.
+4. Suggest potential, gentle interventions or areas of focus to improve their well-being based *only* on the observed patterns in the data. Avoid making medical claims or diagnoses.
+
+Format your response clearly, highlighting the key findings and suggestions.`,
 });
 
 const analyzeMoodPatternsFlow = ai.defineFlow<
