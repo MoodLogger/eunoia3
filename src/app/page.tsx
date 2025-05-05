@@ -46,7 +46,9 @@ export default function Home() {
       // Ensure prevEntry is not null before updating
       if (!prevEntry) return null;
       // Ensure scores object exists before spreading, including the new theme
-      const currentScores = prevEntry.scores || { dreaming: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 };
+      // Use the default scores from getDailyEntry as a base if scores are missing
+      const defaultScores: ThemeScores = { dreaming: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 };
+      const currentScores = prevEntry.scores || defaultScores;
       return {
         ...prevEntry,
         scores: {
@@ -85,7 +87,7 @@ export default function Home() {
                                    <div className="h-4 bg-muted rounded w-1/6"></div>
                                </div>
                                <div className="h-2 bg-muted rounded w-full"></div> {/* Slider track */}
-                                <div className="h-5 w-5 bg-muted rounded-full -mt-3.5 mx-auto"></div> {/* Slider thumb */}
+                                <div className="h-5 w-5 bg-muted rounded-full -mt-3.5 mx-auto relative z-10"></div> {/* Slider thumb */}
                            </div>
                          ))}
                      </CardContent>

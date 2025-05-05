@@ -22,12 +22,12 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
 
     const themeScores = entriesArray.map(entry => ({
         date: entry.date,
-        dreaming: entry.scores.dreaming,
-        training: entry.scores.training,
-        diet: entry.scores.diet,
-        socialRelations: entry.scores.socialRelations,
-        familyRelations: entry.scores.familyRelations, // Added new theme
-        selfEducation: entry.scores.selfEducation
+        dreaming: entry.scores.dreaming ?? 0, // Add nullish coalescing for safety
+        training: entry.scores.training ?? 0,
+        diet: entry.scores.diet ?? 0,
+        socialRelations: entry.scores.socialRelations ?? 0,
+        familyRelations: entry.scores.familyRelations ?? 0, // Added new theme
+        selfEducation: entry.scores.selfEducation ?? 0
     }));
 
     return {
@@ -87,18 +87,18 @@ export function MoodAnalysis() {
               return;
           }
 
-          // Define CSV headers
+          // Define CSV headers in the correct order
           const headers = ['Date', 'Mood', 'Dreaming', 'Training', 'Diet', 'Social Relations', 'Family Relations', 'Self Education']; // Added new header
           // Prepare CSV rows
           const rows = entriesArray.map(entry => [
               entry.date,
               entry.mood || '', // Handle null mood
-              entry.scores.dreaming,
-              entry.scores.training,
-              entry.scores.diet,
-              entry.scores.socialRelations,
-              entry.scores.familyRelations, // Added data for new theme
-              entry.scores.selfEducation
+              entry.scores.dreaming ?? 0, // Use nullish coalescing
+              entry.scores.training ?? 0,
+              entry.scores.diet ?? 0,
+              entry.scores.socialRelations ?? 0,
+              entry.scores.familyRelations ?? 0, // Added data for new theme
+              entry.scores.selfEducation ?? 0
           ]);
 
           // Combine headers and rows

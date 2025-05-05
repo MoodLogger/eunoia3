@@ -58,19 +58,19 @@ const prompt = ai.definePrompt({
       insights: z.string().describe('Insights on factors influencing mood based on the logged data.'),
     }),
   },
-  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores provided over time to identify potential factors influencing the user's mood. The theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral.
+  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores provided over time to identify potential factors influencing the user's mood. The theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes are dreaming, training, diet, social relations, family relations, and self education.
 
 Mood Data (JSON): {{{moodData}}}
 
 Theme Scores (JSON): {{{themeScores}}}
 
 Based on the data:
-1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'family relations' score) and reported moods (e.g., 'happy', 'sad').
+1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'family relations' score) and reported moods (e.g., 'happy', 'sad'). Consider all themes provided, including 'family relations'.
 2. Note any significant shifts in mood and see if they correspond to changes in theme scores around the same time.
 3. Provide concise, actionable insights on what factors might be positively or negatively influencing the user's mood.
 4. Suggest potential, gentle interventions or areas of focus to improve their well-being based *only* on the observed patterns in the data. Avoid making medical claims or diagnoses.
 
-Format your response clearly, highlighting the key findings and suggestions.`,
+Format your response clearly, highlighting the key findings and suggestions. Ensure the analysis considers the 'family relations' theme alongside the others.`,
 });
 
 const analyzeMoodPatternsFlow = ai.defineFlow<
