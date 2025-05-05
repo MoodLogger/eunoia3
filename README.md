@@ -40,39 +40,46 @@ This is a Next.js application for tracking daily mood and related factors. It al
 
     # --- Google Sheets API Credentials (Required for Google Sheets Export) ---
 
-    # 1. Google Sheet ID:
-    #    Create a new Google Sheet or use an existing one.
-    #    The ID is the long string in the sheet's URL:
+    # 1. Google Sheet ID (Required):
+    #    This is the unique identifier for your spreadsheet file (e.g., your "MoodLogger" sheet).
+    #    Find this ID in the URL of your Google Sheet:
     #    https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit
+    #    The API uses this ID to find the correct file, regardless of its folder location (like \\hobby\MoodLogger) in your Google Drive.
     GOOGLE_SHEET_ID="YOUR_SPREADSHEET_ID"
 
     # 2. Sheet Name (Optional):
-    #    If your sheet tab is not named "Sheet1", specify its name here.
-    # GOOGLE_SHEET_NAME="YourSheetTabName"
+    #    The name of the specific tab (sheet) within your spreadsheet file where data should be written.
+    #    If you omit this, it defaults to "Sheet1".
+    # GOOGLE_SHEET_NAME="YourSheetTabName" # e.g., "DailyLogs"
 
-    # 3. Google Cloud Service Account:
+    # 3. Google Cloud Service Account (Required):
+    #    Follow these steps to create a service account and get its credentials:
     #    - Go to the Google Cloud Console: https://console.cloud.google.com/
     #    - Select your project or create a new one.
     #    - Enable the "Google Sheets API": Navigate to APIs & Services > Library, search for "Google Sheets API", and enable it.
     #    - Create a Service Account: Navigate to APIs & Services > Credentials > Create Credentials > Service account.
     #      - Give it a name (e.g., "mood-logger-sheets-writer").
-    #      - Grant it the "Editor" role for basic access, or create a more restricted custom role if needed.
+    #      - Grant it the "Editor" role for basic access (this allows it to write to sheets shared with it). Or create a more restricted custom role if needed.
     #      - Click "Done".
     #    - Generate a Key: Find the created service account, click on it, go to the "Keys" tab, click "Add Key" > "Create new key", choose "JSON", and click "Create". A JSON file will be downloaded.
-    #    - !! Keep this JSON file secure !!
+    #    - !! Keep this JSON file secure !! Do not commit it to version control.
 
-    # 4. Service Account Email:
-    #    Copy the service account's email address (e.g., ...@...iam.gserviceaccount.com) from the Credentials page or the downloaded JSON file (`client_email`).
+    # 4. Service Account Email (Required):
+    #    Copy the service account's email address from the Credentials page or the downloaded JSON file (it's the value for the `client_email` key).
+    #    It looks like: your-service-account-name@your-project-id.iam.gserviceaccount.com
     GOOGLE_SERVICE_ACCOUNT_EMAIL="your-service-account@your-project-id.iam.gserviceaccount.com"
 
-    # 5. Private Key:
-    #    Open the downloaded JSON key file. Copy the ENTIRE private key string, starting from `-----BEGIN PRIVATE KEY-----` to `-----END PRIVATE KEY-----`.
-    #    IMPORTANT: Replace the literal newline characters `\n` within the key string with the sequence `\n` in your .env.local file.
-    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_CONTENT_HERE_WITH_NEWLINES_AS_\\n\n-----END PRIVATE KEY-----\n"
+    # 5. Private Key (Required):
+    #    Open the downloaded JSON key file with a text editor. Copy the ENTIRE private key string, including the header and footer lines (`-----BEGIN PRIVATE KEY-----` to `-----END PRIVATE KEY-----`).
+    #    IMPORTANT: In your .env.local file, paste the key within quotes and replace the literal newline characters (`\n`) within the key string with the sequence `\\n`.
+    GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYOUR_PRIVATE_KEY_CONTENT_WITH_NEWLINES_AS_DOUBLE_BACKSLASH_N\\n-----END PRIVATE KEY-----\\n"
 
-    # 6. Share the Google Sheet:
-    #    Open your Google Sheet and click the "Share" button.
-    #    Paste the Service Account Email (from step 4) into the sharing dialog and give it "Editor" access. Click "Send" or "Share".
+    # 6. Share the Google Sheet (Required):
+    #    Open your specific Google Sheet file (the one identified by GOOGLE_SHEET_ID).
+    #    Click the "Share" button (top right).
+    #    Paste the Service Account Email (from step 4) into the sharing dialog.
+    #    Grant it "Editor" access.
+    #    Click "Send" or "Share". This allows the service account (and thus the app) to write to this specific sheet.
 
     # --- Firebase Configuration (Optional - If using Firebase features) ---
     # NEXT_PUBLIC_FIREBASE_API_KEY="YOUR_FIREBASE_API_KEY"
@@ -112,12 +119,12 @@ This is a Next.js application for tracking daily mood and related factors. It al
 - Your selections are automatically saved to the browser's local storage.
 - The overall score for each theme (-2 to +2) and the calculated overall mood icon (Bad/Normal/Good) will update automatically.
 - **Analyze Moods:** After logging data for at least 3 days, click "Analyze Moods" (requires Genkit server running and API key) to get AI-powered insights.
-- **Export to Sheets:** Click "Export to Sheets" to append the current day's date and overall theme scores as a new row to the configured Google Sheet (requires Google Sheets API setup).
+- **Export to Sheets:** Click "Export to Sheets" to append the current day's date and overall theme scores as a new row to the configured Google Sheet (requires Google Sheets API setup as described above).
 
 ## Data Storage
 
 - Daily assessment data is stored in the browser's **Local Storage**. Clearing your browser data will remove the stored logs.
-- The "Export to Sheets" feature provides a way to back up your data externally.
+- The "Export to Sheets" feature provides a way to back up your data externally to the specific Google Sheet you configured via `GOOGLE_SHEET_ID` and shared with the service account.
 
 ## Building for Production
 
