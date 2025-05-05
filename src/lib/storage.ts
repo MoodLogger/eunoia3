@@ -1,4 +1,5 @@
 
+
 import type { DailyEntry, StoredData, ThemeScores, Mood } from './types';
 
 const STORAGE_KEY = 'moodLoggerData';
@@ -29,11 +30,11 @@ export function getAllEntries(): StoredData {
 export function getDailyEntry(date: string): DailyEntry {
   const allData = getAllEntries();
   const defaultScores: ThemeScores = {
-    dreaming: 5, // Default to middle score
-    training: 5,
-    diet: 5,
-    socialRelations: 5,
-    selfEducation: 5,
+    dreaming: 0, // Default to neutral score 0
+    training: 0,
+    diet: 0,
+    socialRelations: 0,
+    selfEducation: 0,
   };
   return allData[date] || { date, mood: null, scores: defaultScores };
 }
@@ -86,3 +87,4 @@ export function saveDailyEntry(entry: DailyEntry): void {
     console.error("Error saving daily entry to local storage:", error);
   }
 }
+

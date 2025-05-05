@@ -59,12 +59,12 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
           <div key={theme} className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor={theme} className="text-foreground/80">{themeLabels[theme]}</Label>
-              <span className="text-sm font-medium text-primary">{scores[theme]}</span>
+              <span className="text-sm font-medium text-primary">{scores[theme] > 0 ? `+${scores[theme]}` : scores[theme]}</span>
             </div>
             <Slider
               id={theme}
-              min={1}
-              max={10}
+              min={-2} // Updated min value
+              max={2}  // Updated max value
               step={1}
               value={[scores[theme]]}
               onValueChange={([value]) => onScoreChange(theme, value)}
@@ -76,3 +76,4 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
     </Card>
   );
 }
+

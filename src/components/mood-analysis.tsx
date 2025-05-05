@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Lightbulb, FileText } from 'lucide-react';
 import { analyzeMoodPatterns } from '@/ai/flows/analyze-mood-patterns';
-import type { StoredData, DailyEntry } from '@/lib/types';
+import type { StoredData } from '@/lib/types'; // Removed unused DailyEntry import
 import { getAllEntries } from '@/lib/storage';
 import { format } from 'date-fns';
 
@@ -23,7 +23,7 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
     const themeScores = entriesArray.map(entry => ({
         date: entry.date,
         dreaming: entry.scores.dreaming,
-        trainings: entry.scores.training, // Match AI prompt expectation
+        training: entry.scores.training, // Corrected key from 'trainings'
         diet: entry.scores.diet,
         socialRelations: entry.scores.socialRelations,
         selfEducation: entry.scores.selfEducation
@@ -93,7 +93,7 @@ export function MoodAnalysis() {
               entry.date,
               entry.mood || '', // Handle null mood
               entry.scores.dreaming,
-              entry.scores.training,
+              entry.scores.training, // Corrected key
               entry.scores.diet,
               entry.scores.socialRelations,
               entry.scores.selfEducation
