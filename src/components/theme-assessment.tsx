@@ -14,20 +14,22 @@ interface ThemeAssessmentProps {
 
 const themeLabels: Record<keyof ThemeScores, string> = {
   dreaming: 'Dreaming / Sleep Quality',
+  moodScore: 'Mood Quality / Stability', // Added label for new theme
   training: 'Training / Exercise',
   diet: 'Diet / Nutrition',
   socialRelations: 'Social Relations',
-  familyRelations: 'Family Relations', // Added label for new theme
+  familyRelations: 'Family Relations',
   selfEducation: 'Self Education / Learning',
 };
 
 // Order of themes for display
 const themeOrder: Array<keyof ThemeScores> = [
     'dreaming',
+    'moodScore', // Added new theme below dreaming
     'training',
     'diet',
     'socialRelations',
-    'familyRelations', // Added new theme in desired order
+    'familyRelations',
     'selfEducation',
 ];
 
@@ -48,7 +50,7 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
             </CardHeader>
             <CardContent className="space-y-6 p-6">
                 <div className="animate-pulse space-y-6">
-                    {[...Array(6)].map((_, i) => ( // Updated skeleton count to 6
+                    {[...Array(themeOrder.length)].map((_, i) => ( // Updated skeleton count based on themeOrder length
                       <div key={i} className="space-y-2">
                           <div className="flex justify-between items-center">
                                <div className="h-4 bg-muted rounded w-1/3"></div>
@@ -84,8 +86,8 @@ export function ThemeAssessment({ scores, onScoreChange }: ThemeAssessmentProps)
             </div>
             <Slider
               id={theme}
-              min={-2} // Ensure min value is -2
-              max={2}  // Ensure max value is 2
+              min={-2}
+              max={2}
               step={1}
               // Ensure scores[theme] has a fallback value (e.g., 0) if undefined
               value={[scores[theme] !== undefined ? scores[theme] : 0]}

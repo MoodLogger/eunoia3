@@ -32,10 +32,11 @@ export function getDailyEntry(date: string): DailyEntry {
   // Default score is 0, which is the neutral point in the -2 to +2 scale.
   const defaultScores: ThemeScores = {
     dreaming: 0,
+    moodScore: 0, // Added default score for new theme
     training: 0,
     diet: 0,
     socialRelations: 0,
-    familyRelations: 0, // Added default score for new theme
+    familyRelations: 0,
     selfEducation: 0,
   };
   // Return existing entry or a new one with default scores and null mood
@@ -69,7 +70,17 @@ export function saveScores(date: string, scores: ThemeScores): void {
   try {
     const allData = getAllEntries();
     const currentEntry = getDailyEntry(date); // Get existing or default entry
-    allData[date] = { ...currentEntry, scores }; // Update only the scores
+    // Ensure all themes exist in the scores being saved, adding defaults if needed
+    const completeScores: ThemeScores = {
+        dreaming: scores.dreaming ?? 0,
+        moodScore: scores.moodScore ?? 0, // Ensure moodScore exists
+        training: scores.training ?? 0,
+        diet: scores.diet ?? 0,
+        socialRelations: scores.socialRelations ?? 0,
+        familyRelations: scores.familyRelations ?? 0,
+        selfEducation: scores.selfEducation ?? 0,
+    };
+    allData[date] = { ...currentEntry, scores: completeScores }; // Update only the scores
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
   } catch (error) {
     console.error("Error saving scores to local storage:", error);
@@ -89,7 +100,15 @@ export function saveDailyEntry(entry: DailyEntry): void {
     const completeEntry: DailyEntry = {
         date: entry.date,
         mood: entry.mood !== undefined ? entry.mood : null, // Default mood to null if missing
-        scores: entry.scores || { dreaming: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 }, // Default scores if missing, including new theme
+        scores: { // Default scores if missing, including new themes
+            dreaming: entry.scores?.dreaming ?? 0,
+            moodScore: entry.scores?.moodScore ?? 0, // Add default for moodScore
+            training: entry.scores?.training ?? 0,
+            diet: entry.scores?.diet ?? 0,
+            socialRelations: entry.scores?.socialRelations ?? 0,
+            familyRelations: entry.scores?.familyRelations ?? 0,
+            selfEducation: entry.scores?.selfEducation ?? 0,
+        }
     };
     allData[entry.date] = completeEntry;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
@@ -97,4 +116,3 @@ export function saveDailyEntry(entry: DailyEntry): void {
     console.error("Error saving daily entry to local storage:", error);
   }
 }
-

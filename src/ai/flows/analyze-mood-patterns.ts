@@ -23,7 +23,7 @@ const AnalyzeMoodPatternsInputSchema = z.object({
   themeScores: z
     .string()
     .describe(
-      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2, where -2 is very negative, 0 is neutral, +2 is very positive) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, family relations, self education.' // Added familyRelations
+      'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2, where -2 is very negative, 0 is neutral, +2 is very positive) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, moodScore (representing mood quality/stability), training, diet, social relations, family relations, self education.' // Added moodScore
     ),
 });
 export type AnalyzeMoodPatternsInput = z.infer<typeof AnalyzeMoodPatternsInputSchema>;
@@ -49,7 +49,7 @@ const prompt = ai.definePrompt({
       themeScores: z
         .string()
         .describe(
-          'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, training, diet, social relations, family relations, self education.' // Added familyRelations
+          'A stringified JSON array of objects, where each object represents a day and the scores (ranging from -2 to +2) for each of the themes. Each object has date (ISO-8601 format) and scores for themes such as dreaming, moodScore (mood quality/stability), training, diet, social relations, family relations, self education.' // Added moodScore
         ),
     }),
   },
@@ -58,19 +58,19 @@ const prompt = ai.definePrompt({
       insights: z.string().describe('Insights on factors influencing mood based on the logged data.'),
     }),
   },
-  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores provided over time to identify potential factors influencing the user's mood. The theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes are dreaming, training, diet, social relations, family relations, and self education.
+  prompt: `You are a mood analysis expert. Analyze the mood patterns and theme scores provided over time to identify potential factors influencing the user's mood. The theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes are dreaming, moodScore (representing mood quality/stability), training, diet, social relations, family relations, and self education. The 'mood' property represents the primary emotion felt, while 'moodScore' represents an overall assessment of the day's mood quality or stability.
 
 Mood Data (JSON): {{{moodData}}}
 
 Theme Scores (JSON): {{{themeScores}}}
 
 Based on the data:
-1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'family relations' score) and reported moods (e.g., 'happy', 'sad'). Consider all themes provided, including 'family relations'.
-2. Note any significant shifts in mood and see if they correspond to changes in theme scores around the same time.
-3. Provide concise, actionable insights on what factors might be positively or negatively influencing the user's mood.
+1. Identify any correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'moodScore') and reported moods (e.g., 'happy', 'sad'). Consider all themes provided, including 'moodScore' and 'family relations'. Analyze how the 'moodScore' relates to the primary 'mood' reported for the day.
+2. Note any significant shifts in mood and see if they correspond to changes in theme scores (including 'moodScore') around the same time.
+3. Provide concise, actionable insights on what factors might be positively or negatively influencing the user's mood and their perceived mood quality/stability (moodScore).
 4. Suggest potential, gentle interventions or areas of focus to improve their well-being based *only* on the observed patterns in the data. Avoid making medical claims or diagnoses.
 
-Format your response clearly, highlighting the key findings and suggestions. Ensure the analysis considers the 'family relations' theme alongside the others.`,
+Format your response clearly, highlighting the key findings and suggestions. Ensure the analysis considers the 'moodScore' and 'family relations' themes alongside the others.`,
 });
 
 const analyzeMoodPatternsFlow = ai.defineFlow<
@@ -87,4 +87,3 @@ const analyzeMoodPatternsFlow = ai.defineFlow<
     return output!;
   }
 );
-

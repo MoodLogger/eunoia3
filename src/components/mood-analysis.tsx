@@ -23,10 +23,11 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
     const themeScores = entriesArray.map(entry => ({
         date: entry.date,
         dreaming: entry.scores.dreaming ?? 0, // Add nullish coalescing for safety
+        moodScore: entry.scores.moodScore ?? 0, // Added new theme
         training: entry.scores.training ?? 0,
         diet: entry.scores.diet ?? 0,
         socialRelations: entry.scores.socialRelations ?? 0,
-        familyRelations: entry.scores.familyRelations ?? 0, // Added new theme
+        familyRelations: entry.scores.familyRelations ?? 0,
         selfEducation: entry.scores.selfEducation ?? 0
     }));
 
@@ -88,16 +89,17 @@ export function MoodAnalysis() {
           }
 
           // Define CSV headers in the correct order
-          const headers = ['Date', 'Mood', 'Dreaming', 'Training', 'Diet', 'Social Relations', 'Family Relations', 'Self Education']; // Added new header
+          const headers = ['Date', 'Mood', 'Dreaming', 'Mood Quality/Stability', 'Training', 'Diet', 'Social Relations', 'Family Relations', 'Self Education']; // Added new header
           // Prepare CSV rows
           const rows = entriesArray.map(entry => [
               entry.date,
               entry.mood || '', // Handle null mood
               entry.scores.dreaming ?? 0, // Use nullish coalescing
+              entry.scores.moodScore ?? 0, // Added data for new theme
               entry.scores.training ?? 0,
               entry.scores.diet ?? 0,
               entry.scores.socialRelations ?? 0,
-              entry.scores.familyRelations ?? 0, // Added data for new theme
+              entry.scores.familyRelations ?? 0,
               entry.scores.selfEducation ?? 0
           ]);
 

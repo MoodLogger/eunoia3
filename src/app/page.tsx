@@ -47,7 +47,7 @@ export default function Home() {
       if (!prevEntry) return null;
       // Ensure scores object exists before spreading, including the new theme
       // Use the default scores from getDailyEntry as a base if scores are missing
-      const defaultScores: ThemeScores = { dreaming: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 };
+      const defaultScores: ThemeScores = { dreaming: 0, moodScore: 0, training: 0, diet: 0, socialRelations: 0, familyRelations: 0, selfEducation: 0 }; // Added moodScore
       const currentScores = prevEntry.scores || defaultScores;
       return {
         ...prevEntry,
@@ -80,7 +80,7 @@ export default function Home() {
                         <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div>
                     </CardHeader>
                     <CardContent className="space-y-6 p-6">
-                         {[...Array(6)].map((_, i) => ( // Updated skeleton count to 6
+                         {[...Array(7)].map((_, i) => ( // Updated skeleton count to 7
                            <div key={i} className="space-y-2">
                                <div className="flex justify-between items-center">
                                    <div className="h-4 bg-muted rounded w-1/3"></div>
