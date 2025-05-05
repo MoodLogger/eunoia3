@@ -14,15 +14,6 @@ interface ThemeQuestionsFormProps {
   onQuestionScoreChange: (themeKey: keyof ThemeScores, questionIndex: number, value: QuestionScore) => void;
 }
 
-// Placeholder questions - replace with actual questions later
-const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
-  const questions: string[] = [];
-  for (let i = 1; i <= 8; i++) {
-    questions.push(`Placeholder Question ${i} for ${themeLabelMap[themeKey] || themeKey}?`);
-  }
-  return questions;
-};
-
 // Map theme keys to labels if needed, or use themeLabel prop
 const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
     dreaming: 'Dreaming / Sleep Quality',
@@ -32,6 +23,22 @@ const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
     socialRelations: 'Social Relations',
     familyRelations: 'Family Relations',
     selfEducation: 'Self Education / Learning',
+};
+
+
+// Function to get questions, now handles specific question for 'diet' theme
+const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
+  const questions: string[] = [];
+  const label = themeLabelMap[themeKey] || themeKey; // Get the friendly label
+
+  for (let i = 0; i < 8; i++) {
+      if (themeKey === 'diet' && i === 0) {
+          questions.push("Nawodnienie"); // Specific first question for Diet
+      } else {
+          questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
+      }
+  }
+  return questions;
 };
 
 
@@ -86,3 +93,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
