@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster"; // Import Toaster
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Mood Logger', // Updated App Title
+  title: 'Eunoia', // Updated App Title
   description: 'Track your mood and daily activities.',
 };
 

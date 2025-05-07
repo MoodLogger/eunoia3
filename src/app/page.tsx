@@ -134,7 +134,7 @@ export default function Home() {
      return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
             <div className="w-full max-w-md space-y-6">
-                {/* Skeleton for Mood Logger Card */}
+                {/* Skeleton for Eunoia Card */}
                 <Card className="shadow-lg animate-pulse">
                     <CardHeader className="text-center">
                         <div className="h-8 bg-muted rounded w-3/4 mx-auto mb-2"></div>
@@ -186,7 +186,7 @@ export default function Home() {
       <div className="w-full max-w-md space-y-6">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-primary">Mood Logger</CardTitle>
+            <CardTitle className="text-3xl font-bold text-primary">Eunoia</CardTitle>
             <CardDescription className="flex flex-col items-center space-y-2">
               <span>
                 Overall assessment for {selectedDate && isValid(parseISO(selectedDate)) ? format(parseISO(selectedDate), 'MMMM d, yyyy') : '...'}
