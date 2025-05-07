@@ -23,7 +23,7 @@ export const themeLabels: Record<keyof ThemeScores, string> = {
   training: 'Fitness',
   diet: 'Odżywianie',
   socialRelations: 'Relacje zewnętrzne',
-  familyRelations: 'Family Relations',
+  familyRelations: 'Relacje rodzinne',
   selfEducation: 'Self Education / Learning',
 };
 
