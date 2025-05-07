@@ -18,7 +18,7 @@ interface ThemeAssessmentProps {
 
 // Moved themeLabels outside the component and exported
 export const themeLabels: Record<keyof ThemeScores, string> = {
-  dreaming: 'Dreaming / Sleep Quality',
+  dreaming: 'Sen', // Changed label
   moodScore: 'Mood Quality / Stability',
   training: 'Training / Exercise',
   diet: 'Diet / Nutrition',
@@ -130,3 +130,4 @@ export function ThemeAssessment({ scores, detailedScores, onQuestionScoreChange 
     </Card>
   );
 }
+

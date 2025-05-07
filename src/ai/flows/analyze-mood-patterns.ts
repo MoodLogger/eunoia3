@@ -22,7 +22,7 @@ const AnalyzeMoodPatternsInputSchema = z.object({
   themeScores: z
     .string()
     .describe(
-      'A stringified JSON array of objects, where each object represents a day and the *overall* calculated scores (ranging from -2 to +2) for each theme. Each object has date (ISO-8601 format) and scores for themes such as dreaming, moodScore (representing mood quality/stability assessment), training, diet, social relations, family relations, self education.'
+      'A stringified JSON array of objects, where each object represents a day and the *overall* calculated scores (ranging from -2 to +2) for each theme. Each object has date (ISO-8601 format) and scores for themes such as Sen (dreaming/sleep quality), moodScore (representing mood quality/stability assessment), training, diet, social relations, family relations, self education.'
     ),
    // Optional: Add detailedScores if AI needs to analyze question-level data in the future
   // detailedThemeScores: z
@@ -53,7 +53,7 @@ const prompt = ai.definePrompt({
   output: { // Output schema matches AnalyzeMoodPatternsOutputSchema
     schema: AnalyzeMoodPatternsOutputSchema,
   },
-  prompt: `You are a mood analysis expert. Analyze the primary logged moods and *overall theme scores* provided over time to identify potential factors influencing the user's mood and well-being. The overall theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes assessed are dreaming, moodScore (mood quality/stability assessment), training, diet, social relations, family relations, and self education.
+  prompt: `You are a mood analysis expert. Analyze the primary logged moods and *overall theme scores* provided over time to identify potential factors influencing the user's mood and well-being. The overall theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes assessed are Sen (dreaming/sleep quality), moodScore (mood quality/stability assessment), training, diet, social relations, family relations, and self education.
 
 Primary Mood Data (JSON): {{{moodData}}}
 
@@ -88,3 +88,4 @@ const analyzeMoodPatternsFlow = ai.defineFlow<
     return output;
   }
 );
+

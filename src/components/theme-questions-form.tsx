@@ -16,7 +16,7 @@ interface ThemeQuestionsFormProps {
 
 // Map theme keys to labels if needed, or use themeLabel prop
 const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
-    dreaming: 'Dreaming / Sleep Quality',
+    dreaming: 'Sen', // Changed label
     moodScore: 'Mood Quality / Stability',
     training: 'Training / Exercise',
     diet: 'Diet / Nutrition',
