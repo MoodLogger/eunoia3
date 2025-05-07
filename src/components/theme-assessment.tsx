@@ -18,8 +18,8 @@ interface ThemeAssessmentProps {
 
 // Moved themeLabels outside the component and exported
 export const themeLabels: Record<keyof ThemeScores, string> = {
-  dreaming: 'Sen', // Changed label
-  moodScore: 'Mood Quality / Stability',
+  dreaming: 'Sen',
+  moodScore: 'Nastawienie', // Changed label
   training: 'Training / Exercise',
   diet: 'Diet / Nutrition',
   socialRelations: 'Social Relations',
