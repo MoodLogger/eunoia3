@@ -20,8 +20,8 @@ interface ThemeAssessmentProps {
 export const themeLabels: Record<keyof ThemeScores, string> = {
   dreaming: 'Sen',
   moodScore: 'Nastawienie',
-  training: 'Fitness', // Changed label
-  diet: 'Diet / Nutrition',
+  training: 'Fitness',
+  diet: 'Odżywianie', // Changed label
   socialRelations: 'Social Relations',
   familyRelations: 'Family Relations',
   selfEducation: 'Self Education / Learning',
