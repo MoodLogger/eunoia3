@@ -25,7 +25,7 @@ const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
 };
 
 
-// Function to get questions, now handles specific question for 'diet' theme
+// Function to get questions, now handles specific question for 'diet' and 'dreaming' theme
 const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
   const questions: string[] = [];
   const label = themeLabelMap[themeKey] || themeKey; // Get the friendly label
@@ -33,7 +33,10 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
   for (let i = 0; i < 8; i++) {
       if (themeKey === 'diet' && i === 0) {
           questions.push("Nawodnienie"); // Specific first question for Diet
-      } else {
+      } else if (themeKey === 'dreaming' && i === 0) {
+          questions.push("O której położyłeś się do łóżka?"); // Specific first question for Sen
+      }
+      else {
           questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
       }
   }
