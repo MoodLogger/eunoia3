@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -53,14 +52,14 @@ const prompt = ai.definePrompt({
   output: { // Output schema matches AnalyzeMoodPatternsOutputSchema
     schema: AnalyzeMoodPatternsOutputSchema,
   },
-  prompt: `You are a mood analysis expert. Analyze the primary logged moods and *overall theme scores* provided over time to identify potential factors influencing the user's mood and well-being. The overall theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes assessed are Sen (dreaming/sleep quality), Nastawienie (mood quality/stability), training, diet, social relations, family relations, and self education.
+  prompt: `You are a mood analysis expert. Analyze the primary logged moods and *overall theme scores* provided over time to identify potential factors influencing the user's mood and well-being. The overall theme scores range from -2 (very negative impact/quality) to +2 (very positive impact/quality), with 0 being neutral. The themes assessed are Sen, Nastawienie, Fitness, Odżywianie, Relacje zewnętrzne, Relacje rodzinne, and Rozwój intelektualny.
 
 Primary Mood Data (JSON): {{{moodData}}}
 
 Overall Theme Scores (JSON): {{{themeScores}}}
 
 Based *only* on the provided overall scores and primary moods:
-1. Identify any potential correlations (positive or negative) between specific themes (e.g., high 'training' score, low 'Nastawienie') and reported primary moods (e.g., 'happy', 'sad'). Consider the 'Nastawienie' theme alongside others.
+1. Identify any potential correlations (positive or negative) between specific themes (e.g., high 'Fitness' score, low 'Nastawienie') and reported primary moods (e.g., 'happy', 'sad'). Consider the 'Nastawienie' theme alongside others.
 2. Note any significant shifts in primary mood and see if they correspond to changes in the *overall* theme scores around the same time.
 3. Provide concise, actionable insights on what factors *might* be influencing the user's mood based on these *overall* patterns. Highlight potential positive and negative contributors.
 4. Suggest potential, gentle areas of focus to improve well-being based *only* on the observed patterns in the *overall* data. Avoid making medical claims or diagnoses. Do not refer to individual question scores, only the overall theme scores.
@@ -88,4 +87,3 @@ const analyzeMoodPatternsFlow = ai.defineFlow<
     return output;
   }
 );
-

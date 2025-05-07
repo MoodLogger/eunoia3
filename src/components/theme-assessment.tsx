@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -24,7 +23,7 @@ export const themeLabels: Record<keyof ThemeScores, string> = {
   diet: 'Odżywianie',
   socialRelations: 'Relacje zewnętrzne',
   familyRelations: 'Relacje rodzinne',
-  selfEducation: 'Self Education / Learning',
+  selfEducation: 'Rozwój intelektualny', // Updated label
 };
 
 // Order of themes for display
@@ -130,4 +129,3 @@ export function ThemeAssessment({ scores, detailedScores, onQuestionScoreChange 
     </Card>
   );
 }
-

@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -22,7 +21,7 @@ const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
     diet: 'Odżywianie',
     socialRelations: 'Relacje zewnętrzne',
     familyRelations: 'Relacje rodzinne',
-    selfEducation: 'Self Education / Learning',
+    selfEducation: 'Rozwój intelektualny', // Updated label
 };
 
 
@@ -100,4 +99,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
