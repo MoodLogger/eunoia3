@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -69,6 +68,7 @@ export function ThemeQuestionsForm({
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
+        const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
 
         const defaultNegativeLabel = "Negative (-0.25)";
         const defaultNeutralLabel = "Neutral (0)";
@@ -79,13 +79,16 @@ export function ThemeQuestionsForm({
         let positiveLabel = defaultPositiveLabel;
 
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)";
+            negativeLabel = "&lt;1 litr (-0.25)";
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = ">2 litry (+0.25)";
+            positiveLabel = "&gt;2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)";
             neutralLabel = "między g. 22 a 23 (0)";
             positiveLabel = "przed g. 22 (+0.25)";
+        } else if (isDreamingQuestion2) {
+            negativeLabel = "Ponad godzinę (-0.25)";
+            // Neutral and Positive labels will remain default for this question unless specified later
         }
 
         return (
