@@ -9,9 +9,10 @@ import { cn } from '@/lib/utils';
 interface CalculatedMoodDisplayProps {
   icon: LucideIcon | null;
   label: string;
+  totalScore: number | null; // Added totalScore prop
 }
 
-export function CalculatedMoodDisplay({ icon: Icon, label }: CalculatedMoodDisplayProps) {
+export function CalculatedMoodDisplay({ icon: Icon, label, totalScore }: CalculatedMoodDisplayProps) {
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
@@ -24,6 +25,7 @@ export function CalculatedMoodDisplay({ icon: Icon, label }: CalculatedMoodDispl
         <div className="flex flex-col items-center justify-center py-4 space-y-2 animate-pulse">
             <div className="h-16 w-16 bg-muted rounded-full"></div>
             <div className="h-4 bg-muted rounded w-1/4"></div>
+            <div className="h-4 bg-muted rounded w-1/6 mt-1"></div> {/* Skeleton for Total Score */}
         </div>
     );
   }
@@ -61,6 +63,12 @@ export function CalculatedMoodDisplay({ icon: Icon, label }: CalculatedMoodDispl
       <span className={cn("text-lg font-medium", getIconColor(label).replace('animate-spin', ''))}> {/* Remove spin from label */}
         {label}
       </span>
+      {totalScore !== null && label !== 'Calculating...' && (
+        <span className="text-sm text-muted-foreground">
+          Total Score: {totalScore > 0 ? `+${totalScore}` : totalScore}
+        </span>
+      )}
     </div>
   );
 }
+

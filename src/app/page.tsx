@@ -18,12 +18,13 @@ type CalculatedMoodCategory = 'Bad' | 'Normal' | 'Good' | 'Calculating...';
 interface CalculatedMoodState {
     icon: LucideIcon | null;
     label: CalculatedMoodCategory;
+    totalScore: number | null; // Added totalScore
 }
 
-// Function to calculate mood category and icon based on *overall* scores
+// Function to calculate mood category, icon, and total score based on *overall* scores
 const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): CalculatedMoodState => {
     if (!scores) {
-        return { icon: Loader2, label: 'Calculating...' }; // Use Loader2 icon
+        return { icon: Loader2, label: 'Calculating...', totalScore: null }; // Use Loader2 icon
     }
 
     const themeKeys = Object.keys(scores) as Array<keyof ThemeScores>;
@@ -40,11 +41,11 @@ const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): Calcul
 
 
     if (average <= badThreshold) {
-        return { icon: Frown, label: 'Bad' };
+        return { icon: Frown, label: 'Bad', totalScore: parseFloat(sum.toFixed(2)) };
     } else if (average >= goodThreshold) {
-        return { icon: Smile, label: 'Good' };
+        return { icon: Smile, label: 'Good', totalScore: parseFloat(sum.toFixed(2)) };
     } else {
-        return { icon: Meh, label: 'Normal' };
+        return { icon: Meh, label: 'Normal', totalScore: parseFloat(sum.toFixed(2)) };
     }
 };
 
@@ -52,7 +53,7 @@ const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): Calcul
 export default function Home() {
   const [selectedDate, setSelectedDate] = React.useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [dailyEntry, setDailyEntry] = React.useState<DailyEntry | null>(null);
-  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...' }); // Default to calculating
+  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...', totalScore: null }); // Default to calculating
   const [isClient, setIsClient] = React.useState(false);
 
   // Effect to run only on the client after mount
@@ -142,6 +143,7 @@ export default function Home() {
                     <CardContent className="flex flex-col items-center justify-center py-4 space-y-2">
                          <div className="h-16 w-16 bg-muted rounded-full"></div> {/* Placeholder for CalculatedMoodDisplay Icon */}
                          <div className="h-4 bg-muted rounded w-1/4"></div> {/* Placeholder for CalculatedMoodDisplay Label */}
+                         <div className="h-4 bg-muted rounded w-1/6 mt-1"></div> {/* Placeholder for Total Score */}
                     </CardContent>
                 </Card>
                  {/* Skeleton for Theme Assessment Card */}
@@ -199,6 +201,7 @@ export default function Home() {
              <CalculatedMoodDisplay
                  icon={calculatedMood.icon}
                  label={calculatedMood.label}
+                 totalScore={calculatedMood.totalScore}
             />
           </CardContent>
         </Card>
@@ -215,3 +218,4 @@ export default function Home() {
     </main>
   );
 }
+
