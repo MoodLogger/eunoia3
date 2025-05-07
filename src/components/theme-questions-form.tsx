@@ -36,6 +36,8 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
           questions.push("Nawodnienie"); // Specific first question for Diet
       } else if (themeKey === 'dreaming' && i === 0) {
           questions.push("O której położyłeś się do łóżka?"); // Specific first question for Sen
+      } else if (themeKey === 'dreaming' && i === 1) {
+          questions.push("Jak szybko usnąłeś?"); // Specific second question for Sen
       }
       else {
           questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
@@ -81,9 +83,9 @@ export function ThemeQuestionsForm({
             neutralLabel = "1-2 litry (0)";
             positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
-            negativeLabel = "po g. 23 (-0.25)"; // Updated negative label
+            negativeLabel = "po g. 23 (-0.25)";
             neutralLabel = "między g. 22 a 23 (0)";
-            positiveLabel = "przed g. 22 (+0.25)"; // Updated positive label (with points)
+            positiveLabel = "przed g. 22 (+0.25)";
         }
 
         return (
