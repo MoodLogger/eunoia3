@@ -146,10 +146,10 @@ export default function Home() {
                          <div className="h-4 bg-muted rounded w-1/6 mt-1"></div> {/* Placeholder for Total Score */}
                     </CardContent>
                 </Card>
-                 {/* Skeleton for Theme Assessment Card */}
+                 {/* Skeleton for Pryzmaty Card */}
                  <Card className="shadow-lg animate-pulse">
                      <CardHeader>
-                         <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div>
+                         <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div> {/* Changed from "Daily Theme Assessment" */}
                     </CardHeader>
                     <CardContent className="space-y-4 p-6">
                           {[...Array(7)].map((_, i) => ( // Updated skeleton count to 7

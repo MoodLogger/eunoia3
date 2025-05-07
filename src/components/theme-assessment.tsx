@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -23,7 +24,7 @@ export const themeLabels: Record<keyof ThemeScores, string> = {
   diet: 'Odżywianie',
   socialRelations: 'Relacje zewnętrzne',
   familyRelations: 'Relacje rodzinne',
-  selfEducation: 'Rozwój intelektualny', // Updated label
+  selfEducation: 'Rozwój intelektualny',
 };
 
 // Order of themes for display
@@ -58,7 +59,7 @@ export function ThemeAssessment({ scores, detailedScores, onQuestionScoreChange 
       return (
         <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
             <CardHeader>
-                <CardTitle className="text-center">Daily Theme Assessment</CardTitle>
+                <CardTitle className="text-center">Pryzmaty</CardTitle> {/* Updated Title Here */}
             </CardHeader>
             <CardContent className="space-y-4 p-6">
                 <div className="animate-pulse space-y-4">
@@ -86,7 +87,7 @@ export function ThemeAssessment({ scores, detailedScores, onQuestionScoreChange 
   return (
     <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
       <CardHeader>
-        <CardTitle className="text-center">Daily Theme Assessment</CardTitle>
+        <CardTitle className="text-center">Pryzmaty</CardTitle> {/* Updated Title Here */}
       </CardHeader>
       <CardContent className="p-4 md:p-6">
         <Accordion
