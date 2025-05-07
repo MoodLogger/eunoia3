@@ -19,8 +19,8 @@ const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
     dreaming: 'Sen',
     moodScore: 'Nastawienie',
     training: 'Fitness',
-    diet: 'Odżywianie', // Changed label
-    socialRelations: 'Social Relations',
+    diet: 'Odżywianie',
+    socialRelations: 'Relacje zewnętrzne',
     familyRelations: 'Family Relations',
     selfEducation: 'Self Education / Learning',
 };
