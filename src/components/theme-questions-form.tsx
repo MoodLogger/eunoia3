@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -64,10 +65,25 @@ export function ThemeQuestionsForm({
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-center text-primary">{themeLabel} Questions</h3>
       {questions.map((question, index) => {
-        const isNawodnienieQuestion = themeKey === 'diet' && index === 0;
-        const negativeLabel = isNawodnienieQuestion ? "<1 litr (-0.25)" : "Negative (-0.25)";
-        const neutralLabel = isNawodnienieQuestion ? "1-2 litry (0)" : "Neutral (0)";
-        const positiveLabel = isNawodnienieQuestion ? ">2 litry (+0.25)" : "Positive (+0.25)";
+        const isDietQuestion1 = themeKey === 'diet' && index === 0;
+        const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
+
+        const defaultNegativeLabel = "Negative (-0.25)";
+        const defaultNeutralLabel = "Neutral (0)";
+        const defaultPositiveLabel = "Positive (+0.25)";
+
+        let negativeLabel = defaultNegativeLabel;
+        let neutralLabel = defaultNeutralLabel;
+        let positiveLabel = defaultPositiveLabel;
+
+        if (isDietQuestion1) {
+            negativeLabel = "<1 litr (-0.25)";
+            neutralLabel = "1-2 litry (0)";
+            positiveLabel = ">2 litry (+0.25)";
+        } else if (isDreamingQuestion1) {
+            negativeLabel = "przed g. 22 (-0.25)";
+            // Neutral and Positive labels remain default for this specific question as per current request
+        }
 
         return (
           <div key={`${themeKey}-${index}`} className="space-y-3 p-4 border rounded-md bg-card shadow-sm">
