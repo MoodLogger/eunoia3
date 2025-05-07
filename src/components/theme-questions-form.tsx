@@ -82,7 +82,8 @@ export function ThemeQuestionsForm({
             positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "przed g. 22 (-0.25)";
-            // Neutral and Positive labels remain default for this specific question as per current request
+            neutralLabel = "między g. 22 a 23 (0)"; // Updated neutral label
+            // Positive label remains default for this specific question as per current request
         }
 
         return (
