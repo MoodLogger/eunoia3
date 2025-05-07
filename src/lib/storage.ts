@@ -1,6 +1,7 @@
 
 import type { DailyEntry, StoredData, ThemeScores, Mood, DetailedThemeScores, ThemeQuestionScores, QuestionScore } from './types';
 import { themeOrder } from '@/components/theme-assessment'; // Import themeOrder
+import { saveEntryToFirestore } from '@/actions/save-entry-to-firestore'; // Import the new server action
 
 const STORAGE_KEY = 'moodLoggerData';
 
@@ -147,58 +148,71 @@ export function getDailyEntry(date: string): DailyEntry {
 
 
 /**
- * Saves the entire daily entry (mood, calculated scores, and detailed scores) for a specific date.
+ * Saves the entire daily entry (mood, calculated scores, and detailed scores) for a specific date
+ * to LocalStorage and attempts to save to Firebase Firestore.
  * Ensures the entry structure is complete before saving.
  * @param entry - The DailyEntry object.
  */
-export function saveDailyEntry(entry: DailyEntry): void {
+export async function saveDailyEntry(entry: DailyEntry): Promise<void> { // Make function async
    if (typeof window === 'undefined' || !entry || !entry.date) return;
-  try {
-    const allData = getAllEntries(); // Get current data (already validated/migrated)
-    const defaultDetailedScores = createDefaultDetailedScores();
-    const defaultScores = createDefaultThemeScores();
-
-
-    // Ensure the entry being saved has all necessary fields, merging defaults
-     const completeDetailedScores = { ...defaultDetailedScores, ...(entry.detailedScores || {}) };
-      themeOrder.forEach(theme => {
-          completeDetailedScores[theme] = { ...(defaultDetailedScores[theme] || {}), ...(entry.detailedScores?.[theme] || {}) };
-           for (let i = 0; i < 8; i++) {
-                if (completeDetailedScores[theme][i] === undefined) {
-                    completeDetailedScores[theme][i] = 0; // Default missing question score
-                }
+  
+  // Prepare complete entry data (already done in your existing logic)
+  const defaultDetailedScores = createDefaultDetailedScores();
+  const defaultScores = createDefaultThemeScores();
+  const completeDetailedScores = { ...defaultDetailedScores, ...(entry.detailedScores || {}) };
+  themeOrder.forEach(theme => {
+      completeDetailedScores[theme] = { ...(defaultDetailedScores[theme] || {}), ...(entry.detailedScores?.[theme] || {}) };
+       for (let i = 0; i < 8; i++) {
+            if (completeDetailedScores[theme][i] === undefined) {
+                completeDetailedScores[theme][i] = 0;
             }
-      });
+        }
+  });
+  const completeScores = { ...defaultScores, ...(entry.scores || {}) };
+  themeOrder.forEach(theme => {
+      if (completeScores[theme] === undefined) {
+          completeScores[theme] = 0;
+      }
+  });
+  const completeEntry: DailyEntry = {
+      date: entry.date,
+      mood: entry.mood !== undefined ? entry.mood : null,
+      scores: completeScores,
+      detailedScores: completeDetailedScores
+  };
 
-     const completeScores = { ...defaultScores, ...(entry.scores || {}) };
-      themeOrder.forEach(theme => {
-          if (completeScores[theme] === undefined) {
-              completeScores[theme] = 0; // Default missing overall score
-          }
-      });
-
-
-    const completeEntry: DailyEntry = {
-        date: entry.date,
-        mood: entry.mood !== undefined ? entry.mood : null,
-        scores: completeScores,
-        detailedScores: completeDetailedScores
-    };
-
+  // 1. Save to LocalStorage
+  try {
+    const allData = getAllEntries();
     allData[entry.date] = completeEntry;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+    console.log('[LocalStorage] Entry saved successfully for date:', entry.date);
   } catch (error) {
-    console.error("Error saving daily entry to local storage:", error);
-     // Consider notifying the user about the save failure
+    console.error("[LocalStorage] Error saving daily entry to local storage:", error);
+  }
+
+  // 2. Attempt to save to Firestore
+  if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) { // Only attempt if Firebase is likely configured
+    try {
+      console.log('[Firestore] Attempting to save entry for date:', completeEntry.date);
+      const firestoreResult = await saveEntryToFirestore(completeEntry);
+      if (!firestoreResult.success) {
+        console.error('[Firestore] Failed to save entry to Firestore:', firestoreResult.error);
+        // Optionally, inform the user via a non-blocking mechanism if possible (e.g., a global toast context)
+        // For now, just logging the error.
+      } else {
+        console.log('[Firestore] Entry also saved to Firestore with docId:', firestoreResult.docId);
+      }
+    } catch (error) {
+      console.error('[Firestore] Error calling saveEntryToFirestore from saveDailyEntry:', error);
+    }
+  } else {
+      console.warn('[Firestore] Skipping Firestore save as NEXT_PUBLIC_FIREBASE_PROJECT_ID is not set.');
   }
 }
 
-// --- Removed saveMood and saveScores as saveDailyEntry handles the whole object ---
-// If granular saving is needed later, these can be re-added, ensuring they
-// correctly fetch the full entry, update the specific part, and save the full entry back.
 
 // Helper function to calculate overall theme scores from detailed scores
-// This can be used in page.tsx or here if needed for migration/consistency checks
 export function calculateOverallScores(detailedScores: DetailedThemeScores): ThemeScores {
     const overallScores = {} as ThemeScores;
     themeOrder.forEach(theme => {
@@ -209,8 +223,8 @@ export function calculateOverallScores(detailedScores: DetailedThemeScores): The
                 sum += themeQuestions[i] ?? 0;
             }
         }
-        // Clamp the score between -2 and +2 (although sum should naturally fall in this range)
-        overallScores[theme] = Math.max(-2, Math.min(2, sum));
+        overallScores[theme] = Math.max(-2, Math.min(2, parseFloat(sum.toFixed(2))));
     });
     return overallScores;
 }
+

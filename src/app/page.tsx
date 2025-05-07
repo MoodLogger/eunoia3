@@ -64,12 +64,16 @@ export default function Home() {
     setCalculatedMood(calculateMoodFromOverallScores(storedEntry.scores));
   }, []);
 
-  // Update localStorage whenever dailyEntry changes
+  // Update localStorage and potentially Firestore whenever dailyEntry changes
   React.useEffect(() => {
-    if (dailyEntry && isClient && currentDate) {
-      saveDailyEntry(dailyEntry);
-    }
-  }, [dailyEntry, isClient, currentDate]); // Added currentDate dependency
+    const performSave = async () => {
+      if (dailyEntry && isClient && currentDate) {
+        await saveDailyEntry(dailyEntry); // saveDailyEntry is now async
+      }
+    };
+
+    performSave();
+  }, [dailyEntry, isClient, currentDate]);
 
 
    // Handler for changes in detailed question scores
