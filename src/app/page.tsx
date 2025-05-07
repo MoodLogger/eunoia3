@@ -2,7 +2,7 @@
 "use client"; // This page interacts with localStorage and state, so it needs to be a Client Component
 
 import * as React from 'react';
-import { format } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ThemeAssessment } from '@/components/theme-assessment';
 import { MoodAnalysis } from '@/components/mood-analysis';
@@ -10,7 +10,9 @@ import { CalculatedMoodDisplay } from '@/components/calculated-mood-display';
 import { saveDailyEntry, getDailyEntry, calculateOverallScores } from '@/lib/storage'; // Import calculateOverallScores
 import type { DailyEntry, Mood, ThemeScores, DetailedThemeScores, QuestionScore } from '@/lib/types';
 import type { LucideIcon } from 'lucide-react';
-import { Frown, Meh, Smile, Loader2 } from 'lucide-react';
+import { Frown, Meh, Smile, Loader2, CalendarIcon } from 'lucide-react';
+import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { Button } from '@/components/ui/button';
 
 type CalculatedMoodCategory = 'Bad' | 'Normal' | 'Good' | 'Calculating...';
 interface CalculatedMoodState {
@@ -48,7 +50,7 @@ const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): Calcul
 
 
 export default function Home() {
-  const [currentDate, setCurrentDate] = React.useState('');
+  const [selectedDate, setSelectedDate] = React.useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [dailyEntry, setDailyEntry] = React.useState<DailyEntry | null>(null);
   const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...' }); // Default to calculating
   const [isClient, setIsClient] = React.useState(false);
@@ -56,24 +58,35 @@ export default function Home() {
   // Effect to run only on the client after mount
   React.useEffect(() => {
     setIsClient(true);
-    const today = format(new Date(), 'yyyy-MM-dd');
-    setCurrentDate(today);
-    const storedEntry = getDailyEntry(today); // Fetches entry with detailed scores
-    setDailyEntry(storedEntry);
-    // Initial calculation of mood based on overall scores
-    setCalculatedMood(calculateMoodFromOverallScores(storedEntry.scores));
+    // No need to set selectedDate here anymore as it's initialized above
   }, []);
+  
+  // Effect to load or initialize entry when selectedDate changes or on initial client mount
+  React.useEffect(() => {
+    if (isClient && selectedDate) {
+        const dateObj = parseISO(selectedDate);
+        if (!isValid(dateObj)) {
+            console.warn(`Invalid date selected: ${selectedDate}. Defaulting to today.`);
+            setSelectedDate(format(new Date(), 'yyyy-MM-dd')); // Reset to today if invalid
+            return;
+        }
+        const storedEntry = getDailyEntry(selectedDate); // Fetches entry with detailed scores for the selected date
+        setDailyEntry(storedEntry);
+        setCalculatedMood(calculateMoodFromOverallScores(storedEntry.scores));
+    }
+  }, [isClient, selectedDate]);
+
 
   // Update localStorage and potentially Firestore whenever dailyEntry changes
   React.useEffect(() => {
     const performSave = async () => {
-      if (dailyEntry && isClient && currentDate) {
+      if (dailyEntry && isClient && selectedDate && dailyEntry.date === selectedDate) { // Ensure saving for the correct date
         await saveDailyEntry(dailyEntry); // saveDailyEntry is now async
       }
     };
 
     performSave();
-  }, [dailyEntry, isClient, currentDate]);
+  }, [dailyEntry, isClient, selectedDate]);
 
 
    // Handler for changes in detailed question scores
@@ -107,6 +120,12 @@ export default function Home() {
            };
        });
    };
+
+   const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      setSelectedDate(format(date, 'yyyy-MM-dd'));
+    }
+  };
 
 
   // Render loading state or null on server/before hydration
@@ -166,9 +185,14 @@ export default function Home() {
         <Card className="shadow-lg">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-primary">Mood Logger</CardTitle>
-            <CardDescription>
-              {/* Ensure currentDate is valid before formatting */}
-              Overall assessment for {currentDate ? format(new Date(currentDate + 'T00:00:00'), 'MMMM d, yyyy') : '...'}
+            <CardDescription className="flex flex-col items-center space-y-2">
+              <span>
+                Overall assessment for {selectedDate && isValid(parseISO(selectedDate)) ? format(parseISO(selectedDate), 'MMMM d, yyyy') : '...'}
+              </span>
+              <DatePicker
+                date={selectedDate ? parseISO(selectedDate) : new Date()}
+                onDateChange={handleDateChange}
+              />
             </CardDescription>
           </CardHeader>
           <CardContent>
