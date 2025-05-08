@@ -85,9 +85,9 @@ export function ThemeQuestionsForm({
         let positiveLabel = defaultPositiveLabel;
 
         if (isDietQuestion1) {
-            negativeLabel = "&lt;1 litr (-0.25)";
+            negativeLabel = "<1 litr (-0.25)";
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = "&gt;2 litry (+0.25)";
+            positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)";
             neutralLabel = "między g. 22 a 23 (0)";
@@ -97,7 +97,8 @@ export function ThemeQuestionsForm({
             // Neutral and Positive labels will remain default for this question unless specified later
         } else if (isDreamingQuestion3) {
             negativeLabel = "po g. 7 (-0.25)";
-            // Neutral and Positive labels will remain default for this question unless specified later
+            neutralLabel = "ok. 6:30 (0)"; 
+            // Positive labels will remain default for this question unless specified later
         }
 
 
