@@ -97,8 +97,8 @@ export function ThemeQuestionsForm({
             positiveLabel = "przed g. 22 (+0.25)";
         } else if (isDreamingQuestion2) {
             negativeLabel = "Ponad godzinę (-0.25)";
-            neutralLabel = "ok. pół godziny (0)"; // Updated neutral label
-            // Positive label will remain default for this question unless specified later
+            neutralLabel = "ok. pół godziny (0)";
+            positiveLabel = "ok. kwadrans (+0.25)"; // Updated positive label
         } else if (isDreamingQuestion3) {
             negativeLabel = "po g. 7 (-0.25)";
             neutralLabel = "ok. 6:30 (0)"; 
