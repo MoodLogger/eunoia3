@@ -103,6 +103,7 @@ export function ThemeQuestionsForm({
             positiveLabel = "ok. g. 6 (+0.25)";
         } else if (isDreamingQuestion4) {
             negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
+            neutralLabel = "Wstałem po 1 pierwszym dzwonku (0)";
         }
 
 
