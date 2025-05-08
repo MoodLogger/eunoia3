@@ -80,6 +80,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
         const isDreamingQuestion4 = themeKey === 'dreaming' && index === 3;
+        const isDreamingQuestion5 = themeKey === 'dreaming' && index === 4;
 
         const defaultNegativeLabel = "Negative (-0.25)";
         const defaultNeutralLabel = "Neutral (0)";
@@ -100,7 +101,7 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion2) {
             negativeLabel = "Ponad godzinę (-0.25)";
             neutralLabel = "ok. pół godziny (0)";
-            positiveLabel = "ok. kwadrans (+0.25)"; // Updated positive label
+            positiveLabel = "ok. kwadrans (+0.25)";
         } else if (isDreamingQuestion3) {
             negativeLabel = "po g. 7 (-0.25)";
             neutralLabel = "ok. 6:30 (0)"; 
@@ -109,6 +110,9 @@ export function ThemeQuestionsForm({
             negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
             neutralLabel = "Wstałem po jednym dzwonku (0)";
             positiveLabel = "Wstałem przed budzikiem (+0.25)";
+        } else if (isDreamingQuestion5) {
+            negativeLabel = "tak i miałem problem z ponownym zaśnięciem (-0.25)";
+            // neutralLabel and positiveLabel remain default for this question for now
         }
 
 
