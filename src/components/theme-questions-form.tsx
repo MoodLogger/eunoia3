@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -119,7 +120,8 @@ export function ThemeQuestionsForm({
             positiveLabel = "nie (+0.25)";
         } else if (isDreamingQuestion6) {
             negativeLabel = "Byłem nieprzytomny (-0.25)";
-            // Neutral and Positive labels will use default values for this question
+            neutralLabel = "Lekko niedospany (0)"; // Updated "Neutral" label
+            // Positive labels will use default values for this question
         }
 
 
