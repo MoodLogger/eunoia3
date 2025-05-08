@@ -98,7 +98,7 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion3) {
             negativeLabel = "po g. 7 (-0.25)";
             neutralLabel = "ok. 6:30 (0)"; 
-            // Positive labels will remain default for this question unless specified later
+            positiveLabel = "ok. g. 6 (+0.25)";
         }
 
 
