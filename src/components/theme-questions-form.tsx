@@ -64,7 +64,9 @@ export function ThemeQuestionsForm({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-center text-primary">{themeLabel} Questions</h3>
+      <h3 className="text-lg font-semibold text-center text-primary">
+        {themeKey === 'dreaming' ? "Pytania na temat snu" : `${themeLabel} Questions`}
+      </h3>
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
