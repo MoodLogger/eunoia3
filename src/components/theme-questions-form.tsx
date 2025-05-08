@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -77,6 +76,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
+        const isDreamingQuestion4 = themeKey === 'dreaming' && index === 3;
 
         const defaultNegativeLabel = "Negative (-0.25)";
         const defaultNeutralLabel = "Neutral (0)";
@@ -101,6 +101,8 @@ export function ThemeQuestionsForm({
             negativeLabel = "po g. 7 (-0.25)";
             neutralLabel = "ok. 6:30 (0)"; 
             positiveLabel = "ok. g. 6 (+0.25)";
+        } else if (isDreamingQuestion4) {
+            negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
         }
 
 
