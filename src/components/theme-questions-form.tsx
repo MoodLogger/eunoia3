@@ -74,6 +74,7 @@ export function ThemeQuestionsForm({
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
+        const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
 
         const defaultNegativeLabel = "Negative (-0.25)";
         const defaultNeutralLabel = "Neutral (0)";
@@ -94,7 +95,11 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion2) {
             negativeLabel = "Ponad godzinę (-0.25)";
             // Neutral and Positive labels will remain default for this question unless specified later
+        } else if (isDreamingQuestion3) {
+            negativeLabel = "po g. 7 (-0.25)";
+            // Neutral and Positive labels will remain default for this question unless specified later
         }
+
 
         return (
           <div key={`${themeKey}-${index}`} className="space-y-3 p-4 border rounded-md bg-card shadow-sm">
