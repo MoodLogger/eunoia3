@@ -82,6 +82,8 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
         const isDreamingQuestion4 = themeKey === 'dreaming' && index === 3;
         const isDreamingQuestion5 = themeKey === 'dreaming' && index === 4;
+        const isDreamingQuestion6 = themeKey === 'dreaming' && index === 5;
+
 
         const defaultNegativeLabel = "Negative (-0.25)";
         const defaultNeutralLabel = "Neutral (0)";
@@ -114,7 +116,10 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion5) {
             negativeLabel = "tak i miałem problem z ponownym zaśnięciem (-0.25)";
             neutralLabel = "tak, na krótko (0)";
-            positiveLabel = "nie (+0.25)"; // Updated "Positive" label for this question
+            positiveLabel = "nie (+0.25)";
+        } else if (isDreamingQuestion6) {
+            negativeLabel = "Byłem nieprzytomny (-0.25)";
+            // Neutral and Positive labels will use default values for this question
         }
 
 
@@ -151,3 +156,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
