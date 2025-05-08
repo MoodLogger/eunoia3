@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -113,7 +112,7 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion5) {
             negativeLabel = "tak i miałem problem z ponownym zaśnięciem (-0.25)";
             neutralLabel = "tak, na krótko (0)";
-            // positiveLabel remains default for this question for now
+            positiveLabel = "nie (+0.25)"; // Updated "Positive" label for this question
         }
 
 
