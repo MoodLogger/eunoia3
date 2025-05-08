@@ -42,6 +42,8 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
           questions.push("O której się obudziłeś?"); // Specific third question for Sen
       } else if (themeKey === 'dreaming' && i === 3) {
           questions.push("Czy był potrzebny budzik?"); // Specific fourth question for Sen
+      } else if (themeKey === 'dreaming' && i === 4) {
+          questions.push("Czy budziłeś się w nocy?"); // Specific fifth question for Sen
       }
       else {
           questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
