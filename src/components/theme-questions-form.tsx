@@ -112,7 +112,8 @@ export function ThemeQuestionsForm({
             positiveLabel = "Wstałem przed budzikiem (+0.25)";
         } else if (isDreamingQuestion5) {
             negativeLabel = "tak i miałem problem z ponownym zaśnięciem (-0.25)";
-            // neutralLabel and positiveLabel remain default for this question for now
+            neutralLabel = "tak, na krótko (0)";
+            // positiveLabel remains default for this question for now
         }
 
 
