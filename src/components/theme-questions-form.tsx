@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -37,6 +38,8 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
           questions.push("O której położyłeś się do łóżka?"); // Specific first question for Sen
       } else if (themeKey === 'dreaming' && i === 1) {
           questions.push("Jak szybko usnąłeś?"); // Specific second question for Sen
+      } else if (themeKey === 'dreaming' && i === 2) {
+          questions.push("O której się obudziłeś?"); // Specific third question for Sen
       }
       else {
           questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
