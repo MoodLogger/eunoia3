@@ -105,6 +105,7 @@ export function ThemeQuestionsForm({
         } else if (isDreamingQuestion4) {
             negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
             neutralLabel = "Wstałem po jednym dzwonku (0)";
+            positiveLabel = "Wstałem przed budzikiem (+0.25)";
         }
 
 
