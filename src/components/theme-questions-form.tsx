@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -184,6 +183,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion8 = themeKey === 'moodScore' && index === 7; // Identify Nastawienie Q8
         const isTrainingQuestion1 = themeKey === 'training' && index === 0; // Identify Fitness Q1
         const isTrainingQuestion2 = themeKey === 'training' && index === 1; // Identify Fitness Q2
+        const isTrainingQuestion3 = themeKey === 'training' && index === 2; // Identify Fitness Q3
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -197,9 +197,9 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)"; // Corrected label
+            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = ">2 litry (+0.25)";
+            positiveLabel = "&gt;2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
@@ -283,8 +283,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "mniej niż 4k (-0.25)";
              neutralLabel = "4-6k (0)";
              positiveLabel = "powyżej 6k (+0.25)";
+        } else if (isTrainingQuestion3) {
+             // Labels for Fitness Q3 ("Ile spaliłeś kalorii?")
+             negativeLabel = "mniej niż 300 (-0.25)";
+             neutralLabel = "300-500 (0)";
+             positiveLabel = "powyżej 500 (+0.25)";
         }
-        // Default labels apply for other themes (Fitness Q3-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q4-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
