@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -187,13 +186,13 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)"; // Corrected label
+            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = ">2 litry (+0.25)";
+            positiveLabel = "&gt;2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
-            negativeLabel = "ból/infekcja (-0.25)"; // Updated label for Sen Q1
-            neutralLabel = "średnio/zmęczenie (0)"; // Updated label for Sen Q1
-            positiveLabel = "znakomicie (+0.25)"; // Updated label for Sen Q1
+            negativeLabel = "po g. 23 (-0.25)"; // Reverted
+            neutralLabel = "między g. 22 a 23 (0)"; // Reverted
+            positiveLabel = "przed g. 22 (+0.25)"; // Reverted
         } else if (isDreamingQuestion2) {
             negativeLabel = "Ponad godzinę (-0.25)";
             neutralLabel = "ok. pół godziny (0)";
@@ -269,3 +268,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
