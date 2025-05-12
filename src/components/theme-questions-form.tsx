@@ -45,6 +45,8 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
           questions.push("Czy budziłeś się w nocy?"); // Specific fifth question for Sen
       } else if (themeKey === 'dreaming' && i === 5) {
           questions.push("Czy czułeś się wyspany?"); // Specific sixth question for Sen
+      } else if (themeKey === 'dreaming' && i === 6) {
+          questions.push("Jakie miałeś sny?"); // Specific seventh question for Sen
       }
       else {
           questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
@@ -83,6 +85,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion4 = themeKey === 'dreaming' && index === 3;
         const isDreamingQuestion5 = themeKey === 'dreaming' && index === 4;
         const isDreamingQuestion6 = themeKey === 'dreaming' && index === 5;
+        const isDreamingQuestion7 = themeKey === 'dreaming' && index === 6; // Added check for question 7
 
 
         const defaultNegativeLabel = "Negative (-0.25)";
@@ -107,7 +110,7 @@ export function ThemeQuestionsForm({
             positiveLabel = "ok. kwadrans (+0.25)";
         } else if (isDreamingQuestion3) {
             negativeLabel = "po g. 7 (-0.25)";
-            neutralLabel = "ok. 6:30 (0)"; 
+            neutralLabel = "ok. 6:30 (0)";
             positiveLabel = "ok. g. 6 (+0.25)";
         } else if (isDreamingQuestion4) {
             negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
@@ -122,6 +125,12 @@ export function ThemeQuestionsForm({
             neutralLabel = "Lekko niedospany (0)"; // Updated "Neutral" label
             positiveLabel = "Tak, pełen energii (+0.25)"; // Updated "Positive" label
         }
+        // Add specific labels for the 7th dreaming question if needed
+        // else if (isDreamingQuestion7) {
+        //   negativeLabel = "Nightmares (-0.25)";
+        //   neutralLabel = "Neutral / Don't remember (0)";
+        //   positiveLabel = "Pleasant dreams (+0.25)";
+        // }
 
 
         return (
