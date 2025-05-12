@@ -165,6 +165,7 @@ export function ThemeQuestionsForm({
       </h3>
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
+        const isDietQuestion2 = themeKey === 'diet' && index === 1; // Check for Diet Q2
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -205,6 +206,10 @@ export function ThemeQuestionsForm({
             negativeLabel = "<1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
             positiveLabel = ">2 litry (+0.25)";
+        } else if (isDietQuestion2) { // Add labels for Diet Q2
+            negativeLabel = "wzrost o ponad 0,3 kg (-0.25)";
+            neutralLabel = "bez zmian (0)";
+            positiveLabel = "spadek o ponad 0,3 kg (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
@@ -319,7 +324,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "do 3 p. (0)";
              positiveLabel = "więcej niż 3 p. (+0.25)";
         }
-        // Default labels apply for other themes (Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Odżywianie Q3-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
