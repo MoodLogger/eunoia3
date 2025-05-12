@@ -58,7 +58,7 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
         questions.push("Czy skupiłeś się na wdzięczności?"); // Q6
         questions.push("Czy zacząłeś dzień od pozytywnej afirmacji?"); // Q7
         questions.push("Czy zapisałem jakąś myśl?"); // Q8
-    } else if (themeKey === 'training') { // Added specific questions for Fitness
+    } else if (themeKey === 'training') {
         questions.push("Ile czasu byłeś na świeżym powietrzu?"); // Q1
         questions.push("Ile zrobiłeś kroków?"); // Q2
         questions.push("Ile spaliłeś kalorii?"); // Q3
@@ -67,13 +67,20 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
         questions.push("Czy robiłeś stretching?"); // Q6
         questions.push("Czy robiłeś ćwiczenia oddechowe?"); // Q7
         questions.push("Czy chodziłeś po schodach?"); // Q8
+    } else if (themeKey === 'diet') {
+        questions.push("Nawodnienie"); // Q1 (Kept specific)
+        questions.push("Jaka zmiana masy?"); // Q2
+        questions.push("W jakich godzinach jadłeś?"); // Q3
+        questions.push("Co jadłeś na główny posiłek?"); // Q4
+        questions.push("Czy jadłeś słodycze?"); // Q5
+        questions.push("Czy piłeś alkohol?"); // Q6
+        questions.push("Ile razy jadłeś warzywa i owoce?"); // Q7
+        questions.push("Jakie miałeś ciśnienie?"); // Q8
     } else {
-         // Default logic for other themes (Diet, Social, Family, SelfEdu)
+         // Default logic for other themes (Social, Family, SelfEdu)
          for (let i = 0; i < 8; i++) {
-            if (themeKey === 'diet' && i === 0) {
-                questions.push("Nawodnienie"); // Specific first question for Diet
-            } else if (i === 7) { // Handle the 8th question (index 7) for OTHER themes
-                // Keep it editable for Diet, Social, Family, SelfEdu
+            if (i === 7) { // Handle the 8th question (index 7) for OTHER themes
+                // Keep it editable for Social, Family, SelfEdu
                 questions.push(`Custom Question 8 for ${label}?`); // Placeholder for Q8
             } else {
                 // Default placeholders for questions 1-7 for themes other than 'diet', 'dreaming', 'moodScore', 'training'
@@ -95,7 +102,7 @@ export function ThemeQuestionsForm({
 
    // State for the editable question text (Q8 for non-dreaming/non-moodScore themes)
    // Note: This approach has limitations mentioned above.
-   const isEditableThemeQ8 = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training'; // Exclude training from editable Q8 now
+   const isEditableThemeQ8 = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training' && themeKey !== 'diet'; // Exclude diet from editable Q8 now
    const [customQuestion8Text, setCustomQuestion8Text] = React.useState(
        isEditableThemeQ8 ? `Custom Question 8 for ${themeLabel}?` : '' // Initialize only if editable
    );
@@ -104,7 +111,7 @@ export function ThemeQuestionsForm({
    React.useEffect(() => {
      setIsClient(true);
      // Re-initialize custom question text if themeKey changes after mount
-     const shouldBeEditable = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training';
+     const shouldBeEditable = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training' && themeKey !== 'diet';
      if (shouldBeEditable) {
        setCustomQuestion8Text(`Custom Question 8 for ${themeLabel}?`);
      } else {
@@ -201,7 +208,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "Częściowo (0)";
              positiveLabel = "Tak (+0.25)";
         }
-        // Default labels apply for the editable Q8 on other themes and for Nastawienie & Fitness themes
+        // Default labels apply for the editable Q8 on other themes and for Nastawienie, Fitness & Odżywianie themes
 
 
         return (
@@ -246,3 +253,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
