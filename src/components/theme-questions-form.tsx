@@ -176,6 +176,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion1 = themeKey === 'moodScore' && index === 0; // Identify Nastawienie Q1
         const isMoodQuestion2 = themeKey === 'moodScore' && index === 1; // Identify Nastawienie Q2
         const isMoodQuestion3 = themeKey === 'moodScore' && index === 2; // Identify Nastawienie Q3
+        const isMoodQuestion4 = themeKey === 'moodScore' && index === 3; // Identify Nastawienie Q4
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -240,8 +241,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "boję się (-0.25)";
              neutralLabel = "mam stres (0)";
              positiveLabel = "brak lęku (+0.25)";
+        } else if (isMoodQuestion4) {
+             // Labels for Nastawienie Q4 ("Czy zaplanowałeś dzień?")
+             negativeLabel = "brak planu (-0.25)";
+             neutralLabel = "jest plan ogólny (0)";
+             positiveLabel = "plan z checklistą (+0.25)";
         }
-        // Default labels apply for other themes (Nastawienie Q2-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Nastawienie Q5-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
