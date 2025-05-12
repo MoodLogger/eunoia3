@@ -185,6 +185,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion2 = themeKey === 'training' && index === 1; // Identify Fitness Q2
         const isTrainingQuestion3 = themeKey === 'training' && index === 2; // Identify Fitness Q3
         const isTrainingQuestion4 = themeKey === 'training' && index === 3; // Identify Fitness Q4
+        const isTrainingQuestion5 = themeKey === 'training' && index === 4; // Identify Fitness Q5
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -294,8 +295,13 @@ export function ThemeQuestionsForm({
             negativeLabel = "mniej niż 15 min (-0.25)";
             neutralLabel = "15-30 min (0)";
             positiveLabel = "ponad 45 min (+0.25)";
+        } else if (isTrainingQuestion5) {
+            // Labels for Fitness Q5 ("Czy był trening mięśni?")
+            negativeLabel = "nie (-0.25)";
+            neutralLabel = "częściowy (0)";
+            positiveLabel = "3 partie ciała (+0.25)";
         }
-        // Default labels apply for other themes (Fitness Q5-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q6-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
