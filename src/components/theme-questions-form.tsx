@@ -219,6 +219,7 @@ export function ThemeQuestionsForm({
         const isSelfEducationQuestion3 = themeKey === 'selfEducation' && index === 2; // Identify Rozwój intelektualny Q3
         const isSelfEducationQuestion4 = themeKey === 'selfEducation' && index === 3; // Identify Rozwój intelektualny Q4
         const isSelfEducationQuestion5 = themeKey === 'selfEducation' && index === 4; // Identify Rozwój intelektualny Q5
+        const isSelfEducationQuestion6 = themeKey === 'selfEducation' && index === 5; // Identify Rozwój intelektualny Q6
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -453,9 +454,9 @@ export function ThemeQuestionsForm({
             positiveLabel = "było miło";
         } else if (isSelfEducationQuestion1) {
             // Labels for Rozwój intelektualny Q1 ("Czy poświęciłeś czas na czytanie?")
-            negativeLabel = "nie"; // Updated
-            neutralLabel = "fragmentarycznie"; // Updated
-            positiveLabel = "tak do wykorzystania"; // Updated
+            negativeLabel = "nie";
+            neutralLabel = "fragmentarycznie";
+            positiveLabel = "tak do wykorzystania";
         } else if (isSelfEducationQuestion2) {
              // Labels for Rozwój intelektualny Q2 ("Czy uczyłeś się języka obcego?")
              negativeLabel = "nie";
@@ -476,8 +477,12 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "tylko quiz";
              positiveLabel = "tak przydatny";
+        } else if (isSelfEducationQuestion6) { // Check for Q6
+             negativeLabel = "nie";
+             neutralLabel = "tak ale bez zastosowania";
+             positiveLabel = "tak do wykorzystania";
         }
-        // Default labels apply for other themes (Rozwój intelektualny Q6-Q8) and other questions
+        // Default labels apply for other themes (Rozwój intelektualny Q7-Q8) and other questions
 
 
         return (
