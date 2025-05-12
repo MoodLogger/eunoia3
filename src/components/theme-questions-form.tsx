@@ -183,6 +183,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion7 = themeKey === 'moodScore' && index === 6; // Identify Nastawienie Q7
         const isMoodQuestion8 = themeKey === 'moodScore' && index === 7; // Identify Nastawienie Q8
         const isTrainingQuestion1 = themeKey === 'training' && index === 0; // Identify Fitness Q1
+        const isTrainingQuestion2 = themeKey === 'training' && index === 1; // Identify Fitness Q2
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -277,8 +278,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "poniżej 30 min. (-0.25)";
              neutralLabel = "ok. 45 min. (0)";
              positiveLabel = "ponad godzinę (+0.25)";
+        } else if (isTrainingQuestion2) {
+             // Labels for Fitness Q2 ("Ile zrobiłeś kroków?")
+             negativeLabel = "mniej niż 4k (-0.25)";
+             neutralLabel = "4-6k (0)";
+             positiveLabel = "powyżej 6k (+0.25)";
         }
-        // Default labels apply for other themes (Fitness Q2-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q3-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
@@ -323,3 +329,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
