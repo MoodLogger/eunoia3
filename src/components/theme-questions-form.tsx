@@ -177,6 +177,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion2 = themeKey === 'moodScore' && index === 1; // Identify Nastawienie Q2
         const isMoodQuestion3 = themeKey === 'moodScore' && index === 2; // Identify Nastawienie Q3
         const isMoodQuestion4 = themeKey === 'moodScore' && index === 3; // Identify Nastawienie Q4
+        const isMoodQuestion5 = themeKey === 'moodScore' && index === 4; // Identify Nastawienie Q5
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -246,8 +247,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "brak planu (-0.25)";
              neutralLabel = "jest plan ogólny (0)";
              positiveLabel = "plan z checklistą (+0.25)";
+        } else if (isMoodQuestion5) {
+             // Labels for Nastawienie Q5 ("Czy zwizualizowałeś swoje życiowe priorytety?")
+             negativeLabel = "zapomniałem (-0.25)";
+             neutralLabel = "próbowałem ale rozproszyłem się (0)";
+             positiveLabel = "mam focus na cel (+0.25)";
         }
-        // Default labels apply for other themes (Nastawienie Q5-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Nastawienie Q6-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
