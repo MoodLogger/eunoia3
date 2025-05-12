@@ -339,7 +339,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "do 3 p.";
              positiveLabel = "więcej niż 3 p.";
         }
-        // Default labels apply for other themes (Odżywianie Q3-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
@@ -367,15 +367,24 @@ export function ThemeQuestionsForm({
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} aria-label={negativeLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{`(-0.25)`}</Label>
+                {/* Display descriptive label AND point value */}
+                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">
+                  {negativeLabel} {`(-0.25)`}
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} aria-label={neutralLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{`(0)`}</Label>
+                 {/* Display descriptive label AND point value */}
+                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">
+                   {neutralLabel} {`(0)`}
+                </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} aria-label={positiveLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{`(+0.25)`}</Label>
+                 {/* Display descriptive label AND point value */}
+                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">
+                  {positiveLabel} {`(+0.25)`}
+                </Label>
               </div>
             </RadioGroup>
           </div>
@@ -384,3 +393,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
