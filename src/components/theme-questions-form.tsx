@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -202,6 +203,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion4 = themeKey === 'socialRelations' && index === 3; // Identify Social Relations Q4
         const isSocialRelationsQuestion5 = themeKey === 'socialRelations' && index === 4; // Identify Social Relations Q5
         const isSocialRelationsQuestion6 = themeKey === 'socialRelations' && index === 5; // Identify Social Relations Q6
+        const isSocialRelationsQuestion7 = themeKey === 'socialRelations' && index === 6; // Identify Social Relations Q7
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -389,6 +391,11 @@ export function ThemeQuestionsForm({
             negativeLabel = "tak przesadnie";
             neutralLabel = "raz niewinnie";
             positiveLabel = "nie";
+        } else if (isSocialRelationsQuestion7) {
+             // Labels for Relacje zewnętrzne Q7 ("Czy byłem asertywny wobec innych?")
+             negativeLabel = "nie, a było trzeba";
+             neutralLabel = "nie było potrzeby";
+             positiveLabel = "tak";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
