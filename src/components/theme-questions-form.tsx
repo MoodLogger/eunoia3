@@ -217,6 +217,7 @@ export function ThemeQuestionsForm({
         const isSelfEducationQuestion1 = themeKey === 'selfEducation' && index === 0; // Identify Rozwój intelektualny Q1
         const isSelfEducationQuestion2 = themeKey === 'selfEducation' && index === 1; // Identify Rozwój intelektualny Q2
         const isSelfEducationQuestion3 = themeKey === 'selfEducation' && index === 2; // Identify Rozwój intelektualny Q3
+        const isSelfEducationQuestion4 = themeKey === 'selfEducation' && index === 3; // Identify Rozwój intelektualny Q4
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -464,6 +465,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "fragmentarycznie";
              positiveLabel = "tak do wykorzystania";
+        } else if (isSelfEducationQuestion4) {
+            // Labels for Rozwój intelektualny Q4 ("Czy uczyłeś się programowania?")
+             negativeLabel = "nie";
+             neutralLabel = "fragmentarycznie";
+             positiveLabel = "tak 30 min";
         }
         // Default labels apply for other themes (Rozwój intelektualny Q4-Q8) and other questions
 
