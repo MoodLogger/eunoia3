@@ -188,6 +188,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion4 = themeKey === 'training' && index === 3; // Identify Fitness Q4
         const isTrainingQuestion5 = themeKey === 'training' && index === 4; // Identify Fitness Q5
         const isTrainingQuestion6 = themeKey === 'training' && index === 5; // Identify Fitness Q6
+        const isTrainingQuestion7 = themeKey === 'training' && index === 6; // Identify Fitness Q7
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -201,9 +202,9 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
+            negativeLabel = "<1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = "&gt;2 litry (+0.25)";
+            positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
@@ -307,8 +308,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie (-0.25)";
              neutralLabel = "częściowy (0)";
              positiveLabel = "pełny (+0.25)";
+        } else if (isTrainingQuestion7) {
+            // Labels for Fitness Q7 ("Czy robiłeś ćwiczenia oddechowe?")
+             negativeLabel = "nie (-0.25)";
+             neutralLabel = "powierzchownie (0)";
+             positiveLabel = "gruntownie (+0.25)";
         }
-        // Default labels apply for other themes (Fitness Q7-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
@@ -353,4 +359,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
