@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -156,11 +157,12 @@ export function ThemeQuestionsForm({
     return <div>Loading questions...</div>; // Or a skeleton loader
   }
 
+  const themeTitle = themeLabelMap[themeKey] ? `${themeLabelMap[themeKey]} Questions` : `${themeLabel} Questions`;
 
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-center text-primary">
-        {themeLabelMap[themeKey] ? `${themeLabelMap[themeKey]} Questions` : `${themeLabel} Questions`}
+         {themeTitle === 'Sen Questions' ? 'Pytania na temat snu' : themeTitle}
       </h3>
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
@@ -189,9 +191,9 @@ export function ThemeQuestionsForm({
             neutralLabel = "1-2 litry (0)";
             positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
-            negativeLabel = "po g. 23 (-0.25)";
-            neutralLabel = "między g. 22 a 23 (0)";
-            positiveLabel = "przed g. 22 (+0.25)";
+            negativeLabel = "ból/infekcja (-0.25)"; // Updated label for Sen Q1
+            neutralLabel = "średnio/zmęczenie (0)"; // Updated label for Sen Q1
+            positiveLabel = "znakomicie (+0.25)"; // Updated label for Sen Q1
         } else if (isDreamingQuestion2) {
             negativeLabel = "Ponad godzinę (-0.25)";
             neutralLabel = "ok. pół godziny (0)";
