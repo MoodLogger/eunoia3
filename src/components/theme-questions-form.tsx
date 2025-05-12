@@ -174,6 +174,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion7 = themeKey === 'dreaming' && index === 6;
         const isDreamingQuestion8 = themeKey === 'dreaming' && index === 7; // Identify Sen Q8
         const isMoodQuestion1 = themeKey === 'moodScore' && index === 0; // Identify Nastawienie Q1
+        const isMoodQuestion2 = themeKey === 'moodScore' && index === 1; // Identify Nastawienie Q2
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -187,9 +188,9 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
+            negativeLabel = "<1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = "&gt;2 litry (+0.25)";
+            positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
@@ -228,6 +229,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "ból/infekcja (-0.25)";
              neutralLabel = "średnio/zmęczenie (0)";
              positiveLabel = "znakomicie (+0.25)";
+        } else if (isMoodQuestion2) {
+             // Labels for Nastawienie Q2 ("Jaki masz nastrój?")
+             negativeLabel = "przygnębienie/smutek (-0.25)";
+             neutralLabel = "neutralny (0)";
+             positiveLabel = "entuzjastyczny (+0.25)";
         }
         // Default labels apply for other themes (Nastawienie Q2-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
@@ -274,4 +280,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
