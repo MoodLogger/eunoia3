@@ -450,9 +450,9 @@ export function ThemeQuestionsForm({
             positiveLabel = "było miło";
         } else if (isSelfEducationQuestion1) {
             // Labels for Rozwój intelektualny Q1 ("Czy poświęciłeś czas na czytanie?")
-            negativeLabel = "nie";
-            neutralLabel = "krótko, bez skupienia";
-            positiveLabel = "ponad 30 min uważnie";
+            negativeLabel = "nie"; // Updated
+            neutralLabel = "fragmentarycznie"; // Updated
+            positiveLabel = "tak do wykorzystania"; // Updated
         } else if (isSelfEducationQuestion2) {
              // Labels for Rozwój intelektualny Q2 ("Czy uczyłeś się języka obcego?")
              negativeLabel = "nie";
