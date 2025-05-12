@@ -204,6 +204,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion5 = themeKey === 'socialRelations' && index === 4; // Identify Social Relations Q5
         const isSocialRelationsQuestion6 = themeKey === 'socialRelations' && index === 5; // Identify Social Relations Q6
         const isSocialRelationsQuestion7 = themeKey === 'socialRelations' && index === 6; // Identify Social Relations Q7
+        const isSocialRelationsQuestion8 = themeKey === 'socialRelations' && index === 7; // Identify Social Relations Q8
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -396,6 +397,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie, a było trzeba";
              neutralLabel = "nie było potrzeby";
              positiveLabel = "tak";
+        } else if (isSocialRelationsQuestion8) {
+             // Labels for Relacje zewnętrzne Q8 ("Zainicjowałem kontakt z jakąś osobą?")
+             negativeLabel = "nie mimo przestrzeni";
+             neutralLabel = "podjąłem próbę";
+             positiveLabel = "tak i fajnie wyszło";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
