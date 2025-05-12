@@ -173,6 +173,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion6 = themeKey === 'dreaming' && index === 5;
         const isDreamingQuestion7 = themeKey === 'dreaming' && index === 6;
         const isDreamingQuestion8 = themeKey === 'dreaming' && index === 7; // Identify Sen Q8
+        const isMoodQuestion1 = themeKey === 'moodScore' && index === 0; // Identify Nastawienie Q1
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -222,8 +223,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "Nie (-0.25)";
              neutralLabel = "Częściowo (0)";
              positiveLabel = "Tak (+0.25)";
+        } else if (isMoodQuestion1) {
+             // Labels for Nastawienie Q1 ("Jak się czujesz fizycznie?")
+             negativeLabel = "ból/infekcja (-0.25)";
+             neutralLabel = "średnio/zmęczenie (0)";
+             positiveLabel = "znakomicie (+0.25)";
         }
-        // Default labels apply for other themes (Nastawienie, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Nastawienie Q2-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
