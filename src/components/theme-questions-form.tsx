@@ -166,6 +166,7 @@ export function ThemeQuestionsForm({
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
         const isDietQuestion2 = themeKey === 'diet' && index === 1; // Check for Diet Q2
+        const isDietQuestion3 = themeKey === 'diet' && index === 2; // Check for Diet Q3
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -203,13 +204,17 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)"; // Corrected label
+            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
             positiveLabel = ">2 litry (+0.25)";
         } else if (isDietQuestion2) { // Add labels for Diet Q2
             negativeLabel = "wzrost o ponad 0,3 kg (-0.25)";
             neutralLabel = "bez zmian (0)";
             positiveLabel = "spadek o ponad 0,3 kg (+0.25)";
+        } else if (isDietQuestion3) { // Add labels for Diet Q3
+             negativeLabel = "za wcześnie i za późno (-0.25)";
+             neutralLabel = "przekroczony jeden czas (0)";
+             positiveLabel = "w godz. 10-20 (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
