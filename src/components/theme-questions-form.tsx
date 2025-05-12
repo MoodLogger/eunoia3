@@ -178,6 +178,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion3 = themeKey === 'moodScore' && index === 2; // Identify Nastawienie Q3
         const isMoodQuestion4 = themeKey === 'moodScore' && index === 3; // Identify Nastawienie Q4
         const isMoodQuestion5 = themeKey === 'moodScore' && index === 4; // Identify Nastawienie Q5
+        const isMoodQuestion6 = themeKey === 'moodScore' && index === 5; // Identify Nastawienie Q6
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -252,8 +253,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "zapomniałem (-0.25)";
              neutralLabel = "próbowałem ale rozproszyłem się (0)";
              positiveLabel = "mam focus na cel (+0.25)";
+        } else if (isMoodQuestion6) {
+             // Labels for Nastawienie Q6 ("Czy skupiłeś się na wdzięczności?")
+             negativeLabel = "nie (-0.25)";
+             neutralLabel = "na chwilę ale mało konkretnie (0)";
+             positiveLabel = "tak dogłębnie (+0.25)";
         }
-        // Default labels apply for other themes (Nastawienie Q6-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Nastawienie Q7-8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
