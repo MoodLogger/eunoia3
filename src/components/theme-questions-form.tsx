@@ -200,6 +200,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion2 = themeKey === 'socialRelations' && index === 1; // Identify Social Relations Q2
         const isSocialRelationsQuestion3 = themeKey === 'socialRelations' && index === 2; // Identify Social Relations Q3
         const isSocialRelationsQuestion4 = themeKey === 'socialRelations' && index === 3; // Identify Social Relations Q4
+        const isSocialRelationsQuestion5 = themeKey === 'socialRelations' && index === 4; // Identify Social Relations Q5
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -377,6 +378,11 @@ export function ThemeQuestionsForm({
             negativeLabel = "nie";
             neutralLabel = "tak ale słabo";
             positiveLabel = "tak wzmacniająco";
+        } else if (isSocialRelationsQuestion5) {
+            // Labels for Relacje zewnętrzne Q5 ("Czy byłeś aktywny na spotkaniu?")
+            negativeLabel = "nie mimo okazji";
+            neutralLabel = "brak okazji";
+            positiveLabel = "tak wyraziłem swoje zdanie";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
