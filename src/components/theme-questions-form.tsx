@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -85,12 +84,21 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
         questions.push("Czy dogryzałem innym?"); // Q6
         questions.push("Czy byłem asertywny wobec innych?"); // Q7
         questions.push("Zainicjowałem kontakt z jakąś osobą?"); // Q8
+    } else if (themeKey === 'familyRelations') {
+        questions.push("Czy rozmawiałeś z rodzicami/teściami?"); // Q1
+        questions.push("Czy poświęciłeś uwagę żonie?"); // Q2
+        questions.push("Czy poświęciłeś uwagę synowi?"); // Q3
+        questions.push("Czy pomogłeś w obowiązkach domowych?"); // Q4
+        questions.push("Czy zrobiłeś przyjemność żonie?"); // Q5
+        questions.push("Czy pomogłeś w lekcjach?"); // Q6
+        questions.push("Czy zorganizowałeś wspólne spędzenie czasu?"); // Q7
+        questions.push("Czy zakończyliście dzień w miłej atmosferze?"); // Q8
     }
      else {
-         // Default logic for other themes (Family, SelfEdu)
+         // Default logic for other themes (SelfEdu)
          for (let i = 0; i < 8; i++) {
             if (i === 7) { // Handle the 8th question (index 7) for OTHER themes
-                // Keep it editable for Family, SelfEdu
+                // Keep it editable for SelfEdu
                 questions.push(`Custom Question 8 for ${label}?`); // Placeholder for Q8
             } else {
                 // Default placeholders for questions 1-7 for themes other than specified above
@@ -110,8 +118,8 @@ export function ThemeQuestionsForm({
   onQuestionScoreChange
 }: ThemeQuestionsFormProps) {
 
-   // State for the editable question text (Q8 for non-dreaming/non-moodScore/non-training/non-diet/non-socialRelations themes)
-   const isEditableThemeQ8 = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations'].includes(themeKey);
+   // State for the editable question text (Q8 for non-dreaming/non-moodScore/non-training/non-diet/non-socialRelations/non-familyRelations themes)
+   const isEditableThemeQ8 = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations', 'familyRelations'].includes(themeKey);
    const [customQuestion8Text, setCustomQuestion8Text] = React.useState(
        isEditableThemeQ8 ? `Custom Question 8 for ${themeLabel}?` : '' // Initialize only if editable
    );
@@ -120,7 +128,7 @@ export function ThemeQuestionsForm({
    React.useEffect(() => {
      setIsClient(true);
      // Re-initialize custom question text if themeKey changes after mount
-     const shouldBeEditable = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations'].includes(themeKey);
+     const shouldBeEditable = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations', 'familyRelations'].includes(themeKey);
      if (shouldBeEditable) {
        setCustomQuestion8Text(`Custom Question 8 for ${themeLabel}?`);
      } else {
@@ -180,9 +188,9 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)";
+            negativeLabel = "&lt;1 litr (-0.25)";
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = ">2 litry (+0.25)";
+            positiveLabel = "&gt;2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)";
             neutralLabel = "między g. 22 a 23 (0)";
@@ -217,7 +225,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "Częściowo (0)";
              positiveLabel = "Tak (+0.25)";
         }
-        // Default labels apply for the editable Q8 on other themes and for Nastawienie, Fitness, Odżywianie & Relacje zewnętrzne themes
+        // Default labels apply for the editable Q8 on other themes and for Nastawienie, Fitness, Odżywianie, Relacje zewnętrzne & Relacje rodzinne themes
 
 
         return (
@@ -262,4 +270,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
