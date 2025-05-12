@@ -180,6 +180,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion5 = themeKey === 'moodScore' && index === 4; // Identify Nastawienie Q5
         const isMoodQuestion6 = themeKey === 'moodScore' && index === 5; // Identify Nastawienie Q6
         const isMoodQuestion7 = themeKey === 'moodScore' && index === 6; // Identify Nastawienie Q7
+        const isMoodQuestion8 = themeKey === 'moodScore' && index === 7; // Identify Nastawienie Q8
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -264,8 +265,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie (-0.25)";
              neutralLabel = "tak ale mało przekonująco (0)";
              positiveLabel = "tak i podziałało (+0.25)";
+        } else if (isMoodQuestion8) {
+             // Labels for Nastawienie Q8 ("Czy zapisałem jakąś myśl?")
+             negativeLabel = "nie (-0.25)";
+             neutralLabel = "tak ale nic istotnego (0)";
+             positiveLabel = "tak coś wartościowego (+0.25)";
         }
-        // Default labels apply for other themes (Nastawienie Q8, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
