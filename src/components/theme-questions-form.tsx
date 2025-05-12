@@ -215,6 +215,7 @@ export function ThemeQuestionsForm({
         const isFamilyRelationsQuestion7 = themeKey === 'familyRelations' && index === 6; // Identify Family Relations Q7
         const isFamilyRelationsQuestion8 = themeKey === 'familyRelations' && index === 7; // Identify Family Relations Q8
         const isSelfEducationQuestion1 = themeKey === 'selfEducation' && index === 0; // Identify Rozwój intelektualny Q1
+        const isSelfEducationQuestion2 = themeKey === 'selfEducation' && index === 1; // Identify Rozwój intelektualny Q2
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -452,8 +453,13 @@ export function ThemeQuestionsForm({
             negativeLabel = "nie";
             neutralLabel = "krótko, bez skupienia";
             positiveLabel = "ponad 30 min uważnie";
+        } else if (isSelfEducationQuestion2) {
+             // Labels for Rozwój intelektualny Q2 ("Czy uczyłeś się języka obcego?")
+             negativeLabel = "nie";
+             neutralLabel = "krótko, bez skupienia";
+             positiveLabel = "ponad 30 min";
         }
-        // Default labels apply for other themes (Rozwój intelektualny Q2-Q8) and other questions
+        // Default labels apply for other themes (Rozwój intelektualny Q3-Q8) and other questions
 
 
         return (
