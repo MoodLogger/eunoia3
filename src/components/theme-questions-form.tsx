@@ -221,6 +221,7 @@ export function ThemeQuestionsForm({
         const isSelfEducationQuestion5 = themeKey === 'selfEducation' && index === 4; // Identify Rozwój intelektualny Q5
         const isSelfEducationQuestion6 = themeKey === 'selfEducation' && index === 5; // Identify Rozwój intelektualny Q6
         const isSelfEducationQuestion7 = themeKey === 'selfEducation' && index === 6; // Identify Rozwój intelektualny Q7
+        const isSelfEducationQuestion8 = themeKey === 'selfEducation' && index === 7; // Identify Rozwój intelektualny Q8
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -487,8 +488,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "tylko analiza konta";
              positiveLabel = "tak z inwestycjami";
+        } else if (isSelfEducationQuestion8) {
+            // Labels for Rozwój intelektualny Q8 ("Pracowałeś nad Eunoią?")
+             negativeLabel = "nie";
+             neutralLabel = "pobieżnie";
+             positiveLabel = "gruntownie";
         }
-        // Default labels apply for other themes (Rozwój intelektualny Q7-Q8) and other questions
+        // Default labels apply for other themes and other questions
 
 
         return (
