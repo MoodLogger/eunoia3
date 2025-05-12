@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -181,6 +182,7 @@ export function ThemeQuestionsForm({
         const isMoodQuestion6 = themeKey === 'moodScore' && index === 5; // Identify Nastawienie Q6
         const isMoodQuestion7 = themeKey === 'moodScore' && index === 6; // Identify Nastawienie Q7
         const isMoodQuestion8 = themeKey === 'moodScore' && index === 7; // Identify Nastawienie Q8
+        const isTrainingQuestion1 = themeKey === 'training' && index === 0; // Identify Fitness Q1
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -270,8 +272,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie (-0.25)";
              neutralLabel = "tak ale nic istotnego (0)";
              positiveLabel = "tak coś wartościowego (+0.25)";
+        } else if (isTrainingQuestion1) {
+             // Labels for Fitness Q1 ("Ile czasu byłeś na świeżym powietrzu?")
+             negativeLabel = "poniżej 30 min. (-0.25)";
+             neutralLabel = "ok. 45 min. (0)";
+             positiveLabel = "ponad godzinę (+0.25)";
         }
-        // Default labels apply for other themes (Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q2-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
