@@ -171,6 +171,7 @@ export function ThemeQuestionsForm({
         const isDietQuestion4 = themeKey === 'diet' && index === 3; // Check for Diet Q4
         const isDietQuestion5 = themeKey === 'diet' && index === 4; // Check for Diet Q5
         const isDietQuestion6 = themeKey === 'diet' && index === 5; // Check for Diet Q6
+        const isDietQuestion7 = themeKey === 'diet' && index === 6; // Check for Diet Q7
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -231,6 +232,10 @@ export function ThemeQuestionsForm({
              negativeLabel = "tak";
              neutralLabel = "lampkę wina";
              positiveLabel = "nie";
+        } else if (isDietQuestion7) { // Add labels for Diet Q7
+             negativeLabel = "wcale";
+             neutralLabel = "2-3 razy";
+             positiveLabel = "4 i więcej";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23"; // Reverted
             neutralLabel = "między g. 22 a 23"; // Reverted
