@@ -34,7 +34,7 @@ const themeLabelMap: Partial<Record<keyof ThemeScores, string>> = {
 // A more robust solution would involve storing the custom question text in the DailyEntry itself.
 
 
-// Function to get questions, now handles specific questions and the 8th question for 'dreaming'
+// Function to get questions, now handles specific questions and the 8th question for themes
 const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
   const questions: string[] = [];
   const label = themeLabelMap[themeKey] || themeKey; // Get the friendly label
@@ -93,17 +93,21 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
         questions.push("Czy pomogłeś w lekcjach?"); // Q6
         questions.push("Czy zorganizowałeś wspólne spędzenie czasu?"); // Q7
         questions.push("Czy zakończyliście dzień w miłej atmosferze?"); // Q8
-    }
+    } else if (themeKey === 'selfEducation') { // Add specific questions for Rozwój intelektualny
+        questions.push("Czy poświęciłeś czas na czytanie?"); // Q1
+        questions.push("Czy uczyłeś się języka obcego?"); // Q2
+        questions.push("Czy obejrzałeś/wysłuchałeś coś wartościowego?"); // Q3
+        questions.push("Czy uczyłeś się programowania?"); // Q4
+        questions.push("Czy zrobiłeś kurs/quiz on-line?"); // Q5
+        questions.push("Podałeś nowy pomysł na coś?"); // Q6
+        questions.push("Poświęciłeś czas finansom?"); // Q7
+        questions.push("Pracowałeś nad Eunoią?"); // Q8
+     }
      else {
-         // Default logic for other themes (SelfEdu)
+         // Default logic for any other UNEXPECTED themes (should not happen with current types)
          for (let i = 0; i < 8; i++) {
-            if (i === 7) { // Handle the 8th question (index 7) for OTHER themes
-                // Keep it editable for SelfEdu
-                questions.push(`Custom Question 8 for ${label}?`); // Placeholder for Q8
-            } else {
-                // Default placeholders for questions 1-7 for themes other than specified above
-                questions.push(`Placeholder Question ${i + 1} for ${label}?`);
-            }
+            // Default placeholders for questions 1-8
+            questions.push(`Placeholder Question ${i + 1} for ${label}?`);
         }
     }
 
@@ -118,23 +122,16 @@ export function ThemeQuestionsForm({
   onQuestionScoreChange
 }: ThemeQuestionsFormProps) {
 
-   // State for the editable question text (Q8 for non-dreaming/non-moodScore/non-training/non-diet/non-socialRelations/non-familyRelations themes)
-   const isEditableThemeQ8 = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations', 'familyRelations'].includes(themeKey);
-   const [customQuestion8Text, setCustomQuestion8Text] = React.useState(
-       isEditableThemeQ8 ? `Custom Question 8 for ${themeLabel}?` : '' // Initialize only if editable
-   );
+   // State for the editable question text - Q8 is NO LONGER editable for any defined theme
+   const isEditableThemeQ8 = false; // !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations', 'familyRelations', 'selfEducation'].includes(themeKey);
+   const [customQuestion8Text, setCustomQuestion8Text] = React.useState(''); // No custom text needed initially
    const [isClient, setIsClient] = React.useState(false);
 
    React.useEffect(() => {
      setIsClient(true);
-     // Re-initialize custom question text if themeKey changes after mount
-     const shouldBeEditable = !['dreaming', 'moodScore', 'training', 'diet', 'socialRelations', 'familyRelations'].includes(themeKey);
-     if (shouldBeEditable) {
-       setCustomQuestion8Text(`Custom Question 8 for ${themeLabel}?`);
-     } else {
-       setCustomQuestion8Text(''); // Clear if it becomes a non-editable theme
-     }
-   }, [themeKey, themeLabel]);
+     // Clear custom question text state if themeKey changes after mount
+     setCustomQuestion8Text('');
+   }, [themeKey]);
 
 
    const questions = getQuestionsForTheme(themeKey);
@@ -147,7 +144,7 @@ export function ThemeQuestionsForm({
     }
   };
 
-   // Handler for changing the custom question text
+   // Handler for changing the custom question text (kept for potential future use, but not currently enabled)
    const handleCustomQuestionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
      setCustomQuestion8Text(event.target.value);
      // Here you might want to also save this custom question text back to your
@@ -163,7 +160,7 @@ export function ThemeQuestionsForm({
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-center text-primary">
-        {themeKey === 'dreaming' ? "Pytania na temat snu" : `${themeLabel} Questions`}
+        {themeLabelMap[themeKey] ? `${themeLabelMap[themeKey]} Questions` : `${themeLabel} Questions`}
       </h3>
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
@@ -175,7 +172,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion6 = themeKey === 'dreaming' && index === 5;
         const isDreamingQuestion7 = themeKey === 'dreaming' && index === 6;
         const isDreamingQuestion8 = themeKey === 'dreaming' && index === 7; // Identify Sen Q8
-        const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Identify editable Q8 for other themes
+        const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
         const defaultNegativeLabel = "Negative (-0.25)";
@@ -188,9 +185,9 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "&lt;1 litr (-0.25)";
+            negativeLabel = "<1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
-            positiveLabel = "&gt;2 litry (+0.25)";
+            positiveLabel = ">2 litry (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)";
             neutralLabel = "między g. 22 a 23 (0)";
@@ -225,7 +222,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "Częściowo (0)";
              positiveLabel = "Tak (+0.25)";
         }
-        // Default labels apply for the editable Q8 on other themes and for Nastawienie, Fitness, Odżywianie, Relacje zewnętrzne & Relacje rodzinne themes
+        // Default labels apply for other themes (Nastawienie, Fitness, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
