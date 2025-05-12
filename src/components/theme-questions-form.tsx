@@ -47,9 +47,11 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
           questions.push("Czy czułeś się wyspany?"); // Specific sixth question for Sen
       } else if (themeKey === 'dreaming' && i === 6) {
           questions.push("Jakie miałeś sny?"); // Specific seventh question for Sen
+      } else if (i === 7) { // Handle the 8th question (index 7)
+          questions.push(`Custom Question 8 for ${label}?`); // Generic placeholder for Q8
       }
       else {
-          questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders
+          questions.push(`Placeholder Question ${i + 1} for ${label}?`); // Default placeholders for others (if any are missed)
       }
   }
   return questions;
@@ -124,12 +126,17 @@ export function ThemeQuestionsForm({
             negativeLabel = "Byłem nieprzytomny (-0.25)";
             neutralLabel = "Lekko niedospany (0)"; // Updated "Neutral" label
             positiveLabel = "Tak, pełen energii (+0.25)"; // Updated "Positive" label
+        } else if (isDreamingQuestion7) {
+             // Default labels for Q7 (Jakie miałeś sny?) - can be customized further
+             negativeLabel = "Koszmary (-0.25)";
+             neutralLabel = "Neutralne / Nie pamiętam (0)";
+             positiveLabel = "Przyjemne (+0.25)";
         }
-        // Add specific labels for the 7th dreaming question if needed
-        // else if (isDreamingQuestion7) {
-        //   negativeLabel = "Nightmares (-0.25)";
-        //   neutralLabel = "Neutral / Don't remember (0)";
-        //   positiveLabel = "Pleasant dreams (+0.25)";
+        // Add specific labels for the 8th question if needed, otherwise defaults will be used.
+        // else if (index === 7) {
+        //   negativeLabel = "Specific Negative Label for Q8 (-0.25)";
+        //   neutralLabel = "Specific Neutral Label for Q8 (0)";
+        //   positiveLabel = "Specific Positive Label for Q8 (+0.25)";
         // }
 
 
