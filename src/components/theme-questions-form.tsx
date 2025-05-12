@@ -201,6 +201,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion3 = themeKey === 'socialRelations' && index === 2; // Identify Social Relations Q3
         const isSocialRelationsQuestion4 = themeKey === 'socialRelations' && index === 3; // Identify Social Relations Q4
         const isSocialRelationsQuestion5 = themeKey === 'socialRelations' && index === 4; // Identify Social Relations Q5
+        const isSocialRelationsQuestion6 = themeKey === 'socialRelations' && index === 5; // Identify Social Relations Q6
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -383,6 +384,11 @@ export function ThemeQuestionsForm({
             negativeLabel = "nie mimo okazji";
             neutralLabel = "brak okazji";
             positiveLabel = "tak wyraziłem swoje zdanie";
+        } else if (isSocialRelationsQuestion6) {
+            // Labels for Relacje zewnętrzne Q6 ("Czy dogryzałem innym?")
+            negativeLabel = "tak przesadnie";
+            neutralLabel = "raz niewinnie";
+            positiveLabel = "nie";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
