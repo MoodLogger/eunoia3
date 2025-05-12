@@ -196,9 +196,9 @@ export function ThemeQuestionsForm({
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
-        const defaultNegativeLabel = "Negative (-0.25)";
-        const defaultNeutralLabel = "Neutral (0)";
-        const defaultPositiveLabel = "Positive (+0.25)";
+        const defaultNegativeLabel = "Negative";
+        const defaultNeutralLabel = "Neutral";
+        const defaultPositiveLabel = "Positive";
 
         let negativeLabel = defaultNegativeLabel;
         let neutralLabel = defaultNeutralLabel;
@@ -206,138 +206,138 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "<1 litr (-0.25)"; // Corrected label
-            neutralLabel = "1-2 litry (0)";
-            positiveLabel = ">2 litry (+0.25)";
+            negativeLabel = "<1 litr"; // Corrected label
+            neutralLabel = "1-2 litry";
+            positiveLabel = ">2 litry";
         } else if (isDietQuestion2) { // Add labels for Diet Q2
-            negativeLabel = "wzrost o ponad 0,3 kg (-0.25)";
-            neutralLabel = "bez zmian (0)";
-            positiveLabel = "spadek o ponad 0,3 kg (+0.25)";
+            negativeLabel = "wzrost o ponad 0,3 kg";
+            neutralLabel = "bez zmian";
+            positiveLabel = "spadek o ponad 0,3 kg";
         } else if (isDietQuestion3) { // Add labels for Diet Q3
-             negativeLabel = "za wcześnie i za późno (-0.25)";
-             neutralLabel = "przekroczony jeden czas (0)";
-             positiveLabel = "w godz. 10-20 (+0.25)";
+             negativeLabel = "za wcześnie i za późno";
+             neutralLabel = "przekroczony jeden czas";
+             positiveLabel = "w godz. 10-20";
         } else if (isDietQuestion4) { // Add labels for Diet Q4
-             negativeLabel = "przetworzone/wieprzowina (-0.25)";
-             neutralLabel = "drób/wołowina (0)";
-             positiveLabel = "ryba/vege (+0.25)";
+             negativeLabel = "przetworzone/wieprzowina";
+             neutralLabel = "drób/wołowina";
+             positiveLabel = "ryba/vege";
         } else if (isDietQuestion5) { // Add labels for Diet Q5
-             negativeLabel = "tak (-0.25)";
-             neutralLabel = "raz i mało (0)";
-             positiveLabel = "nie (+0.25)";
+             negativeLabel = "tak";
+             neutralLabel = "raz i mało";
+             positiveLabel = "nie";
         } else if (isDreamingQuestion1) {
-            negativeLabel = "po g. 23 (-0.25)"; // Reverted
-            neutralLabel = "między g. 22 a 23 (0)"; // Reverted
-            positiveLabel = "przed g. 22 (+0.25)"; // Reverted
+            negativeLabel = "po g. 23"; // Reverted
+            neutralLabel = "między g. 22 a 23"; // Reverted
+            positiveLabel = "przed g. 22"; // Reverted
         } else if (isDreamingQuestion2) {
-            negativeLabel = "Ponad godzinę (-0.25)";
-            neutralLabel = "ok. pół godziny (0)";
-            positiveLabel = "ok. kwadrans (+0.25)";
+            negativeLabel = "Ponad godzinę";
+            neutralLabel = "ok. pół godziny";
+            positiveLabel = "ok. kwadrans";
         } else if (isDreamingQuestion3) {
-            negativeLabel = "po g. 7 (-0.25)";
-            neutralLabel = "ok. 6:30 (0)";
-            positiveLabel = "ok. g. 6 (+0.25)";
+            negativeLabel = "po g. 7";
+            neutralLabel = "ok. 6:30";
+            positiveLabel = "ok. g. 6";
         } else if (isDreamingQuestion4) {
-            negativeLabel = "Musiał dzwonić kilka razy (-0.25)";
-            neutralLabel = "Wstałem po jednym dzwonku (0)";
-            positiveLabel = "Wstałem przed budzikiem (+0.25)";
+            negativeLabel = "Musiał dzwonić kilka razy";
+            neutralLabel = "Wstałem po jednym dzwonku";
+            positiveLabel = "Wstałem przed budzikiem";
         } else if (isDreamingQuestion5) {
-            negativeLabel = "tak i miałem problem z ponownym zaśnięciem (-0.25)";
-            neutralLabel = "tak, na krótko (0)";
-            positiveLabel = "nie (+0.25)";
+            negativeLabel = "tak i miałem problem z ponownym zaśnięciem";
+            neutralLabel = "tak, na krótko";
+            positiveLabel = "nie";
         } else if (isDreamingQuestion6) {
-            negativeLabel = "Byłem nieprzytomny (-0.25)";
-            neutralLabel = "Lekko niedospany (0)";
-            positiveLabel = "Tak, pełen energii (+0.25)";
+            negativeLabel = "Byłem nieprzytomny";
+            neutralLabel = "Lekko niedospany";
+            positiveLabel = "Tak, pełen energii";
         } else if (isDreamingQuestion7) {
-             negativeLabel = "Koszmary (-0.25)";
-             neutralLabel = "Neutralne / Nie pamiętam (0)";
-             positiveLabel = "Przyjemne (+0.25)";
+             negativeLabel = "Koszmary";
+             neutralLabel = "Neutralne / Nie pamiętam";
+             positiveLabel = "Przyjemne";
         } else if (isDreamingQuestion8) {
              // Default labels for Sen Q8 ("Czy uniknąłeś nadmiernych bodźców przed snem?")
-             negativeLabel = "Nie (-0.25)";
-             neutralLabel = "Częściowo (0)";
-             positiveLabel = "Tak (+0.25)";
+             negativeLabel = "Nie";
+             neutralLabel = "Częściowo";
+             positiveLabel = "Tak";
         } else if (isMoodQuestion1) {
              // Labels for Nastawienie Q1 ("Jak się czujesz fizycznie?")
-             negativeLabel = "ból/infekcja (-0.25)";
-             neutralLabel = "średnio/zmęczenie (0)";
-             positiveLabel = "znakomicie (+0.25)";
+             negativeLabel = "ból/infekcja";
+             neutralLabel = "średnio/zmęczenie";
+             positiveLabel = "znakomicie";
         } else if (isMoodQuestion2) {
              // Labels for Nastawienie Q2 ("Jaki masz nastrój?")
-             negativeLabel = "przygnębienie/smutek (-0.25)";
-             neutralLabel = "neutralny (0)";
-             positiveLabel = "entuzjastyczny (+0.25)";
+             negativeLabel = "przygnębienie/smutek";
+             neutralLabel = "neutralny";
+             positiveLabel = "entuzjastyczny";
         } else if (isMoodQuestion3) {
              // Labels for Nastawienie Q3 ("Czy czujesz lęk przed nadchodzącym dniem?")
-             negativeLabel = "boję się (-0.25)";
-             neutralLabel = "mam stres (0)";
-             positiveLabel = "brak lęku (+0.25)";
+             negativeLabel = "boję się";
+             neutralLabel = "mam stres";
+             positiveLabel = "brak lęku";
         } else if (isMoodQuestion4) {
              // Labels for Nastawienie Q4 ("Czy zaplanowałeś dzień?")
-             negativeLabel = "brak planu (-0.25)";
-             neutralLabel = "jest plan ogólny (0)";
-             positiveLabel = "plan z checklistą (+0.25)";
+             negativeLabel = "brak planu";
+             neutralLabel = "jest plan ogólny";
+             positiveLabel = "plan z checklistą";
         } else if (isMoodQuestion5) {
              // Labels for Nastawienie Q5 ("Czy zwizualizowałeś swoje życiowe priorytety?")
-             negativeLabel = "zapomniałem (-0.25)";
-             neutralLabel = "próbowałem ale rozproszyłem się (0)";
-             positiveLabel = "mam focus na cel (+0.25)";
+             negativeLabel = "zapomniałem";
+             neutralLabel = "próbowałem ale rozproszyłem się";
+             positiveLabel = "mam focus na cel";
         } else if (isMoodQuestion6) {
              // Labels for Nastawienie Q6 ("Czy skupiłeś się na wdzięczności?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "na chwilę ale mało konkretnie (0)";
-             positiveLabel = "tak dogłębnie (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "na chwilę ale mało konkretnie";
+             positiveLabel = "tak dogłębnie";
         } else if (isMoodQuestion7) {
              // Labels for Nastawienie Q7 ("Czy zacząłeś dzień od pozytywnej afirmacji?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "tak ale mało przekonująco (0)";
-             positiveLabel = "tak i podziałało (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "tak ale mało przekonująco";
+             positiveLabel = "tak i podziałało";
         } else if (isMoodQuestion8) {
              // Labels for Nastawienie Q8 ("Czy zapisałem jakąś myśl?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "tak ale nic istotnego (0)";
-             positiveLabel = "tak coś wartościowego (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "tak ale nic istotnego";
+             positiveLabel = "tak coś wartościowego";
         } else if (isTrainingQuestion1) {
              // Labels for Fitness Q1 ("Ile czasu byłeś na świeżym powietrzu?")
-             negativeLabel = "poniżej 30 min. (-0.25)";
-             neutralLabel = "ok. 45 min. (0)";
-             positiveLabel = "ponad godzinę (+0.25)";
+             negativeLabel = "poniżej 30 min.";
+             neutralLabel = "ok. 45 min.";
+             positiveLabel = "ponad godzinę";
         } else if (isTrainingQuestion2) {
              // Labels for Fitness Q2 ("Ile zrobiłeś kroków?")
-             negativeLabel = "mniej niż 4k (-0.25)";
-             neutralLabel = "4-6k (0)";
-             positiveLabel = "powyżej 6k (+0.25)";
+             negativeLabel = "mniej niż 4k";
+             neutralLabel = "4-6k";
+             positiveLabel = "powyżej 6k";
         } else if (isTrainingQuestion3) {
              // Labels for Fitness Q3 ("Ile spaliłeś kalorii?")
-             negativeLabel = "mniej niż 300 (-0.25)";
-             neutralLabel = "300-500 (0)";
-             positiveLabel = "powyżej 500 (+0.25)";
+             negativeLabel = "mniej niż 300";
+             neutralLabel = "300-500";
+             positiveLabel = "powyżej 500";
         } else if (isTrainingQuestion4) {
             // Labels for Fitness Q4 ("Ile czasu poświęciłeś na trening?")
-            negativeLabel = "mniej niż 15 min (-0.25)";
-            neutralLabel = "15-30 min (0)";
-            positiveLabel = "ponad 45 min (+0.25)";
+            negativeLabel = "mniej niż 15 min";
+            neutralLabel = "15-30 min";
+            positiveLabel = "ponad 45 min";
         } else if (isTrainingQuestion5) {
             // Labels for Fitness Q5 ("Czy był trening mięśni?")
-            negativeLabel = "nie (-0.25)";
-            neutralLabel = "częściowy (0)";
-            positiveLabel = "3 partie ciała (+0.25)";
+            negativeLabel = "nie";
+            neutralLabel = "częściowy";
+            positiveLabel = "3 partie ciała";
         } else if (isTrainingQuestion6) {
              // Labels for Fitness Q6 ("Czy robiłeś stretching?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "częściowy (0)";
-             positiveLabel = "pełny (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "częściowy";
+             positiveLabel = "pełny";
         } else if (isTrainingQuestion7) {
             // Labels for Fitness Q7 ("Czy robiłeś ćwiczenia oddechowe?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "powierzchownie (0)";
-             positiveLabel = "gruntownie (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "powierzchownie";
+             positiveLabel = "gruntownie";
         } else if (isTrainingQuestion8) {
             // Labels for Fitness Q8 ("Czy chodziłeś po schodach?")
-             negativeLabel = "nie (-0.25)";
-             neutralLabel = "do 3 p. (0)";
-             positiveLabel = "więcej niż 3 p. (+0.25)";
+             negativeLabel = "nie";
+             neutralLabel = "do 3 p.";
+             positiveLabel = "więcej niż 3 p.";
         }
         // Default labels apply for other themes (Odżywianie Q3-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
@@ -367,15 +367,15 @@ export function ThemeQuestionsForm({
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} aria-label={negativeLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{`${negativeLabel} (-0.25)`}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{`(-0.25)`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} aria-label={neutralLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{`${neutralLabel} (0)`}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{`(0)`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} aria-label={positiveLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{`${positiveLabel} (+0.25)`}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{`(+0.25)`}</Label>
               </div>
             </RadioGroup>
           </div>
