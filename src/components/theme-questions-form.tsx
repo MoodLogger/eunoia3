@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -199,6 +198,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion8 = themeKey === 'training' && index === 7; // Identify Fitness Q8
         const isSocialRelationsQuestion1 = themeKey === 'socialRelations' && index === 0; // Identify Social Relations Q1
         const isSocialRelationsQuestion2 = themeKey === 'socialRelations' && index === 1; // Identify Social Relations Q2
+        const isSocialRelationsQuestion3 = themeKey === 'socialRelations' && index === 2; // Identify Social Relations Q3
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -366,6 +366,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "negatywne emocje";
              neutralLabel = "neutralnie/brak";
              positiveLabel = "budujące emocje";
+        } else if (isSocialRelationsQuestion3) {
+            // Labels for Relacje zewnętrzne Q3 ("Czy miałeś smalltalk z kimś obcym?")
+            negativeLabel = "nie mimo okazji";
+            neutralLabel = "brak okazji";
+            positiveLabel = "zainicjowałem rozmowę";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
@@ -421,4 +426,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
