@@ -220,6 +220,7 @@ export function ThemeQuestionsForm({
         const isSelfEducationQuestion4 = themeKey === 'selfEducation' && index === 3; // Identify Rozwój intelektualny Q4
         const isSelfEducationQuestion5 = themeKey === 'selfEducation' && index === 4; // Identify Rozwój intelektualny Q5
         const isSelfEducationQuestion6 = themeKey === 'selfEducation' && index === 5; // Identify Rozwój intelektualny Q6
+        const isSelfEducationQuestion7 = themeKey === 'selfEducation' && index === 6; // Identify Rozwój intelektualny Q7
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -481,6 +482,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "tak ale bez zastosowania";
              positiveLabel = "tak do wykorzystania";
+        } else if (isSelfEducationQuestion7) {
+             // Labels for Rozwój intelektualny Q7 ("Poświęciłeś czas finansom?")
+             negativeLabel = "nie";
+             neutralLabel = "tylko analiza konta";
+             positiveLabel = "tak z inwestycjami";
         }
         // Default labels apply for other themes (Rozwój intelektualny Q7-Q8) and other questions
 
