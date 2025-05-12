@@ -205,6 +205,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion6 = themeKey === 'socialRelations' && index === 5; // Identify Social Relations Q6
         const isSocialRelationsQuestion7 = themeKey === 'socialRelations' && index === 6; // Identify Social Relations Q7
         const isSocialRelationsQuestion8 = themeKey === 'socialRelations' && index === 7; // Identify Social Relations Q8
+        const isFamilyRelationsQuestion1 = themeKey === 'familyRelations' && index === 0; // Identify Family Relations Q1
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -402,6 +403,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie mimo przestrzeni";
              neutralLabel = "podjąłem próbę";
              positiveLabel = "tak i fajnie wyszło";
+        } else if (isFamilyRelationsQuestion1) {
+             // Labels for Relacje rodzinne Q1 ("Czy rozmawiałeś z rodzicami/teściami?")
+             negativeLabel = "nie mimo wolnego czasu";
+             neutralLabel = "tak krótko";
+             positiveLabel = "tak z zaangażowaniem";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
@@ -457,3 +463,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
