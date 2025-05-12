@@ -212,6 +212,7 @@ export function ThemeQuestionsForm({
         const isFamilyRelationsQuestion4 = themeKey === 'familyRelations' && index === 3; // Identify Family Relations Q4
         const isFamilyRelationsQuestion5 = themeKey === 'familyRelations' && index === 4; // Identify Family Relations Q5
         const isFamilyRelationsQuestion6 = themeKey === 'familyRelations' && index === 5; // Identify Family Relations Q6
+        const isFamilyRelationsQuestion7 = themeKey === 'familyRelations' && index === 6; // Identify Family Relations Q7
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -434,8 +435,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "nie było potrzeby";
              positiveLabel = "tak";
+        } else if (isFamilyRelationsQuestion7) {
+            // Labels for Relacje rodzinne Q7 ("Czy zorganizowałeś wspólne spędzenie czasu?")
+            negativeLabel = "nie mimo okazji";
+            neutralLabel = "brak przestrzeni";
+            positiveLabel = "tak wyszło ok";
         }
-        // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
+        // Default labels apply for other themes (Rozwój intelektualny) and other questions
 
 
         return (
