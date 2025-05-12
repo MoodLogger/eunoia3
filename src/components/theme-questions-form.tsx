@@ -218,6 +218,7 @@ export function ThemeQuestionsForm({
         const isSelfEducationQuestion2 = themeKey === 'selfEducation' && index === 1; // Identify Rozwój intelektualny Q2
         const isSelfEducationQuestion3 = themeKey === 'selfEducation' && index === 2; // Identify Rozwój intelektualny Q3
         const isSelfEducationQuestion4 = themeKey === 'selfEducation' && index === 3; // Identify Rozwój intelektualny Q4
+        const isSelfEducationQuestion5 = themeKey === 'selfEducation' && index === 4; // Identify Rozwój intelektualny Q5
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -470,8 +471,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "fragmentarycznie";
              positiveLabel = "tak 30 min";
+        } else if (isSelfEducationQuestion5) {
+            // Labels for Rozwój intelektualny Q5 ("Czy zrobiłeś kurs/quiz on-line?")
+             negativeLabel = "nie";
+             neutralLabel = "tylko quiz";
+             positiveLabel = "tak przydatny";
         }
-        // Default labels apply for other themes (Rozwój intelektualny Q4-Q8) and other questions
+        // Default labels apply for other themes (Rozwój intelektualny Q6-Q8) and other questions
 
 
         return (
