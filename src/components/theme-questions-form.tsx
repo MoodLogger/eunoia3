@@ -172,6 +172,7 @@ export function ThemeQuestionsForm({
         const isDietQuestion5 = themeKey === 'diet' && index === 4; // Check for Diet Q5
         const isDietQuestion6 = themeKey === 'diet' && index === 5; // Check for Diet Q6
         const isDietQuestion7 = themeKey === 'diet' && index === 6; // Check for Diet Q7
+        const isDietQuestion8 = themeKey === 'diet' && index === 7; // Check for Diet Q8
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -236,6 +237,10 @@ export function ThemeQuestionsForm({
              negativeLabel = "wcale";
              neutralLabel = "2-3 razy";
              positiveLabel = "4 i więcej";
+        } else if (isDietQuestion8) { // Add labels for Diet Q8
+             negativeLabel = "90 i więcej";
+             neutralLabel = "85-89";
+             positiveLabel = "do 84";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23"; // Reverted
             neutralLabel = "między g. 22 a 23"; // Reverted
