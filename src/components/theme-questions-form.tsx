@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -186,6 +187,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion3 = themeKey === 'training' && index === 2; // Identify Fitness Q3
         const isTrainingQuestion4 = themeKey === 'training' && index === 3; // Identify Fitness Q4
         const isTrainingQuestion5 = themeKey === 'training' && index === 4; // Identify Fitness Q5
+        const isTrainingQuestion6 = themeKey === 'training' && index === 5; // Identify Fitness Q6
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -300,8 +302,13 @@ export function ThemeQuestionsForm({
             negativeLabel = "nie (-0.25)";
             neutralLabel = "częściowy (0)";
             positiveLabel = "3 partie ciała (+0.25)";
+        } else if (isTrainingQuestion6) {
+             // Labels for Fitness Q6 ("Czy robiłeś stretching?")
+             negativeLabel = "nie (-0.25)";
+             neutralLabel = "częściowy (0)";
+             positiveLabel = "pełny (+0.25)";
         }
-        // Default labels apply for other themes (Fitness Q6-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Fitness Q7-8, Odżywianie Q2-8, Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
 
 
         return (
@@ -346,3 +353,4 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
+
