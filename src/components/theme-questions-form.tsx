@@ -197,6 +197,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion6 = themeKey === 'training' && index === 5; // Identify Fitness Q6
         const isTrainingQuestion7 = themeKey === 'training' && index === 6; // Identify Fitness Q7
         const isTrainingQuestion8 = themeKey === 'training' && index === 7; // Identify Fitness Q8
+        const isSocialRelationsQuestion1 = themeKey === 'socialRelations' && index === 0; // Identify Social Relations Q1
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -354,8 +355,13 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "do 3 p.";
              positiveLabel = "więcej niż 3 p.";
+        } else if (isSocialRelationsQuestion1) {
+            // Labels for Relacje zewnętrzne Q1 ("Jak zachowałeś się podczas dojazdów?")
+            negativeLabel = "agresywnie";
+            neutralLabel = "poprawnie";
+            positiveLabel = "przyjaźnie";
         }
-        // Default labels apply for other themes (Relacje zewnętrzne, Relacje rodzinne, Rozwój intelektualny)
+        // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
 
         return (
