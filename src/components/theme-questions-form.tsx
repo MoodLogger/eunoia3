@@ -167,6 +167,7 @@ export function ThemeQuestionsForm({
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
         const isDietQuestion2 = themeKey === 'diet' && index === 1; // Check for Diet Q2
         const isDietQuestion3 = themeKey === 'diet' && index === 2; // Check for Diet Q3
+        const isDietQuestion4 = themeKey === 'diet' && index === 3; // Check for Diet Q4
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -204,7 +205,7 @@ export function ThemeQuestionsForm({
 
         // Apply specific labels based on theme and question index
         if (isDietQuestion1) {
-            negativeLabel = "&lt;1 litr (-0.25)"; // Corrected label
+            negativeLabel = "<1 litr (-0.25)"; // Corrected label
             neutralLabel = "1-2 litry (0)";
             positiveLabel = ">2 litry (+0.25)";
         } else if (isDietQuestion2) { // Add labels for Diet Q2
@@ -215,6 +216,10 @@ export function ThemeQuestionsForm({
              negativeLabel = "za wcześnie i za późno (-0.25)";
              neutralLabel = "przekroczony jeden czas (0)";
              positiveLabel = "w godz. 10-20 (+0.25)";
+        } else if (isDietQuestion4) { // Add labels for Diet Q4
+             negativeLabel = "przetworzone/wieprzowina (-0.25)";
+             neutralLabel = "drób/wołowina (0)";
+             positiveLabel = "ryba/vege (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
@@ -357,15 +362,15 @@ export function ThemeQuestionsForm({
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} aria-label={negativeLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{negativeLabel}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">{`${negativeLabel} (-0.25)`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} aria-label={neutralLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{neutralLabel}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">{`${neutralLabel} (0)`}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} aria-label={positiveLabel}/>
-                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{positiveLabel}</Label>
+                <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">{`${positiveLabel} (+0.25)`}</Label>
               </div>
             </RadioGroup>
           </div>
