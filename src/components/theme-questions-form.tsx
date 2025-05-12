@@ -58,16 +58,25 @@ const getQuestionsForTheme = (themeKey: keyof ThemeScores): string[] => {
         questions.push("Czy skupiłeś się na wdzięczności?"); // Q6
         questions.push("Czy zacząłeś dzień od pozytywnej afirmacji?"); // Q7
         questions.push("Czy zapisałem jakąś myśl?"); // Q8
+    } else if (themeKey === 'training') { // Added specific questions for Fitness
+        questions.push("Ile czasu byłeś na świeżym powietrzu?"); // Q1
+        questions.push("Ile zrobiłeś kroków?"); // Q2
+        questions.push("Ile spaliłeś kalorii?"); // Q3
+        questions.push("Ile czasu poświęciłeś na trening?"); // Q4
+        questions.push("Czy był trening mięśni?"); // Q5
+        questions.push("Czy robiłeś stretching?"); // Q6
+        questions.push("Czy robiłeś ćwiczenia oddechowe?"); // Q7
+        questions.push("Czy chodziłeś po schodach?"); // Q8
     } else {
-         // Default logic for other themes
+         // Default logic for other themes (Diet, Social, Family, SelfEdu)
          for (let i = 0; i < 8; i++) {
             if (themeKey === 'diet' && i === 0) {
                 questions.push("Nawodnienie"); // Specific first question for Diet
             } else if (i === 7) { // Handle the 8th question (index 7) for OTHER themes
-                // For now, keep a placeholder for other themes, or make it editable too if needed
+                // Keep it editable for Diet, Social, Family, SelfEdu
                 questions.push(`Custom Question 8 for ${label}?`); // Placeholder for Q8
             } else {
-                // Default placeholders for questions 1-7 for themes other than 'diet', 'dreaming', 'moodScore'
+                // Default placeholders for questions 1-7 for themes other than 'diet', 'dreaming', 'moodScore', 'training'
                 questions.push(`Placeholder Question ${i + 1} for ${label}?`);
             }
         }
@@ -86,7 +95,7 @@ export function ThemeQuestionsForm({
 
    // State for the editable question text (Q8 for non-dreaming/non-moodScore themes)
    // Note: This approach has limitations mentioned above.
-   const isEditableThemeQ8 = themeKey !== 'dreaming' && themeKey !== 'moodScore';
+   const isEditableThemeQ8 = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training'; // Exclude training from editable Q8 now
    const [customQuestion8Text, setCustomQuestion8Text] = React.useState(
        isEditableThemeQ8 ? `Custom Question 8 for ${themeLabel}?` : '' // Initialize only if editable
    );
@@ -95,7 +104,7 @@ export function ThemeQuestionsForm({
    React.useEffect(() => {
      setIsClient(true);
      // Re-initialize custom question text if themeKey changes after mount
-     const shouldBeEditable = themeKey !== 'dreaming' && themeKey !== 'moodScore';
+     const shouldBeEditable = themeKey !== 'dreaming' && themeKey !== 'moodScore' && themeKey !== 'training';
      if (shouldBeEditable) {
        setCustomQuestion8Text(`Custom Question 8 for ${themeLabel}?`);
      } else {
@@ -142,7 +151,7 @@ export function ThemeQuestionsForm({
         const isDreamingQuestion6 = themeKey === 'dreaming' && index === 5;
         const isDreamingQuestion7 = themeKey === 'dreaming' && index === 6;
         const isDreamingQuestion8 = themeKey === 'dreaming' && index === 7; // Identify Sen Q8
-        const isEditableQuestion8 = index === 7 && themeKey !== 'dreaming' && themeKey !== 'moodScore'; // Identify editable Q8 for other themes
+        const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Identify editable Q8 for other themes
 
 
         const defaultNegativeLabel = "Negative (-0.25)";
@@ -192,7 +201,7 @@ export function ThemeQuestionsForm({
              neutralLabel = "Częściowo (0)";
              positiveLabel = "Tak (+0.25)";
         }
-        // Default labels apply for the editable Q8 on other themes and for Nastawienie theme
+        // Default labels apply for the editable Q8 on other themes and for Nastawienie & Fitness themes
 
 
         return (
@@ -237,5 +246,3 @@ export function ThemeQuestionsForm({
     </div>
   );
 }
-
-    
