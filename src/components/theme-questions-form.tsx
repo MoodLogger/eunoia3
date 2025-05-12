@@ -214,6 +214,7 @@ export function ThemeQuestionsForm({
         const isFamilyRelationsQuestion6 = themeKey === 'familyRelations' && index === 5; // Identify Family Relations Q6
         const isFamilyRelationsQuestion7 = themeKey === 'familyRelations' && index === 6; // Identify Family Relations Q7
         const isFamilyRelationsQuestion8 = themeKey === 'familyRelations' && index === 7; // Identify Family Relations Q8
+        const isSelfEducationQuestion1 = themeKey === 'selfEducation' && index === 0; // Identify Rozwój intelektualny Q1
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -446,8 +447,13 @@ export function ThemeQuestionsForm({
             negativeLabel = "awantura";
             neutralLabel = "było ok";
             positiveLabel = "było miło";
+        } else if (isSelfEducationQuestion1) {
+            // Labels for Rozwój intelektualny Q1 ("Czy poświęciłeś czas na czytanie?")
+            negativeLabel = "nie";
+            neutralLabel = "krótko, bez skupienia";
+            positiveLabel = "ponad 30 min uważnie";
         }
-        // Default labels apply for other themes (Rozwój intelektualny) and other questions
+        // Default labels apply for other themes (Rozwój intelektualny Q2-Q8) and other questions
 
 
         return (
