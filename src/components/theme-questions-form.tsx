@@ -199,6 +199,7 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion1 = themeKey === 'socialRelations' && index === 0; // Identify Social Relations Q1
         const isSocialRelationsQuestion2 = themeKey === 'socialRelations' && index === 1; // Identify Social Relations Q2
         const isSocialRelationsQuestion3 = themeKey === 'socialRelations' && index === 2; // Identify Social Relations Q3
+        const isSocialRelationsQuestion4 = themeKey === 'socialRelations' && index === 3; // Identify Social Relations Q4
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -371,6 +372,11 @@ export function ThemeQuestionsForm({
             negativeLabel = "nie mimo okazji";
             neutralLabel = "brak okazji";
             positiveLabel = "zainicjowałem rozmowę";
+        } else if (isSocialRelationsQuestion4) {
+            // Labels for Relacje zewnętrzne Q4 ("Czy pochwaliłeś współpracownika?")
+            negativeLabel = "nie";
+            neutralLabel = "tak ale słabo";
+            positiveLabel = "tak wzmacniająco";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
