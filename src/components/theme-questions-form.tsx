@@ -211,6 +211,7 @@ export function ThemeQuestionsForm({
         const isFamilyRelationsQuestion3 = themeKey === 'familyRelations' && index === 2; // Identify Family Relations Q3
         const isFamilyRelationsQuestion4 = themeKey === 'familyRelations' && index === 3; // Identify Family Relations Q4
         const isFamilyRelationsQuestion5 = themeKey === 'familyRelations' && index === 4; // Identify Family Relations Q5
+        const isFamilyRelationsQuestion6 = themeKey === 'familyRelations' && index === 5; // Identify Family Relations Q6
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -428,6 +429,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "drobną";
              positiveLabel = "przyłożyłem się";
+        } else if (isFamilyRelationsQuestion6) {
+             // Labels for Relacje rodzinne Q6 ("Czy pomogłeś w lekcjach?")
+             negativeLabel = "nie";
+             neutralLabel = "nie było potrzeby";
+             positiveLabel = "tak";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
