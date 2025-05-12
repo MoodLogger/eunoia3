@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from 'react';
@@ -208,6 +209,7 @@ export function ThemeQuestionsForm({
         const isFamilyRelationsQuestion1 = themeKey === 'familyRelations' && index === 0; // Identify Family Relations Q1
         const isFamilyRelationsQuestion2 = themeKey === 'familyRelations' && index === 1; // Identify Family Relations Q2
         const isFamilyRelationsQuestion3 = themeKey === 'familyRelations' && index === 2; // Identify Family Relations Q3
+        const isFamilyRelationsQuestion4 = themeKey === 'familyRelations' && index === 3; // Identify Family Relations Q4
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -415,6 +417,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie";
              neutralLabel = "krótko i pobieżnie";
              positiveLabel = "tak z uważnością";
+        } else if (isFamilyRelationsQuestion4) {
+            // Labels for Relacje rodzinne Q4 ("Czy pomogłeś w obowiązkach domowych?")
+            negativeLabel = "nie";
+            neutralLabel = "drobne rzeczy";
+            positiveLabel = "duży wkład";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
