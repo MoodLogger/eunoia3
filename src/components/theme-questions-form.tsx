@@ -198,6 +198,7 @@ export function ThemeQuestionsForm({
         const isTrainingQuestion7 = themeKey === 'training' && index === 6; // Identify Fitness Q7
         const isTrainingQuestion8 = themeKey === 'training' && index === 7; // Identify Fitness Q8
         const isSocialRelationsQuestion1 = themeKey === 'socialRelations' && index === 0; // Identify Social Relations Q1
+        const isSocialRelationsQuestion2 = themeKey === 'socialRelations' && index === 1; // Identify Social Relations Q2
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -360,6 +361,11 @@ export function ThemeQuestionsForm({
             negativeLabel = "agresywnie";
             neutralLabel = "poprawnie";
             positiveLabel = "przyjaźnie";
+        } else if (isSocialRelationsQuestion2) {
+             // Labels for Relacje zewnętrzne Q2 ("Czy odbyłeś konstruktywną rozmowę szefem?")
+             negativeLabel = "negatywne emocje";
+             neutralLabel = "neutralnie/brak";
+             positiveLabel = "budujące emocje";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
