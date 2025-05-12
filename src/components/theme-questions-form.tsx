@@ -168,6 +168,7 @@ export function ThemeQuestionsForm({
         const isDietQuestion2 = themeKey === 'diet' && index === 1; // Check for Diet Q2
         const isDietQuestion3 = themeKey === 'diet' && index === 2; // Check for Diet Q3
         const isDietQuestion4 = themeKey === 'diet' && index === 3; // Check for Diet Q4
+        const isDietQuestion5 = themeKey === 'diet' && index === 4; // Check for Diet Q5
         const isDreamingQuestion1 = themeKey === 'dreaming' && index === 0;
         const isDreamingQuestion2 = themeKey === 'dreaming' && index === 1;
         const isDreamingQuestion3 = themeKey === 'dreaming' && index === 2;
@@ -220,6 +221,10 @@ export function ThemeQuestionsForm({
              negativeLabel = "przetworzone/wieprzowina (-0.25)";
              neutralLabel = "drób/wołowina (0)";
              positiveLabel = "ryba/vege (+0.25)";
+        } else if (isDietQuestion5) { // Add labels for Diet Q5
+             negativeLabel = "tak (-0.25)";
+             neutralLabel = "raz i mało (0)";
+             positiveLabel = "nie (+0.25)";
         } else if (isDreamingQuestion1) {
             negativeLabel = "po g. 23 (-0.25)"; // Reverted
             neutralLabel = "między g. 22 a 23 (0)"; // Reverted
