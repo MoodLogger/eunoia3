@@ -206,6 +206,8 @@ export function ThemeQuestionsForm({
         const isSocialRelationsQuestion7 = themeKey === 'socialRelations' && index === 6; // Identify Social Relations Q7
         const isSocialRelationsQuestion8 = themeKey === 'socialRelations' && index === 7; // Identify Social Relations Q8
         const isFamilyRelationsQuestion1 = themeKey === 'familyRelations' && index === 0; // Identify Family Relations Q1
+        const isFamilyRelationsQuestion2 = themeKey === 'familyRelations' && index === 1; // Identify Family Relations Q2
+        const isFamilyRelationsQuestion3 = themeKey === 'familyRelations' && index === 2; // Identify Family Relations Q3
         const isEditableQuestion8 = index === 7 && isEditableThemeQ8; // Check if Q8 should be editable (currently false)
 
 
@@ -408,6 +410,11 @@ export function ThemeQuestionsForm({
              negativeLabel = "nie mimo wolnego czasu";
              neutralLabel = "tak krótko";
              positiveLabel = "tak z zaangażowaniem";
+        } else if (isFamilyRelationsQuestion2 || isFamilyRelationsQuestion3) {
+             // Labels for Relacje rodzinne Q2 and Q3
+             negativeLabel = "nie";
+             neutralLabel = "krótko i pobieżnie";
+             positiveLabel = "tak z uważnością";
         }
         // Default labels apply for other themes (Relacje rodzinne, Rozwój intelektualny) and other questions
 
