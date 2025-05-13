@@ -158,12 +158,14 @@ export function ThemeQuestionsForm({
     return <div>Loading questions...</div>; // Or a skeleton loader
   }
 
-  const themeTitle = themeLabelMap[themeKey] ? `${themeLabelMap[themeKey]} Questions` : `${themeLabel} Questions`;
-
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-center text-primary">
-         {themeTitle === 'Sen Questions' ? 'Pytania na temat snu' : themeTitle}
+        {
+          themeKey === 'dreaming' ? 'Pytania na temat snu' :
+          themeKey === 'moodScore' ? 'Pytania na temat nastawienia' :
+          `Pytania: ${themeLabel}`
+        }
       </h3>
       {questions.map((question, index) => {
         const isDietQuestion1 = themeKey === 'diet' && index === 0;
