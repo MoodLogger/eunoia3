@@ -65,7 +65,7 @@ export function CalculatedMoodDisplay({ icon: Icon, label, totalScore }: Calcula
       </span>
       {totalScore !== null && label !== 'Calculating...' && (
         <span className="text-sm text-muted-foreground">
-          Total Score: {totalScore > 0 ? `+${totalScore}` : totalScore}
+          Łączny Wynik: {totalScore > 0 ? `+${totalScore}` : totalScore}
         </span>
       )}
     </div>
