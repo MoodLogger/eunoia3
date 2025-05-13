@@ -172,7 +172,7 @@ export function MoodAnalysis() {
     return (
         <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
             <CardHeader>
-                <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Mood Analysis & Export</CardTitle>
+                <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
                 <CardDescription className="text-center">Analyze patterns and export your data.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-4 p-6">
@@ -187,7 +187,7 @@ export function MoodAnalysis() {
   return (
     <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
       <CardHeader>
-        <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Mood Analysis & Export</CardTitle>
+        <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
         <CardDescription className="text-center">Analyze overall patterns and export data to Google Sheets.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 p-6">
