@@ -518,25 +518,22 @@ export function ThemeQuestionsForm({
               // Ensure value is a string for RadioGroup, default to '0' if undefined
               value={(detailedScores?.[index]?.toString()) ?? '0'}
               onValueChange={(value) => handleValueChange(index, value)}
-              className="flex space-x-4 justify-center"
+              className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2" // Updated className for wrapping
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1"> {/* Reduced space-x here */}
                 <RadioGroupItem value="-0.25" id={`${themeKey}-q${index}-neg`} aria-label={negativeLabel}/>
-                {/* Display descriptive label AND point value */}
                 <Label htmlFor={`${themeKey}-q${index}-neg`} className="text-xs text-muted-foreground">
                   {negativeLabel} {`(-0.25)`}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1"> {/* Reduced space-x here */}
                 <RadioGroupItem value="0" id={`${themeKey}-q${index}-neu`} aria-label={neutralLabel}/>
-                 {/* Display descriptive label AND point value */}
                 <Label htmlFor={`${themeKey}-q${index}-neu`} className="text-xs text-muted-foreground">
                    {neutralLabel} {`(0)`}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1"> {/* Reduced space-x here */}
                 <RadioGroupItem value="0.25" id={`${themeKey}-q${index}-pos`} aria-label={positiveLabel}/>
-                 {/* Display descriptive label AND point value */}
                 <Label htmlFor={`${themeKey}-q${index}-pos`} className="text-xs text-muted-foreground">
                   {positiveLabel} {`(+0.25)`}
                 </Label>
@@ -549,3 +546,5 @@ export function ThemeQuestionsForm({
   );
 }
 
+
+    
