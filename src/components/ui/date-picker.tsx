@@ -2,7 +2,8 @@
 "use client"
 
 import * as React from "react"
-import { format, isValid, parseISO } from "date-fns"
+import { format, isValid } from "date-fns"
+import { pl } from 'date-fns/locale'; // Import Polish locale
 import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -40,7 +41,7 @@ export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date && isValid(date) ? format(date, "PPP") : <span>Pick a date</span>}
+          {date && isValid(date) ? format(date, "PPP", { locale: pl }) : <span>Wybierz datę</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
@@ -49,8 +50,10 @@ export function DatePicker({ date, onDateChange, className }: DatePickerProps) {
           selected={date}
           onSelect={handleSelectDate}
           initialFocus
+          locale={pl} // Pass Polish locale to Calendar
         />
       </PopoverContent>
     </Popover>
   )
 }
+

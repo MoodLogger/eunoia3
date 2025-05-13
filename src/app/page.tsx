@@ -3,6 +3,7 @@
 
 import * as React from 'react';
 import { format, isValid, parseISO } from 'date-fns';
+import { pl } from 'date-fns/locale'; // Import Polish locale
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ThemeAssessment } from '@/components/theme-assessment';
 import { MoodAnalysis } from '@/components/mood-analysis';
@@ -189,7 +190,7 @@ export default function Home() {
             <CardTitle className="text-3xl font-bold text-primary">Eunoia</CardTitle>
             <CardDescription className="flex flex-col items-center space-y-2">
               <span>
-                Overall assessment for {selectedDate && isValid(parseISO(selectedDate)) ? format(parseISO(selectedDate), 'MMMM d, yyyy') : '...'}
+                Ogólna ocena z dnia {selectedDate && isValid(parseISO(selectedDate)) ? format(parseISO(selectedDate), 'd MMMM yyyy', { locale: pl }) : '...'}
               </span>
               <DatePicker
                 date={selectedDate ? parseISO(selectedDate) : new Date()}
