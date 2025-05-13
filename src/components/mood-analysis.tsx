@@ -11,7 +11,7 @@ import { exportToGoogleSheets } from '@/actions/export-to-google-sheets'; // Imp
 import type { StoredData } from '@/lib/types';
 import { getAllEntries } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast'; // Import useToast
-import { themeOrder, themeLabels } from './theme-assessment'; // Import themeOrder and themeLabels
+import { themeOrder, themeLabels } from '@/components/theme-assessment'; // Import themeOrder and themeLabels
 
 
 // Helper function to prepare data for AI analysis (using overall scores)
@@ -173,7 +173,7 @@ export function MoodAnalysis() {
         <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
             <CardHeader>
                 <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
-                <CardDescription className="text-center">Analyze patterns and export your data.</CardDescription>
+                <CardDescription className="text-center"></CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-4 p-6">
                  <div className="animate-pulse h-10 bg-muted rounded w-1/2"></div>
@@ -188,7 +188,7 @@ export function MoodAnalysis() {
     <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
       <CardHeader>
         <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
-        <CardDescription className="text-center">Analyze overall patterns and export data to Google Sheets.</CardDescription>
+        <CardDescription className="text-center"></CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 p-6">
         <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
@@ -239,3 +239,4 @@ export function MoodAnalysis() {
     </Card>
   );
 }
+
