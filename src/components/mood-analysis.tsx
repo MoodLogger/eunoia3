@@ -3,16 +3,16 @@
 
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Removed CardDescription
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Lightbulb, UploadCloud, AlertCircle } from 'lucide-react';
 import { analyzeMoodPatterns } from '@/ai/flows/analyze-mood-patterns';
 import { exportToGoogleSheets } from '@/actions/export-to-google-sheets';
-import type { StoredData, DailyEntry } from '@/lib/types'; // Added DailyEntry
+import type { StoredData } from '@/lib/types';
 import { getAllEntries } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { themeOrder, themeLabels } from '@/components/theme-assessment';
-import { useAuth } from '@/contexts/auth-context'; // Import useAuth
+// Removed useAuth and Link
 
 function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; themeScores: string } {
     const entriesArray = Object.values(allEntries).sort((a, b) => a.date.localeCompare(b.date));
@@ -49,7 +49,6 @@ function prepareDataForSheetExport(allEntries: StoredData): (string | number | n
 const SHEET_HEADERS = ['Date', ...themeOrder.map(key => themeLabels[key])];
 
 export function MoodAnalysis() {
-  const { currentUser } = useAuth(); // Get current user
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
   const [isExporting, setIsExporting] = React.useState(false);
   const [analysisResult, setAnalysisResult] = React.useState<string | null>(null);
@@ -61,19 +60,14 @@ export function MoodAnalysis() {
     setIsClient(true);
   }, []);
 
-  const fetchDataForUser = async () => {
+  const fetchDataForUser = async () => { // Renamed from fetchDataForUser to reflect anonymous usage
     if (!isClient) return {};
-    // Pass currentUser.uid if available
-    return await getAllEntries(currentUser?.uid);
+    return await getAllEntries(); // No userId
   };
 
   const handleAnalyzeMoods = async () => {
     if (!isClient) return;
-    if (!currentUser) {
-        toast({ variant: "destructive", title: "Authentication Required", description: "Please login to analyze your mood patterns." });
-        return;
-    }
-
+    
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null);
@@ -83,7 +77,7 @@ export function MoodAnalysis() {
       const entriesCount = Object.keys(allEntries).length;
 
       if (entriesCount < 3) {
-          setError("Not enough data to analyze. Please log your assessments for at least 3 days.");
+          setError("Za mało danych do analizy. Proszę logować swoje oceny przez co najmniej 3 dni."); // Hardcoded Polish
           setIsAnalyzing(false);
           return;
       }
@@ -92,9 +86,9 @@ export function MoodAnalysis() {
       setAnalysisResult(result.insights);
     } catch (err) {
       console.error("Error analyzing mood patterns:", err);
-      const errorMessage = err instanceof Error ? err.message : "Failed to analyze mood patterns.";
+      const errorMessage = err instanceof Error ? err.message : "Analiza nie powiodła się."; // Hardcoded Polish
       setError(errorMessage);
-      toast({ variant: "destructive", title: "Analysis Failed", description: errorMessage });
+      toast({ variant: "destructive", title: "Analiza nie powiodła się", description: errorMessage }); // Hardcoded Polish
     } finally {
       setIsAnalyzing(false);
     }
@@ -102,11 +96,7 @@ export function MoodAnalysis() {
 
   const handleExportData = async () => {
       if (!isClient) return;
-       if (!currentUser) {
-        toast({ variant: "destructive", title: "Authentication Required", description: "Please login to export data." });
-        return;
-      }
-
+      
       setIsExporting(true);
       setError(null);
 
@@ -115,22 +105,22 @@ export function MoodAnalysis() {
           const dataRows = prepareDataForSheetExport(allEntries);
 
           if (dataRows.length === 0) {
-              setError("No data available to export.");
-               toast({ variant: "destructive", title: "Export Failed", description: "No data available to export." });
+              setError("Brak danych do wyeksportowania."); // Hardcoded Polish
+               toast({ variant: "destructive", title: "Export nie powiódł się", description: "Brak danych do wyeksportowania." }); // Hardcoded Polish
               setIsExporting(false);
               return;
           }
           const result = await exportToGoogleSheets({ headers: SHEET_HEADERS, data: dataRows });
           if (result.success) {
-              toast({ title: "Export Successful", description: `Data exported. ${result.rowsAppended} rows added.` });
+              toast({ title: "Export udany", description: `Dane wyeksportowane. ${result.rowsAppended} wierszy dodanych.` }); // Hardcoded Polish
           } else {
-              throw new Error(result.error || "Unknown error during export.");
+              throw new Error(result.error || "Nieznany błąd podczas exportu."); // Hardcoded Polish
           }
       } catch (err) {
           console.error("Error exporting data:", err);
-          const errorMessage = err instanceof Error ? err.message : "Failed to export data.";
+          const errorMessage = err instanceof Error ? err.message : "Export nie powiódł się."; // Hardcoded Polish
           setError(errorMessage);
-          toast({ variant: "destructive", title: "Export Failed", description: errorMessage });
+          toast({ variant: "destructive", title: "Export nie powiódł się", description: errorMessage }); // Hardcoded Polish
       } finally {
           setIsExporting(false);
       }
@@ -154,36 +144,29 @@ export function MoodAnalysis() {
     <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
       <CardHeader>
         <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
+        {/* Removed CardDescription */}
       </CardHeader>
       <CardContent className="space-y-4 p-6">
         <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-            <Button onClick={handleAnalyzeMoods} disabled={isAnalyzing || isExporting || !currentUser}>
-              {isAnalyzing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</> : <><Lightbulb className="mr-2 h-4 w-4" /> Analyze Moods</>}
+            <Button onClick={handleAnalyzeMoods} disabled={isAnalyzing || isExporting}> {/* Removed !currentUser check */}
+              {isAnalyzing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analizuję...</> : <><Lightbulb className="mr-2 h-4 w-4" /> Analizuj nastroje</>}
             </Button>
-             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting || !currentUser} variant="outline">
-              {isExporting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Exporting...</> : <><UploadCloud className="mr-2 h-4 w-4" /> Export to Sheets</>}
+             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting} variant="outline"> {/* Removed !currentUser check */}
+              {isExporting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Exportuję...</> : <><UploadCloud className="mr-2 h-4 w-4" /> Export do Arkuszy</>}
             </Button>
         </div>
-        {!currentUser && (
-             <Alert variant="default" className="mt-4 bg-primary/10 border-primary/50">
-                <AlertCircle className="h-4 w-4 text-primary" />
-                <AlertTitle className="text-primary-foreground">Login to Enable Features</AlertTitle>
-                <AlertDescription className="text-primary-foreground/90">
-                    Please <Link href="/login" className="font-semibold hover:underline">login</Link> or <Link href="/register" className="font-semibold hover:underline">register</Link> to analyze mood patterns and export your data.
-                </AlertDescription>
-            </Alert>
-        )}
+        {/* Removed !currentUser Alert */}
         {error && !isAnalyzing && !isExporting && (
             <Alert variant="destructive" className="mt-4">
                  <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error Occurred</AlertTitle>
+                <AlertTitle>Wystąpił błąd</AlertTitle> {/* Hardcoded Polish */}
                 <AlertDescription>{error}</AlertDescription>
             </Alert>
         )}
         {analysisResult && !error && !isAnalyzing && (
           <Alert variant="default" className="mt-4 bg-accent/10 border-accent">
             <Lightbulb className="h-4 w-4 text-accent" />
-            <AlertTitle className="text-accent-foreground">Analysis Insights</AlertTitle>
+            <AlertTitle className="text-accent-foreground">Wnioski z analizy</AlertTitle> {/* Hardcoded Polish */}
             <AlertDescription className="text-accent-foreground/90 whitespace-pre-wrap">
               {analysisResult}
             </AlertDescription>

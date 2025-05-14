@@ -1,7 +1,7 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getAuth, type Auth } from 'firebase/auth'; // Import getAuth
+// Removed getAuth import
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,18 +14,18 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 let db: Firestore | null = null;
-let auth: Auth | null = null; // Initialize auth
+// let auth: Auth | null = null; // Removed auth variable
 
-if (firebaseConfig.projectId) { // Only initialize if projectId is provided
+if (firebaseConfig.projectId) {
   if (!getApps().length) {
     app = initializeApp(firebaseConfig);
   } else {
     app = getApp();
   }
   db = getFirestore(app);
-  auth = getAuth(app); // Get auth instance
+  // auth = getAuth(app); // Removed auth initialization
 } else {
-  console.warn("[Firebase] Firebase Project ID is not set. Firestore and Auth functionality will be disabled. Please set NEXT_PUBLIC_FIREBASE_PROJECT_ID in your .env.local file.");
+  console.warn("[Firebase] Firebase Project ID is not set. Firestore functionality will be limited. Please set NEXT_PUBLIC_FIREBASE_PROJECT_ID in your .env.local file.");
 }
 
-export { app, db, auth }; // Export auth
+export { app, db }; // Removed auth export

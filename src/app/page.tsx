@@ -11,14 +11,11 @@ import { CalculatedMoodDisplay } from '@/components/calculated-mood-display';
 import { saveDailyEntry, getDailyEntry, calculateOverallScores, getAllEntries } from '@/lib/storage';
 import type { DailyEntry, Mood, ThemeScores, DetailedThemeScores, QuestionScore, StoredData } from '@/lib/types';
 import type { LucideIcon } from 'lucide-react';
-import { Frown, Meh, Smile, Loader2, AlertCircle } from 'lucide-react';
+import { Frown, Meh, Smile, Loader2 } from 'lucide-react';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/auth-context'; // Import useAuth
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import Link from 'next/link';
+// Removed Link and Alert related to auth prompt
 
-type CalculatedMoodCategory = 'Bad' | 'Normal' | 'Good' | 'Calculating...';
+type CalculatedMoodCategory = 'Bad' | 'Normal' | 'Good' | 'Obliczanie...'; // Changed from 'Calculating...'
 interface CalculatedMoodState {
     icon: LucideIcon | null;
     label: CalculatedMoodCategory;
@@ -26,7 +23,7 @@ interface CalculatedMoodState {
 }
 
 const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): CalculatedMoodState => {
-    if (!scores) return { icon: Loader2, label: 'Calculating...', totalScore: null };
+    if (!scores) return { icon: Loader2, label: 'Obliczanie...', totalScore: null }; // Adjusted label
     const themeKeys = Object.keys(scores) as Array<keyof ThemeScores>;
     const sum = themeKeys.reduce((acc, key) => acc + (scores[key] ?? 0), 0);
     const count = themeKeys.length;
@@ -39,10 +36,9 @@ const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): Calcul
 };
 
 export default function Home() {
-  const { currentUser, loading: authLoading } = useAuth(); // Get currentUser from AuthContext
   const [selectedDate, setSelectedDate] = React.useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [dailyEntry, setDailyEntry] = React.useState<DailyEntry | null>(null);
-  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...', totalScore: null });
+  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Obliczanie...', totalScore: null });
   const [isClient, setIsClient] = React.useState(false);
   const [isLoadingEntry, setIsLoadingEntry] = React.useState(true);
 
@@ -51,38 +47,34 @@ export default function Home() {
   }, []);
 
   React.useEffect(() => {
-    if (isClient && !authLoading) { // Only load if client and auth state is resolved
+    if (isClient) {
       setIsLoadingEntry(true);
       const dateObj = parseISO(selectedDate);
       if (!isValid(dateObj)) {
-        console.warn(`Invalid date selected: ${selectedDate}. Defaulting to today.`);
+        console.warn('Invalid date selected: ' + selectedDate + '. Defaulting to today.');
         setSelectedDate(format(new Date(), 'yyyy-MM-dd'));
         setIsLoadingEntry(false);
         return;
       }
       
-      // Pass currentUser.uid if available
-      getDailyEntry(selectedDate, currentUser?.uid).then(entry => {
+      getDailyEntry(selectedDate).then(entry => { // Removed userId
         setDailyEntry(entry);
         setCalculatedMood(calculateMoodFromOverallScores(entry.scores));
         setIsLoadingEntry(false);
       }).catch(err => {
         console.error("Error fetching daily entry:", err);
         setIsLoadingEntry(false);
-        // Potentially show an error to the user
       });
     }
-  }, [isClient, selectedDate, currentUser, authLoading]); // Add currentUser and authLoading to dependencies
+  }, [isClient, selectedDate]);
 
   React.useEffect(() => {
-    if (dailyEntry && isClient && selectedDate && dailyEntry.date === selectedDate && !isLoadingEntry && !authLoading) {
-      // Pass currentUser.uid if available
-      saveDailyEntry(dailyEntry, currentUser?.uid).catch(err => {
+    if (dailyEntry && isClient && selectedDate && dailyEntry.date === selectedDate && !isLoadingEntry) {
+      saveDailyEntry(dailyEntry).catch(err => { // Removed userId
         console.error("Error saving daily entry:", err);
-        // Potentially show an error to the user
       });
     }
-  }, [dailyEntry, isClient, selectedDate, currentUser, isLoadingEntry, authLoading]); // Add isLoadingEntry and authLoading
+  }, [dailyEntry, isClient, selectedDate, isLoadingEntry]);
 
 
    const handleQuestionScoreChange = (
@@ -111,51 +103,18 @@ export default function Home() {
     }
   };
 
-  if (authLoading || isLoadingEntry) {
+  if (isLoadingEntry && isClient) { // Simplified loading state
      return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
           <p className="mt-4 text-muted-foreground">
-            {authLoading ? "Authenticating..." : "Loading Eunoia..."}
+            Ładowanie Eunoia...
           </p>
         </main>
       );
   }
   
-  if (!currentUser && isClient) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
-        <Card className="w-full max-w-md text-center shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-primary">Welcome to Eunoia</CardTitle>
-            <CardDescription>Your personal mood and well-being tracker.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-6 text-muted-foreground">
-              Please login or register to save your progress and access personalized insights.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button asChild>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/register">Register</Link>
-              </Button>
-            </div>
-             <p className="mt-6 text-sm text-muted-foreground">
-              Alternatively, you can continue to use the app anonymously. Your data will be stored only in this browser.
-            </p>
-             <Button variant="link" onClick={() => setDailyEntry(getDailyEntry(selectedDate, undefined).then(setDailyEntry).then(() => setIsLoadingEntry(false)))} className="mt-2">
-                Continue Anonymously
-            </Button>
-          </CardContent>
-        </Card>
-      </main>
-    );
-  }
-
-
-  if (!isClient || !dailyEntry) {
+  if (!isClient || !dailyEntry) { // Simplified condition for skeleton
      return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
             <div className="w-full max-w-md space-y-6">
@@ -200,7 +159,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 pt-20 bg-background"> {/* Added pt-20 for nav */}
+    <main className="flex min-h-screen flex-col items-center p-4 pt-6 bg-background"> {/* Adjusted padding */}
       <div className="w-full max-w-md space-y-6">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
@@ -218,7 +177,7 @@ export default function Home() {
           <CardContent>
              <CalculatedMoodDisplay
                  icon={calculatedMood.icon}
-                 label={calculatedMood.label}
+                 label={calculatedMood.label} 
                  totalScore={calculatedMood.totalScore}
             />
           </CardContent>

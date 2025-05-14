@@ -5,9 +5,9 @@ import {
   saveEntryToFirestore, 
   getEntryFromFirestore, 
   getAllEntriesFromFirestore 
-} from '@/actions/save-entry-to-firestore'; // Actions now include Firestore reads
+} from '@/actions/save-entry-to-firestore';
 
-const LOCAL_STORAGE_KEY = 'moodLoggerData_anonymous'; // Use a different key for anonymous local storage
+const LOCAL_STORAGE_KEY = 'moodLoggerData'; // Reverted to a generic key or keep _anonymous if that was pre-auth default
 
 function createDefaultDetailedScores(): DetailedThemeScores {
   const defaultQuestionScores: ThemeQuestionScores = {};
@@ -70,72 +70,64 @@ function validateAndCompleteEntry(entry: Partial<DailyEntry>, date: string): Dai
     };
 }
 
-
-export async function getDailyEntry(date: string, userId?: string): Promise<DailyEntry> {
-  if (userId && process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.log(`[Storage] Attempting to fetch entry for user ${userId}, date ${date} from Firestore.`);
-    const firestoreEntry = await getEntryFromFirestore(userId, date);
+export async function getDailyEntry(date: string): Promise<DailyEntry> {
+  // Try Firestore if configured
+  if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && db) { // Check db from firebase.ts too
+    console.log(`[Storage] Attempting to fetch entry for date \${date} from Firestore (global).`);
+    const firestoreEntry = await getEntryFromFirestore(date);
     if (firestoreEntry) {
-      console.log(`[Storage] Fetched entry from Firestore for user ${userId}, date ${date}.`);
+      console.log(`[Storage] Fetched entry from Firestore (global) for date \${date}.`);
       return validateAndCompleteEntry(firestoreEntry, date);
     }
-    console.log(`[Storage] No entry in Firestore for user ${userId}, date ${date}. Creating default.`);
-  } else if (userId) {
-      console.warn(`[Storage] User ID provided but Firestore is not configured (NEXT_PUBLIC_FIREBASE_PROJECT_ID missing). Falling back to local for ${date}.`);
+    console.log(`[Storage] No entry in Firestore (global) for date \${date}.`);
   }
 
-
-  // Fallback to local storage or create new default if no userId or Firestore fetch failed/not applicable
+  // Fallback to local storage or create new default
   const localData = getLocalStoredData();
   const localEntry = localData[date];
   if (localEntry) {
-      console.log(`[Storage] Fetched entry from LocalStorage for date ${date}.`);
+      console.log(`[Storage] Fetched entry from LocalStorage for date \${date}.`);
       return validateAndCompleteEntry(localEntry, date);
   }
   
-  console.log(`[Storage] No entry in LocalStorage for date ${date}. Creating default.`);
+  console.log(`[Storage] No entry in LocalStorage for date \${date}. Creating default.`);
   return validateAndCompleteEntry({ date }, date);
 }
 
-export async function saveDailyEntry(entry: DailyEntry, userId?: string): Promise<void> {
+export async function saveDailyEntry(entry: DailyEntry): Promise<void> {
   const completeEntry = validateAndCompleteEntry(entry, entry.date);
 
-  // Always save to local storage for immediate UI and offline (if user is anonymous)
-  if (typeof window !== 'undefined' && !userId) { // Only save to anonymous local storage if no user
+  // Always save to local storage for immediate UI and offline
+  if (typeof window !== 'undefined') {
     const localData = getLocalStoredData();
     localData[entry.date] = completeEntry;
     saveLocalStoredData(localData);
-    console.log('[LocalStorage] Anonymous entry saved for date:', entry.date);
+    console.log('[LocalStorage] Entry saved for date:', entry.date);
   }
 
-  // If userId is provided and Firestore is configured, save to Firestore
-  if (userId && process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.log(`[Storage] Attempting to save entry to Firestore for user ${userId}, date ${entry.date}.`);
-    const firestoreResult = await saveEntryToFirestore(userId, completeEntry);
+  // If Firestore is configured, save to global Firestore collection
+  if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && db) {
+    console.log(`[Storage] Attempting to save entry to Firestore (global) for date \${entry.date}.`);
+    const firestoreResult = await saveEntryToFirestore(completeEntry);
     if (firestoreResult.success) {
-      console.log('[Storage] Entry saved to Firestore for user:', userId, 'date:', entry.date);
+      console.log('[Storage] Entry saved to Firestore (global) for date:', entry.date);
     } else {
-      console.error('[Storage] Failed to save entry to Firestore for user:', userId, 'Error:', firestoreResult.error);
-      // Potentially inform user via toast if critical, or rely on local save for now
+      console.error('[Storage] Failed to save entry to Firestore (global). Error:', firestoreResult.error);
     }
-  } else if (userId) {
-    console.warn(`[Storage] User ID provided for save, but Firestore is not configured (NEXT_PUBLIC_FIREBASE_PROJECT_ID missing). Entry NOT saved to Firestore for user ${userId}, date ${entry.date}.`);
   }
 }
 
-export async function getAllEntries(userId?: string): Promise<StoredData> {
-  if (userId && process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.log(`[Storage] Attempting to fetch all entries for user ${userId} from Firestore.`);
-    const firestoreEntries = await getAllEntriesFromFirestore(userId);
-     // Validate each entry
+export async function getAllEntries(): Promise<StoredData> {
+   // Try Firestore if configured
+  if (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID && db) {
+    console.log(`[Storage] Attempting to fetch all entries from Firestore (global).`);
+    const firestoreEntries = await getAllEntriesFromFirestore();
     const validatedEntries: StoredData = {};
     for (const date in firestoreEntries) {
         validatedEntries[date] = validateAndCompleteEntry(firestoreEntries[date], date);
     }
-    console.log(`[Storage] Fetched ${Object.keys(validatedEntries).length} entries from Firestore for user ${userId}.`);
+    console.log(`[Storage] Fetched \${Object.keys(validatedEntries).length} entries from Firestore (global).`);
     return validatedEntries;
-  } else if (userId) {
-    console.warn(`[Storage] User ID provided for getAllEntries, but Firestore is not configured. Falling back to local.`);
   }
   
   // Fallback to local storage
@@ -144,10 +136,9 @@ export async function getAllEntries(userId?: string): Promise<StoredData> {
     for (const date in localData) {
         validatedLocalData[date] = validateAndCompleteEntry(localData[date], date);
     }
-  console.log(`[Storage] Fetched ${Object.keys(validatedLocalData).length} entries from LocalStorage.`);
+  console.log(`[Storage] Fetched \${Object.keys(validatedLocalData).length} entries from LocalStorage.`);
   return validatedLocalData;
 }
-
 
 export function calculateOverallScores(detailedScores: DetailedThemeScores): ThemeScores {
     const overallScores = {} as ThemeScores;

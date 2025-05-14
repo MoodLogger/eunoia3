@@ -3,8 +3,6 @@ import type {Metadata} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from '@/contexts/auth-context'; // Import AuthProvider
-import { NavigationLinks } from '@/components/navigation-links'; // Import NavigationLinks
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,13 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pl"> {/* Defaulting to Polish as many texts were hardcoded this way */}
       <body className={`${inter.className} antialiased`}>
-        <AuthProvider> {/* Wrap with AuthProvider */}
-          <NavigationLinks /> {/* Add NavigationLinks */}
-          {children}
-          <Toaster />
-        </AuthProvider>
+        {/* Removed AuthProvider, LanguageSwitcher, NavigationLinks */}
+        {children}
+        <Toaster />
       </body>
     </html>
   );
