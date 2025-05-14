@@ -17,9 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl"> {/* Defaulting to Polish as many texts were hardcoded this way */}
+    <html lang="pl">
       <body className={`${inter.className} antialiased`}>
-        {/* Removed AuthProvider, LanguageSwitcher, NavigationLinks */}
         {children}
         <Toaster />
       </body>
