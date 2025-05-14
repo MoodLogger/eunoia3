@@ -1,97 +1,90 @@
 
-"use client"; // This page interacts with localStorage and state, so it needs to be a Client Component
+"use client";
 
 import * as React from 'react';
 import { format, isValid, parseISO } from 'date-fns';
-import { pl } from 'date-fns/locale'; // Import Polish locale
+import { pl } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ThemeAssessment } from '@/components/theme-assessment';
 import { MoodAnalysis } from '@/components/mood-analysis';
 import { CalculatedMoodDisplay } from '@/components/calculated-mood-display';
-import { saveDailyEntry, getDailyEntry, calculateOverallScores } from '@/lib/storage'; // Import calculateOverallScores
-import type { DailyEntry, Mood, ThemeScores, DetailedThemeScores, QuestionScore } from '@/lib/types';
+import { saveDailyEntry, getDailyEntry, calculateOverallScores, getAllEntries } from '@/lib/storage';
+import type { DailyEntry, Mood, ThemeScores, DetailedThemeScores, QuestionScore, StoredData } from '@/lib/types';
 import type { LucideIcon } from 'lucide-react';
-import { Frown, Meh, Smile, Loader2, CalendarIcon } from 'lucide-react';
-import { DatePicker } from '@/components/ui/date-picker'; // Import DatePicker
+import { Frown, Meh, Smile, Loader2, AlertCircle } from 'lucide-react';
+import { DatePicker } from '@/components/ui/date-picker';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/auth-context'; // Import useAuth
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Link from 'next/link';
 
 type CalculatedMoodCategory = 'Bad' | 'Normal' | 'Good' | 'Calculating...';
 interface CalculatedMoodState {
     icon: LucideIcon | null;
     label: CalculatedMoodCategory;
-    totalScore: number | null; // Added totalScore
+    totalScore: number | null;
 }
 
-// Function to calculate mood category, icon, and total score based on *overall* scores
 const calculateMoodFromOverallScores = (scores: ThemeScores | undefined): CalculatedMoodState => {
-    if (!scores) {
-        return { icon: Loader2, label: 'Calculating...', totalScore: null }; // Use Loader2 icon
-    }
-
+    if (!scores) return { icon: Loader2, label: 'Calculating...', totalScore: null };
     const themeKeys = Object.keys(scores) as Array<keyof ThemeScores>;
-    // Calculate sum based on overall scores (-2 to +2)
     const sum = themeKeys.reduce((acc, key) => acc + (scores[key] ?? 0), 0);
-     const count = themeKeys.length;
-     const average = count > 0 ? sum / count : 0; // Calculate average score
-
-
-    // Define thresholds based on the average score (range -2 to +2)
-     // Example thresholds: Bad <= -0.75, Good >= 0.75, Normal otherwise
-     const badThreshold = -0.75;
-     const goodThreshold = 0.75;
-
-
-    if (average <= badThreshold) {
-        return { icon: Frown, label: 'Bad', totalScore: parseFloat(sum.toFixed(2)) };
-    } else if (average >= goodThreshold) {
-        return { icon: Smile, label: 'Good', totalScore: parseFloat(sum.toFixed(2)) };
-    } else {
-        return { icon: Meh, label: 'Normal', totalScore: parseFloat(sum.toFixed(2)) };
-    }
+    const count = themeKeys.length;
+    const average = count > 0 ? sum / count : 0;
+    const badThreshold = -0.75;
+    const goodThreshold = 0.75;
+    if (average <= badThreshold) return { icon: Frown, label: 'Bad', totalScore: parseFloat(sum.toFixed(2)) };
+    if (average >= goodThreshold) return { icon: Smile, label: 'Good', totalScore: parseFloat(sum.toFixed(2)) };
+    return { icon: Meh, label: 'Normal', totalScore: parseFloat(sum.toFixed(2)) };
 };
 
-
 export default function Home() {
+  const { currentUser, loading: authLoading } = useAuth(); // Get currentUser from AuthContext
   const [selectedDate, setSelectedDate] = React.useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [dailyEntry, setDailyEntry] = React.useState<DailyEntry | null>(null);
-  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...', totalScore: null }); // Default to calculating
+  const [calculatedMood, setCalculatedMood] = React.useState<CalculatedMoodState>({ icon: Loader2, label: 'Calculating...', totalScore: null });
   const [isClient, setIsClient] = React.useState(false);
+  const [isLoadingEntry, setIsLoadingEntry] = React.useState(true);
 
-  // Effect to run only on the client after mount
   React.useEffect(() => {
     setIsClient(true);
-    // No need to set selectedDate here anymore as it's initialized above
   }, []);
-  
-  // Effect to load or initialize entry when selectedDate changes or on initial client mount
-  React.useEffect(() => {
-    if (isClient && selectedDate) {
-        const dateObj = parseISO(selectedDate);
-        if (!isValid(dateObj)) {
-            console.warn(`Invalid date selected: ${selectedDate}. Defaulting to today.`);
-            setSelectedDate(format(new Date(), 'yyyy-MM-dd')); // Reset to today if invalid
-            return;
-        }
-        const storedEntry = getDailyEntry(selectedDate); // Fetches entry with detailed scores for the selected date
-        setDailyEntry(storedEntry);
-        setCalculatedMood(calculateMoodFromOverallScores(storedEntry.scores));
-    }
-  }, [isClient, selectedDate]);
 
-
-  // Update localStorage and potentially Firestore whenever dailyEntry changes
   React.useEffect(() => {
-    const performSave = async () => {
-      if (dailyEntry && isClient && selectedDate && dailyEntry.date === selectedDate) { // Ensure saving for the correct date
-        await saveDailyEntry(dailyEntry); // saveDailyEntry is now async
+    if (isClient && !authLoading) { // Only load if client and auth state is resolved
+      setIsLoadingEntry(true);
+      const dateObj = parseISO(selectedDate);
+      if (!isValid(dateObj)) {
+        console.warn(`Invalid date selected: ${selectedDate}. Defaulting to today.`);
+        setSelectedDate(format(new Date(), 'yyyy-MM-dd'));
+        setIsLoadingEntry(false);
+        return;
       }
-    };
+      
+      // Pass currentUser.uid if available
+      getDailyEntry(selectedDate, currentUser?.uid).then(entry => {
+        setDailyEntry(entry);
+        setCalculatedMood(calculateMoodFromOverallScores(entry.scores));
+        setIsLoadingEntry(false);
+      }).catch(err => {
+        console.error("Error fetching daily entry:", err);
+        setIsLoadingEntry(false);
+        // Potentially show an error to the user
+      });
+    }
+  }, [isClient, selectedDate, currentUser, authLoading]); // Add currentUser and authLoading to dependencies
 
-    performSave();
-  }, [dailyEntry, isClient, selectedDate]);
+  React.useEffect(() => {
+    if (dailyEntry && isClient && selectedDate && dailyEntry.date === selectedDate && !isLoadingEntry && !authLoading) {
+      // Pass currentUser.uid if available
+      saveDailyEntry(dailyEntry, currentUser?.uid).catch(err => {
+        console.error("Error saving daily entry:", err);
+        // Potentially show an error to the user
+      });
+    }
+  }, [dailyEntry, isClient, selectedDate, currentUser, isLoadingEntry, authLoading]); // Add isLoadingEntry and authLoading
 
 
-   // Handler for changes in detailed question scores
    const handleQuestionScoreChange = (
        theme: keyof ThemeScores,
        questionIndex: number,
@@ -99,22 +92,11 @@ export default function Home() {
    ) => {
        setDailyEntry((prevEntry) => {
            if (!prevEntry) return null;
-
-           // Create a deep copy to avoid direct state mutation
            const newDetailedScores = JSON.parse(JSON.stringify(prevEntry.detailedScores)) as DetailedThemeScores;
-           if (!newDetailedScores[theme]) {
-               newDetailedScores[theme] = {}; // Initialize if theme somehow doesn't exist
-           }
-            newDetailedScores[theme][questionIndex] = value;
-
-
-           // Recalculate the overall scores based on the updated detailed scores
+           if (!newDetailedScores[theme]) newDetailedScores[theme] = {};
+           newDetailedScores[theme][questionIndex] = value;
            const newOverallScores = calculateOverallScores(newDetailedScores);
-
-           // Recalculate the overall mood display based on the new overall scores
            setCalculatedMood(calculateMoodFromOverallScores(newOverallScores));
-
-           // Return the updated entry
            return {
                ...prevEntry,
                scores: newOverallScores,
@@ -129,43 +111,79 @@ export default function Home() {
     }
   };
 
+  if (authLoading || isLoadingEntry) {
+     return (
+        <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <p className="mt-4 text-muted-foreground">
+            {authLoading ? "Authenticating..." : "Loading Eunoia..."}
+          </p>
+        </main>
+      );
+  }
+  
+  if (!currentUser && isClient) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
+        <Card className="w-full max-w-md text-center shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-primary">Welcome to Eunoia</CardTitle>
+            <CardDescription>Your personal mood and well-being tracker.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-6 text-muted-foreground">
+              Please login or register to save your progress and access personalized insights.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/register">Register</Link>
+              </Button>
+            </div>
+             <p className="mt-6 text-sm text-muted-foreground">
+              Alternatively, you can continue to use the app anonymously. Your data will be stored only in this browser.
+            </p>
+             <Button variant="link" onClick={() => setDailyEntry(getDailyEntry(selectedDate, undefined).then(setDailyEntry).then(() => setIsLoadingEntry(false)))} className="mt-2">
+                Continue Anonymously
+            </Button>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
 
-  // Render loading state or null on server/before hydration
+
   if (!isClient || !dailyEntry) {
      return (
         <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
             <div className="w-full max-w-md space-y-6">
-                {/* Skeleton for Eunoia Card */}
                 <Card className="shadow-lg animate-pulse">
                     <CardHeader className="text-center">
                         <div className="h-8 bg-muted rounded w-3/4 mx-auto mb-2"></div>
                         <div className="h-4 bg-muted rounded w-1/2 mx-auto"></div>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center justify-center py-4 space-y-2">
-                         <div className="h-16 w-16 bg-muted rounded-full"></div> {/* Placeholder for CalculatedMoodDisplay Icon */}
-                         <div className="h-4 bg-muted rounded w-1/4"></div> {/* Placeholder for CalculatedMoodDisplay Label */}
-                         <div className="h-4 bg-muted rounded w-1/6 mt-1"></div> {/* Placeholder for Total Score */}
+                         <div className="h-16 w-16 bg-muted rounded-full"></div>
+                         <div className="h-4 bg-muted rounded w-1/4"></div>
+                         <div className="h-4 bg-muted rounded w-1/6 mt-1"></div>
                     </CardContent>
                 </Card>
-                 {/* Skeleton for Pryzmaty Card */}
                  <Card className="shadow-lg animate-pulse">
-                     <CardHeader>
-                         <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div> {/* Changed from "Daily Theme Assessment" */}
-                    </CardHeader>
+                     <CardHeader> <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div> </CardHeader>
                     <CardContent className="space-y-4 p-6">
-                          {[...Array(7)].map((_, i) => ( // Updated skeleton count to 7
+                          {[...Array(7)].map((_, i) => (
                            <div key={i} className="space-y-2 rounded-md border p-4">
                                 <div className="flex justify-between items-center mb-2">
                                     <div className="h-4 bg-muted rounded w-1/3"></div>
                                     <div className="h-4 bg-muted rounded w-1/6"></div>
                                 </div>
-                                <div className="h-2 bg-muted rounded w-full"></div> {/* Placeholder for overall score/progress */}
-                                {/* Skeleton for Accordion Trigger Icon can be omitted or simplified */}
+                                <div className="h-2 bg-muted rounded w-full"></div>
                            </div>
                          ))}
                      </CardContent>
                 </Card>
-                 {/* Skeleton for Mood Analysis Card */}
                 <Card className="shadow-lg animate-pulse">
                      <CardHeader>
                          <div className="h-6 bg-muted rounded w-1/2 mx-auto mb-2"></div>
@@ -181,9 +199,8 @@ export default function Home() {
     );
   }
 
-  // Render actual content once client-side and data is loaded
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 bg-background">
+    <main className="flex min-h-screen flex-col items-center p-4 pt-20 bg-background"> {/* Added pt-20 for nav */}
       <div className="w-full max-w-md space-y-6">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
@@ -207,7 +224,6 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        {/* Pass both overall and detailed scores, and the handler */}
         <ThemeAssessment
           scores={dailyEntry.scores}
           detailedScores={dailyEntry.detailedScores}
@@ -219,4 +235,3 @@ export default function Home() {
     </main>
   );
 }
-

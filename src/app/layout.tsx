@@ -1,13 +1,15 @@
 
 import type {Metadata} from 'next';
-import { Inter } from 'next/font/google'; // Using Inter for a clean look
+import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"; // Import Toaster
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from '@/contexts/auth-context'; // Import AuthProvider
+import { NavigationLinks } from '@/components/navigation-links'; // Import NavigationLinks
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Eunoia', // Updated App Title
+  title: 'Eunoia',
   description: 'Track your mood and daily activities.',
 };
 
@@ -19,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        {children}
-        <Toaster /> {/* Add Toaster here */}
+        <AuthProvider> {/* Wrap with AuthProvider */}
+          <NavigationLinks /> {/* Add NavigationLinks */}
+          {children}
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
 }
-
