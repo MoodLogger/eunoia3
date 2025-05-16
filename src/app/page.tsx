@@ -189,7 +189,7 @@ export default function Home() {
           onQuestionScoreChange={handleQuestionScoreChange}
         />
 
-        <MoodAnalysis />
+        <MoodAnalysis currentEntry={dailyEntry} />
       </div>
     </main>
   );

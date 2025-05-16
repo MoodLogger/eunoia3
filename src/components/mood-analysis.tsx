@@ -8,11 +8,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Lightbulb, UploadCloud, AlertCircle, CheckCircle } from 'lucide-react'; // Added CheckCircle
 import { analyzeMoodPatterns } from '@/ai/flows/analyze-mood-patterns';
 import { exportToGoogleSheets, testReadGoogleSheet } from '@/actions/export-to-google-sheets'; // Added testReadGoogleSheet
-import type { StoredData } from '@/lib/types';
+import type { DailyEntry, StoredData, ThemeScores } from '@/lib/types';
 import { getAllEntries } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { themeOrder, themeLabels } from '@/components/theme-assessment';
 
+interface MoodAnalysisProps {
+  currentEntry: DailyEntry | null;
+}
 
 function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; themeScores: string } {
     const entriesArray = Object.values(allEntries).sort((a, b) => a.date.localeCompare(b.date));
@@ -34,21 +37,19 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
     };
 }
 
-function prepareDataForSheetExport(allEntries: StoredData): (string | number | null)[][] {
-    const entriesArray = Object.values(allEntries).sort((a, b) => a.date.localeCompare(b.date));
-    if (entriesArray.length === 0) return [];
-    return entriesArray.map(entry => {
-        const rowData: (string | number | null)[] = [entry.date];
-        themeOrder.forEach(themeKey => {
-            rowData.push(entry.scores?.[themeKey] ?? 0);
-        });
-        return rowData;
+function prepareDataForSheetExport(entry: DailyEntry | null): (string | number | null)[][] {
+    if (!entry || !entry.scores) return [];
+    
+    const rowData: (string | number | null)[] = [entry.date];
+    themeOrder.forEach(themeKey => {
+        rowData.push(entry.scores?.[themeKey] ?? 0);
     });
+    return [rowData]; // Return as an array of rows, even if it's just one
 }
 
 const SHEET_HEADERS = ['Date', ...themeOrder.map(key => themeLabels[key])];
 
-export function MoodAnalysis() {
+export function MoodAnalysis({ currentEntry }: MoodAnalysisProps) {
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
   const [isExporting, setIsExporting] = React.useState(false);
   const [analysisResult, setAnalysisResult] = React.useState<string | null>(null);
@@ -63,7 +64,7 @@ export function MoodAnalysis() {
     setIsClient(true);
   }, []);
 
-  const fetchDataForUser = async () => {
+  const fetchDataForAllEntries = async () => { // Renamed for clarity for analysis
     if (!isClient) return {};
     return await getAllEntries();
   };
@@ -77,7 +78,7 @@ export function MoodAnalysis() {
     setExportMessage(null);
 
     try {
-      const allEntries = await fetchDataForUser();
+      const allEntries = await fetchDataForAllEntries(); // Analysis still uses all entries
       const entriesCount = Object.keys(allEntries).length;
 
       if (entriesCount < 3) {
@@ -106,13 +107,19 @@ export function MoodAnalysis() {
       setAnalysisResult(null);
       setExportMessage(null);
 
+      if (!currentEntry) {
+        const noDataMsg = "Brak danych dla wybranego dnia do wyeksportowania.";
+        setError(noDataMsg);
+        toast({ variant: "destructive", title: "Export nie powiódł się", description: noDataMsg });
+        setIsExporting(false);
+        return;
+      }
 
       try {
-          const allEntries = await fetchDataForUser();
-          const dataRows = prepareDataForSheetExport(allEntries);
+          const dataRows = prepareDataForSheetExport(currentEntry);
 
           if (dataRows.length === 0) {
-              const noDataMsg = "Brak danych do wyeksportowania.";
+              const noDataMsg = "Brak danych do wyeksportowania dla wybranego dnia.";
               setError(noDataMsg);
               toast({ variant: "destructive", title: "Export nie powiódł się", description: noDataMsg });
               setIsExporting(false);
@@ -188,7 +195,7 @@ export function MoodAnalysis() {
             <Button onClick={handleAnalyzeMoods} disabled={isAnalyzing || isExporting || isTestingSheetRead}>
               {isAnalyzing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analizuję...</> : <><Lightbulb className="mr-2 h-4 w-4" /> Analizuj nastroje</>}
             </Button>
-             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting || isTestingSheetRead} variant="outline">
+             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting || isTestingSheetRead || !currentEntry} variant="outline">
               {isExporting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Exportuję...</> : <><UploadCloud className="mr-2 h-4 w-4" /> Export do Arkuszy</>}
             </Button>
         </div>
