@@ -40,14 +40,20 @@ function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; the
 function prepareDataForSheetExport(entry: DailyEntry | null): (string | number | null)[][] {
     if (!entry || !entry.scores) return [];
     
-    const rowData: (string | number | null)[] = [entry.date];
+    const themeScoresArray: (number | null)[] = [];
+    let totalSum = 0;
     themeOrder.forEach(themeKey => {
-        rowData.push(entry.scores?.[themeKey] ?? 0);
+        const score = entry.scores?.[themeKey] ?? 0;
+        themeScoresArray.push(score);
+        totalSum += score;
     });
+    totalSum = parseFloat(totalSum.toFixed(2)); // Ensure two decimal places
+
+    const rowData: (string | number | null)[] = [entry.date, totalSum, ...themeScoresArray];
     return [rowData]; // Return as an array of rows, even if it's just one
 }
 
-const SHEET_HEADERS = ['Date', ...themeOrder.map(key => themeLabels[key])];
+const SHEET_HEADERS = ['Date', 'Suma Punktów', ...themeOrder.map(key => themeLabels[key])];
 
 export function MoodAnalysis({ currentEntry }: MoodAnalysisProps) {
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
@@ -233,3 +239,4 @@ export function MoodAnalysis({ currentEntry }: MoodAnalysisProps) {
     </Card>
   );
 }
+
