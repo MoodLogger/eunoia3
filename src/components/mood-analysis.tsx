@@ -3,16 +3,16 @@
 
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Removed CardDescription
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, Lightbulb, UploadCloud, AlertCircle } from 'lucide-react';
+import { Loader2, Lightbulb, UploadCloud, AlertCircle, CheckCircle } from 'lucide-react'; // Added CheckCircle
 import { analyzeMoodPatterns } from '@/ai/flows/analyze-mood-patterns';
-import { exportToGoogleSheets } from '@/actions/export-to-google-sheets';
+import { exportToGoogleSheets, testReadGoogleSheet } from '@/actions/export-to-google-sheets'; // Added testReadGoogleSheet
 import type { StoredData } from '@/lib/types';
 import { getAllEntries } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { themeOrder, themeLabels } from '@/components/theme-assessment';
-// Removed useAuth and Link
+
 
 function prepareDataForAnalysis(allEntries: StoredData): { moodData: string; themeScores: string } {
     const entriesArray = Object.values(allEntries).sort((a, b) => a.date.localeCompare(b.date));
@@ -52,17 +52,20 @@ export function MoodAnalysis() {
   const [isAnalyzing, setIsAnalyzing] = React.useState(false);
   const [isExporting, setIsExporting] = React.useState(false);
   const [analysisResult, setAnalysisResult] = React.useState<string | null>(null);
+  const [exportMessage, setExportMessage] = React.useState<string | null>(null); // For success/info messages
   const [error, setError] = React.useState<string | null>(null);
   const [isClient, setIsClient] = React.useState(false);
   const { toast } = useToast();
+  const [isTestingSheetRead, setIsTestingSheetRead] = React.useState(false);
+
 
   React.useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const fetchDataForUser = async () => { // Renamed from fetchDataForUser to reflect anonymous usage
+  const fetchDataForUser = async () => {
     if (!isClient) return {};
-    return await getAllEntries(); // No userId
+    return await getAllEntries();
   };
 
   const handleAnalyzeMoods = async () => {
@@ -71,13 +74,14 @@ export function MoodAnalysis() {
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null);
+    setExportMessage(null);
 
     try {
       const allEntries = await fetchDataForUser();
       const entriesCount = Object.keys(allEntries).length;
 
       if (entriesCount < 3) {
-          setError("Za mało danych do analizy. Proszę logować swoje oceny przez co najmniej 3 dni."); // Hardcoded Polish
+          setError("Za mało danych do analizy. Proszę logować swoje oceny przez co najmniej 3 dni.");
           setIsAnalyzing(false);
           return;
       }
@@ -86,9 +90,9 @@ export function MoodAnalysis() {
       setAnalysisResult(result.insights);
     } catch (err) {
       console.error("Error analyzing mood patterns:", err);
-      const errorMessage = err instanceof Error ? err.message : "Analiza nie powiodła się."; // Hardcoded Polish
+      const errorMessage = err instanceof Error ? err.message : "Analiza nie powiodła się.";
       setError(errorMessage);
-      toast({ variant: "destructive", title: "Analiza nie powiodła się", description: errorMessage }); // Hardcoded Polish
+      toast({ variant: "destructive", title: "Analiza nie powiodła się", description: errorMessage });
     } finally {
       setIsAnalyzing(false);
     }
@@ -99,32 +103,65 @@ export function MoodAnalysis() {
       
       setIsExporting(true);
       setError(null);
+      setAnalysisResult(null);
+      setExportMessage(null);
+
 
       try {
           const allEntries = await fetchDataForUser();
           const dataRows = prepareDataForSheetExport(allEntries);
 
           if (dataRows.length === 0) {
-              setError("Brak danych do wyeksportowania."); // Hardcoded Polish
-               toast({ variant: "destructive", title: "Export nie powiódł się", description: "Brak danych do wyeksportowania." }); // Hardcoded Polish
+              const noDataMsg = "Brak danych do wyeksportowania.";
+              setError(noDataMsg);
+              toast({ variant: "destructive", title: "Export nie powiódł się", description: noDataMsg });
               setIsExporting(false);
               return;
           }
           const result = await exportToGoogleSheets({ headers: SHEET_HEADERS, data: dataRows });
           if (result.success) {
-              toast({ title: "Export udany", description: `Dane wyeksportowane. ${result.rowsAppended} wierszy dodanych.` }); // Hardcoded Polish
+              const successMsg = result.message || `Dane wyeksportowane. ${result.rowsAppended || 0} wierszy dodanych, ${result.rowsUpdated || 0} wierszy zaktualizowanych.`;
+              setExportMessage(successMsg);
+              toast({ title: "Export udany", description: successMsg });
           } else {
-              throw new Error(result.error || "Nieznany błąd podczas exportu."); // Hardcoded Polish
+              throw new Error(result.error || "Nieznany błąd podczas exportu.");
           }
       } catch (err) {
           console.error("Error exporting data:", err);
-          const errorMessage = err instanceof Error ? err.message : "Export nie powiódł się."; // Hardcoded Polish
+          const errorMessage = err instanceof Error ? err.message : "Export nie powiódł się.";
           setError(errorMessage);
-          toast({ variant: "destructive", title: "Export nie powiódł się", description: errorMessage }); // Hardcoded Polish
+          toast({ variant: "destructive", title: "Export nie powiódł się", description: errorMessage });
       } finally {
           setIsExporting(false);
       }
   };
+
+  const handleTestSheetRead = async () => {
+    if (!isClient) return;
+    setIsTestingSheetRead(true);
+    setError(null);
+    setAnalysisResult(null);
+    setExportMessage(null);
+    toast({ title: "Testowanie odczytu", description: "Próba odczytu z Google Sheet..." });
+    try {
+        const result = await testReadGoogleSheet(); // Default range
+        if (result.success) {
+            const successMsg = `Test odczytu udany. Odczytano dane: ${JSON.stringify(result.data || "brak danych w zakresie")}.`;
+            setExportMessage(successMsg);
+            toast({ title: "Test odczytu udany", description: successMsg, duration: 10000 });
+        } else {
+            throw new Error(result.error || "Nieznany błąd podczas testu odczytu.");
+        }
+    } catch (err) {
+        console.error("Error testing sheet read:", err);
+        const errorMessage = err instanceof Error ? err.message : "Test odczytu nie powiódł się.";
+        setError(errorMessage);
+        toast({ variant: "destructive", title: "Test odczytu nie powiódł się", description: errorMessage, duration: 10000 });
+    } finally {
+        setIsTestingSheetRead(false);
+    }
+};
+
 
   if (!isClient) {
     return (
@@ -133,8 +170,9 @@ export function MoodAnalysis() {
                 <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-4 p-6">
-                 <div className="animate-pulse h-10 bg-muted rounded w-1/2"></div>
-                 <div className="animate-pulse h-10 bg-muted rounded w-1/2"></div>
+                 <div className="animate-pulse h-10 bg-muted rounded w-3/4"></div>
+                 <div className="animate-pulse h-10 bg-muted rounded w-3/4"></div>
+                 <div className="animate-pulse h-8 bg-muted rounded w-1/2 mt-2"></div>
             </CardContent>
         </Card>
     );
@@ -144,33 +182,45 @@ export function MoodAnalysis() {
     <Card className="w-full max-w-md mx-auto mt-6 shadow-lg">
       <CardHeader>
         <CardTitle className="text-center flex items-center justify-center"><Lightbulb className="mr-2 h-5 w-5 text-accent" /> Analiza i export</CardTitle>
-        {/* Removed CardDescription */}
       </CardHeader>
       <CardContent className="space-y-4 p-6">
         <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
-            <Button onClick={handleAnalyzeMoods} disabled={isAnalyzing || isExporting}> {/* Removed !currentUser check */}
+            <Button onClick={handleAnalyzeMoods} disabled={isAnalyzing || isExporting || isTestingSheetRead}>
               {isAnalyzing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analizuję...</> : <><Lightbulb className="mr-2 h-4 w-4" /> Analizuj nastroje</>}
             </Button>
-             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting} variant="outline"> {/* Removed !currentUser check */}
+             <Button onClick={handleExportData} disabled={isAnalyzing || isExporting || isTestingSheetRead} variant="outline">
               {isExporting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Exportuję...</> : <><UploadCloud className="mr-2 h-4 w-4" /> Export do Arkuszy</>}
             </Button>
         </div>
-        {/* Removed !currentUser Alert */}
-        {error && !isAnalyzing && !isExporting && (
+         <div className="flex justify-center pt-2">
+            <Button onClick={handleTestSheetRead} disabled={isAnalyzing || isExporting || isTestingSheetRead} variant="secondary" size="sm">
+                {isTestingSheetRead ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Testuję...</> : "Testuj Odczyt Arkusza"}
+            </Button>
+        </div>
+        {error && !isAnalyzing && !isExporting && !isTestingSheetRead && (
             <Alert variant="destructive" className="mt-4">
                  <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Wystąpił błąd</AlertTitle> {/* Hardcoded Polish */}
+                <AlertTitle>Wystąpił błąd</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
             </Alert>
         )}
         {analysisResult && !error && !isAnalyzing && (
           <Alert variant="default" className="mt-4 bg-accent/10 border-accent">
             <Lightbulb className="h-4 w-4 text-accent" />
-            <AlertTitle className="text-accent-foreground">Wnioski z analizy</AlertTitle> {/* Hardcoded Polish */}
+            <AlertTitle className="text-accent-foreground">Wnioski z analizy</AlertTitle>
             <AlertDescription className="text-accent-foreground/90 whitespace-pre-wrap">
               {analysisResult}
             </AlertDescription>
           </Alert>
+        )}
+        {exportMessage && !error && !isExporting && (
+            <Alert variant="default" className="mt-4 bg-primary/10 border-primary">
+                <CheckCircle className="h-4 w-4 text-primary"/>
+                <AlertTitle className="text-primary-foreground">Status Exportu</AlertTitle>
+                <AlertDescription className="text-primary-foreground/90">
+                    {exportMessage}
+                </AlertDescription>
+            </Alert>
         )}
       </CardContent>
     </Card>
